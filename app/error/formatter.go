@@ -85,7 +85,7 @@ func formatValidationPayload(p map[string]string) map[string]string {
 	ep := make(map[string]string)
 
 	for k, v := range p {
-		ek := strcase.ToSnake(strings.Join(strings.Split(k, ".")[1:], "."))
+		ek := strcase.ToSnake(k)
 		ep[ek] = v
 	}
 
