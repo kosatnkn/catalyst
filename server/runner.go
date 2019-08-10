@@ -19,9 +19,6 @@ import (
 // Run runs the application server.
 func Run(cfg config.AppConfig, r *mux.Router, ctr *container.Container) {
 
-	// show splash screen when sterting
-	showSplash(splashShadow)
-
 	var wait time.Duration
 
 	srv := &http.Server{

@@ -1,9 +1,10 @@
 // More is available at following link.
 // https://www.kammerl.de/ascii/AsciiSignature.php
 
-package server
+package splash
 
-const splashShadow string = `
+// SplashShadow shadow style
+const SplashShadow string = `
 
   ___|       |         |            |  
  |      _' | __|  _' | | |   |  __| __|

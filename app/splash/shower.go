@@ -1,4 +1,4 @@
-package server
+package splash
 
 import "fmt"
 
@@ -9,7 +9,7 @@ Go Clean Architecture Base Project for RESTful Services
 `
 
 // Show a splash screen in one of several types.
-func showSplash(stryle string) {
+func Show(stryle string) {
 	fmt.Print(stryle)
 	fmt.Print(serviceDetails)
 }
