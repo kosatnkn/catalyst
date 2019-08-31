@@ -2,7 +2,7 @@ package types
 
 import "fmt"
 
-// MiddlewareError is the type of errors thrown by adapters.
+// MiddlewareError is the type of errors thrown by middleware.
 type MiddlewareError struct {
 	msg     string
 	code    int

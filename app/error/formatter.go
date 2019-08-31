@@ -20,7 +20,7 @@ func format(err error) []byte {
 	var payload interface{}
 
 	switch err.(type) {
-	case *types.ServerError, *types.MiddlewareError, *types.AdapterError, *types.DataError, *types.ServiceError, *domainError.DomainError:
+	case *types.ServerError, *types.MiddlewareError, *types.AdapterError, *types.RepositoryError, *types.ServiceError, *domainError.DomainError:
 		payload = formatCustomError(err)
 		break
 	case *types.ValidationError:
