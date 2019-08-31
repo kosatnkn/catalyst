@@ -14,7 +14,7 @@ import (
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
-// LogAdapter is used to wrap
+// LogAdapter is used to provide structured log messages.
 type LogAdapter struct {
 	cfg config.LogConfig
 	lf  *os.File
@@ -24,7 +24,10 @@ type LogAdapter struct {
 func (a *LogAdapter) New(config config.LogConfig) (adapters.LogAdapterInterface, error) {
 
 	a.cfg = config
-	a.lf = a.initLogFile()
+
+	if a.cfg.File {
+		a.lf = a.initLogFile()
+	}
 
 	return a, nil
 }
@@ -51,6 +54,7 @@ func (a *LogAdapter) Warn(ctx context.Context, message string, options ...interf
 
 // Destruct will close the logger gracefully releasing all resources.
 func (a *LogAdapter) Destruct() {
+
 	if a.cfg.File {
 		a.lf.Close()
 	}
