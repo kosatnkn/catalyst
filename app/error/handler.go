@@ -11,7 +11,7 @@ import (
 )
 
 // Handle handles all errors globally.
-func Handle(ctx context.Context, err error, w http.ResponseWriter, logger adapters.LogdapterInterface) {
+func Handle(ctx context.Context, err error, w http.ResponseWriter, logger adapters.LogAdapterInterface) {
 
 	switch err.(type) {
 	case *types.ServerError:
@@ -36,7 +36,7 @@ func Handle(ctx context.Context, err error, w http.ResponseWriter, logger adapte
 }
 
 // HandleValidationErrors specifically handles validation errors thrown by the validator.
-func HandleValidationErrors(ctx context.Context, errs map[string]string, w http.ResponseWriter, logger adapters.LogdapterInterface) {
+func HandleValidationErrors(ctx context.Context, errs map[string]string, w http.ResponseWriter, logger adapters.LogAdapterInterface) {
 
 	errMessage := formatValidationErrors(errs)
 

@@ -17,7 +17,7 @@ type Container struct {
 // These are wrappers around third party libraries. All adapters will be of a corrosponding adapter interface type.
 type Adapters struct {
 	DB  adapters.DBAdapterInterface
-	Log adapters.LogdapterInterface
+	Log adapters.LogAdapterInterface
 }
 
 // Repositories hold resolved repository instances.
