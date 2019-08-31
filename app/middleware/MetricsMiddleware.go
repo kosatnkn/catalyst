@@ -9,7 +9,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/metrics"
 )
 
-// MetricsMiddleware alrers the request.
+// MetricsMiddleware attaches metrics to the request.
 type MetricsMiddleware struct{}
 
 // Middleware executes middleware rules of MetricsMiddleware.

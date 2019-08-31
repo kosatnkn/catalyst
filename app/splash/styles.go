@@ -3,8 +3,8 @@
 
 package splash
 
-// SplashShadow shadow style
-const SplashShadow string = `
+// StyleShadow shadow style
+const StyleShadow string = `
 
   ___|       |         |            |  
  |      _' | __|  _' | | |   |  __| __|

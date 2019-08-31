@@ -11,7 +11,7 @@ import (
 func main() {
 
 	// show splash screen when starting
-	splash.Show(splash.SplashShadow)
+	splash.Show(splash.StyleShadow)
 
 	// parse all configurations
 	cfg := config.Parse()
