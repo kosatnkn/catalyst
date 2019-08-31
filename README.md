@@ -1,6 +1,8 @@
 # Catalyst
 Go clean architecture RESTful API
 
+[![Build Status](https://travis-ci.org/kosatnkn/catalyst.svg?branch=master)](https://travis-ci.org/kosatnkn/catalyst)
+
 ## Features
 - A server to handle web requests
 - Configuration parser
