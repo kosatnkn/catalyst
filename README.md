@@ -63,3 +63,10 @@ Go clean architecture RESTful API
                | Library |    |  Database  |    |   APIs  |
                + ------- +    + ---------- +    + ------- +
 ```
+
+## VIew `GoDoc` Locally
+```shell
+    godoc -http=:6060 -v
+```
+
+Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/)
