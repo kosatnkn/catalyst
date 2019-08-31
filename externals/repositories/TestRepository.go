@@ -5,7 +5,7 @@ import (
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 
-// TestRepository is an exmple repository that implements test database functionality.
+// TestRepository is an example repository that implements test database functionality.
 type TestRepository struct {
 	DBAdapter adapters.DBAdapterInterface
 }
