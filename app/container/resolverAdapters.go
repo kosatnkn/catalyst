@@ -19,8 +19,9 @@ func resolveAdapters(cfg *config.Config) Adapters {
 // Resolve the database adapter.
 func resolveDBAdapter(cfg config.DBConfig) {
 
-	pg := adapters.PostgresAdapter{}
-	db, _ := pg.New(cfg)
+	// pg := adapters.PostgresAdapter{}
+	db, _ := adapters.NewPostgresAdapter(cfg)
+	// db, _ := pg.New(cfg)
 
 	resolvedAdapters.DB = db
 }
