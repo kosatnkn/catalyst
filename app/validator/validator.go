@@ -2,7 +2,7 @@ package validator
 
 import (
 	localsEn "github.com/go-playground/locales/en"
-	"github.com/go-playground/universal-translator"
+	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
 	enTranslations "gopkg.in/go-playground/validator.v9/translations/en"
 )
@@ -14,6 +14,8 @@ var (
 
 // Validate validates bound values of an unpacker struct against validation rules defined in that unpacker struct.
 func Validate(data interface{}) map[string]string {
+
+	// TODO: check on the validator setup
 
 	validate = validator.New()
 

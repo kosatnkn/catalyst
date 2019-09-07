@@ -21,25 +21,25 @@ type PostgresAdapter struct {
 	pqPrefix string
 }
 
-// New creates a new Postgres adapter instance.
-func (a *PostgresAdapter) New(config config.DBConfig) (adapters.DBAdapterInterface, error) {
-
-	a.cfg = config
+// NewPostgresAdapter creates a new Postgres adapter instance.
+func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 
 	connString := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%d sslmode=disable",
-		a.cfg.User, a.cfg.Password, a.cfg.Database, a.cfg.Host, a.cfg.Port)
+		cfg.User, cfg.Password, cfg.Database, cfg.Host, cfg.Port)
 
 	db, err := sql.Open("postgres", connString)
-
 	if err != nil {
 		return nil, err
 	}
 
 	// pool configurations
-	db.SetMaxOpenConns(a.cfg.PoolSize)
+	db.SetMaxOpenConns(cfg.PoolSize)
 	//db.SetMaxIdleConns(2)
 	//db.SetConnMaxLifetime(time.Hour)
 
+	a := &PostgresAdapter{}
+
+	a.cfg = cfg
 	a.pool = db
 	a.pqPrefix = "?"
 
@@ -123,8 +123,7 @@ func (a *PostgresAdapter) reorderParameters(params map[string]interface{}, named
 		paramValue, isParamExist := params[param]
 
 		if !isParamExist {
-			err := errTypes.AdapterError{}
-			return nil, err.New(fmt.Sprintf("parameter '%s' is missing", param), 100, "")
+			return nil, errTypes.NewAdapterError(fmt.Sprintf("parameter '%s' is missing", param), 100, "")
 		}
 
 		reorderedParams = append(reorderedParams, paramValue)

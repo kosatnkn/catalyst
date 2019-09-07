@@ -9,8 +9,8 @@ type MiddlewareError struct {
 	details string
 }
 
-// New creates a new MiddlewareError instance.
-func (e *MiddlewareError) New(message string, code int, details string) error {
+// NewMiddlewareError creates a new MiddlewareError instance.
+func NewMiddlewareError(message string, code int, details string) error {
 
 	err := &MiddlewareError{}
 

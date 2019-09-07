@@ -64,7 +64,7 @@ Go clean architecture RESTful API
                + ------- +    + ---------- +    + ------- +
 ```
 
-## VIew `GoDoc` Locally
+## View GoDoc Locally
 ```shell
     godoc -http=:6060 -v
 ```

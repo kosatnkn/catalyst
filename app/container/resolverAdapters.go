@@ -19,16 +19,14 @@ func resolveAdapters(cfg *config.Config) Adapters {
 // Resolve the database adapter.
 func resolveDBAdapter(cfg config.DBConfig) {
 
-	pg := adapters.PostgresAdapter{}
-	db, _ := pg.New(cfg)
+	db, _ := adapters.NewPostgresAdapter(cfg)
 
 	resolvedAdapters.DB = db
 }
 
 func resolveLogAdapter(cfg config.LogConfig) {
 
-	l := adapters.LogAdapter{}
-	la, _ := l.New(cfg)
+	la, _ := adapters.NewLogAdapter(cfg)
 
 	resolvedAdapters.Log = la
 }

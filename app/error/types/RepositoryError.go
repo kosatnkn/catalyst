@@ -9,8 +9,8 @@ type RepositoryError struct {
 	details string
 }
 
-// New creates a new RepositoryError instance.
-func (e *RepositoryError) New(message string, code int, details string) error {
+// NewRepositoryError creates a new RepositoryError instance.
+func NewRepositoryError(message string, code int, details string) error {
 
 	err := &RepositoryError{}
 

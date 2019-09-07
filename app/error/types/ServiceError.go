@@ -9,8 +9,8 @@ type ServiceError struct {
 	details string
 }
 
-// New creates a new ServiceError instance.
-func (e *ServiceError) New(message string, code int, details string) error {
+// NewServiceError creates a new ServiceError instance.
+func NewServiceError(message string, code int, details string) error {
 
 	err := &ServiceError{}
 

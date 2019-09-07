@@ -9,8 +9,8 @@ type AdapterError struct {
 	details string
 }
 
-// New creates a new AdapterError instance.
-func (e *AdapterError) New(message string, code int, details string) error {
+// NewAdapterError creates a new AdapterError instance.
+func NewAdapterError(message string, code int, details string) error {
 
 	err := &AdapterError{}
 
