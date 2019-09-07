@@ -5,8 +5,8 @@ type ValidationError struct {
 	details string
 }
 
-// New creates a new ValidationError instance.
-func (e *ValidationError) New(details string) error {
+// NewValidationError creates a new ValidationError instance.
+func NewValidationError(details string) error {
 
 	err := &ValidationError{}
 

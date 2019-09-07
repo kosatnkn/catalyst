@@ -6,7 +6,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/app/error"
-	"github.com/kosatnkn/catalyst/app/error/types"
+	errTypes "github.com/kosatnkn/catalyst/app/error/types"
 )
 
 // RequestCheckerMiddleware validates the request header.
@@ -45,8 +45,7 @@ func (rtm *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler 
 		// check content type
 		if contentType != "application/json" {
 
-			err := types.MiddlewareError{}
-			error.Handle(r.Context(), err.New(fmt.Sprintf("API only accepts JSON, '%s' is given", contentType), 100, ""), w, rtm.container.Adapters.Log)
+			error.Handle(r.Context(), errTypes.NewMiddlewareError(fmt.Sprintf("API only accepts JSON, '%s' is given", contentType), 100, ""), w, rtm.container.Adapters.Log)
 
 			return
 		}

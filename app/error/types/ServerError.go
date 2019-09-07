@@ -9,8 +9,8 @@ type ServerError struct {
 	details string
 }
 
-// New creates a new ServerError instance.
-func (e *ServerError) New(message string, code int, details string) error {
+// NewServerError creates a new ServerError instance.
+func NewServerError(message string, code int, details string) error {
 
 	err := &ServerError{}
 

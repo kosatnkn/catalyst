@@ -2,15 +2,10 @@ package adapters
 
 import (
 	"context"
-
-	"github.com/kosatnkn/catalyst/app/config"
 )
 
 // LogAdapterInterface is implemeted by all looging adapters.
 type LogAdapterInterface interface {
-
-	// New creates a new instance of log adapter implementation.
-	New(config config.LogConfig) (LogAdapterInterface, error)
 
 	// Error logs a message as of error type.
 	Error(ctx context.Context, message string, options ...interface{})

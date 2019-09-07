@@ -123,8 +123,7 @@ func (a *PostgresAdapter) reorderParameters(params map[string]interface{}, named
 		paramValue, isParamExist := params[param]
 
 		if !isParamExist {
-			err := errTypes.AdapterError{}
-			return nil, err.New(fmt.Sprintf("parameter '%s' is missing", param), 100, "")
+			return nil, errTypes.NewAdapterError(fmt.Sprintf("parameter '%s' is missing", param), 100, "")
 		}
 
 		reorderedParams = append(reorderedParams, paramValue)

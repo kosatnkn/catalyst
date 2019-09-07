@@ -20,10 +20,12 @@ type LogAdapter struct {
 	lf  *os.File
 }
 
-// New creates a new Postgres adapter instance.
-func (a *LogAdapter) New(config config.LogConfig) (adapters.LogAdapterInterface, error) {
+// NewLogAdapter creates a new Log adapter instance.
+func NewLogAdapter(cfg config.LogConfig) (adapters.LogAdapterInterface, error) {
 
-	a.cfg = config
+	a := &LogAdapter{}
+
+	a.cfg = cfg
 
 	if a.cfg.File {
 		a.lf = a.initLogFile()
