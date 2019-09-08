@@ -19,7 +19,7 @@ func Handle(ctx context.Context, err error, w http.ResponseWriter, logger adapte
 		response.Send(w, format(err), http.StatusInternalServerError)
 		break
 	case *types.AdapterError, *types.MiddlewareError, *types.RepositoryError, *types.ServiceError, *domainError.DomainError:
-		logger.Error(ctx, "Oter Error", err)
+		logger.Error(ctx, "Other Error", err)
 		response.Send(w, format(err), http.StatusBadRequest)
 		break
 	case *types.ValidationError:

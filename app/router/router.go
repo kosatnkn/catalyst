@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -8,6 +9,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/app/controllers"
 	"github.com/kosatnkn/catalyst/app/middleware"
+	"github.com/kosatnkn/catalyst/app/transport/response"
 )
 
 // Init initializes the router.
@@ -37,6 +39,25 @@ func Init(container *container.Container) *mux.Router {
 	}
 
 	// bind controller functions to routes
+
+	// api info
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+
+		name := "Catalyst Go RESTful API"
+		version := "v1.1.0"
+		purpose := "RESTful API base written in Golang"
+
+		response.Send(
+			w,
+			[]byte(fmt.Sprintf(`{
+				"name": "%s",
+				"version": "%s",
+				"purpose": "%s"
+			  }`, name, version, purpose)),
+			http.StatusOK)
+	}).Methods(http.MethodGet)
+
+	// sample
 	r.HandleFunc("/", testController.TestFunc).Methods(http.MethodPost)
 
 	return r
