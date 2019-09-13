@@ -1,6 +1,7 @@
 package entities
 
-type Test struct {
+// Sample entity
+type Sample struct {
 	ID   int64
 	Name string
 }

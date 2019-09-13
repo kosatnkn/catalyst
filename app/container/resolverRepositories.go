@@ -8,6 +8,6 @@ import (
 func resolveRepositories() Repositories {
 
 	return Repositories{
-		TestRepository: &repositories.TestRepository{DBAdapter: resolvedAdapters.DB},
+		SampleRepository: &repositories.SampleRepository{DBAdapter: resolvedAdapters.DB},
 	}
 }
