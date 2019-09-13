@@ -1,4 +1,4 @@
-- name: service_1
+- name: sample
   url: http://localhost:8080/
   timeout: 10
 

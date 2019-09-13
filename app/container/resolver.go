@@ -13,6 +13,6 @@ func Resolve(cfg *config.Config) *Container {
 	return &Container{
 		Adapters:     resolveAdapters(cfg),
 		Repositories: resolveRepositories(),
-		Services:     resolveServices(cfg),
+		Services:     resolveServices(cfg.ServicesConfig),
 	}
 }

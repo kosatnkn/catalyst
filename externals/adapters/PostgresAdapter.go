@@ -37,11 +37,11 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 	//db.SetMaxIdleConns(2)
 	//db.SetConnMaxLifetime(time.Hour)
 
-	a := &PostgresAdapter{}
-
-	a.cfg = cfg
-	a.pool = db
-	a.pqPrefix = "?"
+	a := &PostgresAdapter{
+		cfg:      cfg,
+		pool:     db,
+		pqPrefix: "?",
+	}
 
 	return a, nil
 }

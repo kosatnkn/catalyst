@@ -4,16 +4,23 @@ import (
 	"context"
 
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
+	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 
 // SampleRepository is an example repository that implements test database functionality.
 type SampleRepository struct {
-	DBAdapter adapters.DBAdapterInterface
+	db adapters.DBAdapterInterface
+}
+
+// NewSampleRepository creates a new instance of the repository
+func NewSampleRepository(dbAdapter adapters.DBAdapterInterface) repositories.SampleRepositoryInterface {
+
+	return &SampleRepository{db: dbAdapter}
 }
 
 // Get temporarily mocks database functionality.
-func (t *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
+func (repo *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 
 	// temporarily added
 	var m []entities.Sample
@@ -28,7 +35,7 @@ func (t *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 	// 	"name": "Name 4",
 	// }
 
-	// result, err := t.DBAdapter.Query(query, parameters)
+	// result, err := repo.db.Query(query, parameters)
 	// if err != nil {
 	// 	return nil, err
 	// }
