@@ -15,8 +15,6 @@ var (
 // Validate validates bound values of an unpacker struct against validation rules defined in that unpacker struct.
 func Validate(data interface{}) map[string]string {
 
-	// TODO: check on the validator setup
-
 	validate = validator.New()
 
 	en := localsEn.New()
@@ -26,7 +24,6 @@ func Validate(data interface{}) map[string]string {
 	// also see uni.FindTranslator(...)
 	trans, _ := uni.GetTranslator("en")
 
-	validate = validator.New()
 	enTranslations.RegisterDefaultTranslations(validate, trans)
 
 	// returns nil or ValidationErrors ( []FieldError )
