@@ -9,7 +9,7 @@ type SampleUnpacker struct {
 }
 
 // RequiredFormat returns the applicable JSON format for the address data structure.
-func (au *SampleUnpacker) RequiredFormat() string {
+func (u *SampleUnpacker) RequiredFormat() string {
 	return `{
 		"street": <string>,
 		"city": <string>,

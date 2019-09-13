@@ -7,9 +7,9 @@ import (
 
 	"github.com/iancoleman/strcase"
 
+	"github.com/kosatnkn/catalyst/app/error/transformers"
 	"github.com/kosatnkn/catalyst/app/error/types"
 	"github.com/kosatnkn/catalyst/app/transport/response"
-	"github.com/kosatnkn/catalyst/app/transport/response/transformers"
 	domainError "github.com/kosatnkn/catalyst/domain/error"
 )
 

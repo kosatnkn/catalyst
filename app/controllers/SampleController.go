@@ -48,18 +48,11 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: add this method to transformer package
-	// map result to transformer
-	var tr []transformers.SampleTransformer
-	for _, sample := range samples {
-		tr = append(tr, transformers.SampleTransformer{
-			ID:   sample.ID,
-			Name: sample.Name,
-		})
-	}
+	// transform
+	tr := response.Transform(samples, &transformers.SampleTransformer{}, true)
 
 	// send response
-	response.Send(w, response.Transform(tr), http.StatusOK)
+	response.Send(w, tr, http.StatusOK)
 }
 
 // // GetByID handles retreiving a single sample
