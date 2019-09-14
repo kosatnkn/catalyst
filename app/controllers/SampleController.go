@@ -19,8 +19,8 @@ import (
 
 // SampleController contains controller logic for endpoints.
 type SampleController struct {
-	Container     *container.Container
-	SampleUseCase sample.Sample
+	container     *container.Container
+	sampleUseCase sample.Sample
 }
 
 // NewSampleController returns a base type for this controller
@@ -33,8 +33,8 @@ func NewSampleController(container *container.Container) *SampleController {
 
 	// create instance of controller
 	return &SampleController{
-		Container:     container,
-		SampleUseCase: sampleUseCase,
+		container:     container,
+		sampleUseCase: sampleUseCase,
 	}
 }
 
@@ -48,9 +48,9 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	ctx = globals.AppendToContextPrefix(ctx, "SampleController.Get")
 
 	// get data
-	samples, err := ctl.SampleUseCase.Get(ctx)
+	samples, err := ctl.sampleUseCase.Get(ctx)
 	if err != nil {
-		error.Handle(ctx, err, w, ctl.Container.Adapters.Log)
+		error.Handle(ctx, err, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -80,14 +80,14 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// routes and by data type conversions done in the controller
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.container.Adapters.Log)
 		return
 	}
 
 	// get data
-	sample, err := ctl.SampleUseCase.GetByID(ctx, id)
+	sample, err := ctl.sampleUseCase.GetByID(ctx, id)
 	if err != nil {
-		error.Handle(ctx, err, w, ctl.Container.Adapters.Log)
+		error.Handle(ctx, err, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -111,14 +111,14 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		error.Handle(r.Context(), err, w, ctl.container.Adapters.Log)
 		return
 	}
 
 	// validate unpacked data
 	errs := validator.Validate(sampleUnpacker)
 	if errs != nil {
-		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -129,9 +129,9 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// add
-	err = ctl.SampleUseCase.Add(ctx, sample)
+	err = ctl.sampleUseCase.Add(ctx, sample)
 	if err != nil {
-		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		error.Handle(r.Context(), err, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -155,7 +155,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		error.Handle(r.Context(), err, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -166,14 +166,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.container.Adapters.Log)
 		return
 	}
 
 	// validate unpacked data
 	errs = validator.Validate(sampleUnpacker)
 	if errs != nil {
-		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -184,9 +184,9 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// edit
-	err = ctl.SampleUseCase.Edit(ctx, id, sample)
+	err = ctl.sampleUseCase.Edit(ctx, id, sample)
 	if err != nil {
-		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		error.Handle(r.Context(), err, w, ctl.container.Adapters.Log)
 		return
 	}
 
@@ -210,14 +210,14 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.container.Adapters.Log)
 		return
 	}
 
 	// delete
-	err := ctl.SampleUseCase.Delete(ctx, id)
+	err := ctl.sampleUseCase.Delete(ctx, id)
 	if err != nil {
-		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		error.Handle(r.Context(), err, w, ctl.container.Adapters.Log)
 		return
 	}
 
