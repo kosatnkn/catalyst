@@ -1,11 +1,19 @@
 package transformers
 
-import "github.com/kosatnkn/catalyst/domain/entities"
+import (
+	"github.com/kosatnkn/catalyst/app/transport/response"
+	"github.com/kosatnkn/catalyst/domain/entities"
+)
 
 // SampleTransformer is used to transform sample
 type SampleTransformer struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
+	ID   int64  `json:"transformed_id"`
+	Name string `json:"transformed_name"`
+}
+
+// NewSampleTransformer creates a new instance of the transformer.
+func NewSampleTransformer() response.TransformerInterface {
+	return &SampleTransformer{}
 }
 
 // TransformAsObject map data to a transformer object.
@@ -25,7 +33,7 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) interface{} 
 
 	var tr []SampleTransformer
 
-	for _, sample := range data.([]interface{}) {
+	for _, sample := range data.([]entities.Sample) {
 		tr = append(tr, t.TransformAsObject(sample).(SampleTransformer))
 	}
 

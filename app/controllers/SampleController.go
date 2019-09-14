@@ -49,7 +49,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// transform
-	tr := response.Transform(samples, &transformers.SampleTransformer{}, true)
+	tr := response.Transform(samples, transformers.NewSampleTransformer(), true)
 
 	// send response
 	response.Send(w, tr, http.StatusOK)
@@ -62,8 +62,8 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 // 	r = r.WithContext(globals.AppendToContextPrefix(r.Context(), "SampleController.GetAll"))
 
 // 	// unpack request
-// 	sampleUnpacker := unpackers.SampleUnpacker{}
-// 	err := request.Unpack(r, &sampleUnpacker)
+// 	sampleUnpacker := unpackers.NewSampleUnpacker()
+// 	err := request.Unpack(r, sampleUnpacker)
 // 	if err != nil {
 // 		error.Handle(r.Context(), err, w, t.Container.Adapters.Log)
 // 		return

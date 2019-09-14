@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
@@ -13,17 +14,19 @@ type SampleRepository struct {
 	db adapters.DBAdapterInterface
 }
 
-// NewSampleRepository creates a new instance of the repository
+// NewSampleRepository creates a new instance of the repository.
 func NewSampleRepository(dbAdapter adapters.DBAdapterInterface) repositories.SampleRepositoryInterface {
 
 	return &SampleRepository{db: dbAdapter}
 }
 
-// Get temporarily mocks database functionality.
+// Get retrieves a collection of Samples.
 func (repo *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 
 	// temporarily added
 	var m []entities.Sample
+
+	m = tempGetMockedData()
 
 	return m, nil
 
@@ -43,6 +46,34 @@ func (repo *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error
 	// return mapResult(result), nil
 }
 
+// GetByID retrieves a single Sample.
+func (repo *SampleRepository) GetByID(ctx context.Context, id int) (entities.Sample, error) {
+
+	return entities.Sample{
+		ID:       int64(id),
+		Name:     fmt.Sprintf("Name %d", id),
+		Password: fmt.Sprintf("Password %d", id),
+	}, nil
+}
+
+// Add adds a new sample.
+func (repo *SampleRepository) Add(ctx context.Context, sample entities.Sample) error {
+
+	return nil
+}
+
+// Edit updates an existing sample identified by the id.
+func (repo *SampleRepository) Edit(ctx context.Context, id int, sample entities.Sample) error {
+
+	return nil
+}
+
+// Delete deletes an existing sample identified by id.
+func (repo *SampleRepository) Delete(ctx context.Context, id int) error {
+
+	return nil
+}
+
 // Map results to entities.
 func mapResult(result []map[string]interface{}) []entities.Sample {
 
@@ -60,4 +91,21 @@ func mapResult(result []map[string]interface{}) []entities.Sample {
 	}
 
 	return m
+}
+
+func tempGetMockedData() []entities.Sample {
+
+	const NumRecords int = 3
+	var samples []entities.Sample
+
+	for i := 0; i < NumRecords; i++ {
+
+		samples = append(samples, entities.Sample{
+			ID:       int64(i),
+			Name:     fmt.Sprintf("Name %d", i),
+			Password: fmt.Sprintf("Password %d", i),
+		})
+	}
+
+	return samples
 }
