@@ -12,6 +12,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 
 	resolveDBAdapter(cfg.DBConfig)
 	resolveLogAdapter(cfg.LogConfig)
+	resolveValidatorAdapter()
 
 	return resolvedAdapters
 }
@@ -30,4 +31,12 @@ func resolveLogAdapter(cfg config.LogConfig) {
 	la, _ := adapters.NewLogAdapter(cfg)
 
 	resolvedAdapters.Log = la
+}
+
+// resolveValidatorAdapter resolves the validator adapter.
+func resolveValidatorAdapter() {
+
+	va, _ := adapters.NewValidatorAdapter()
+
+	resolvedAdapters.Validator = va
 }

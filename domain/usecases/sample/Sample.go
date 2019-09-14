@@ -11,9 +11,9 @@ type Sample struct {
 }
 
 // NewSample creates a new instance of sample usecase.
-func NewSample(container *container.Container) Sample {
+func NewSample(container *container.Container) *Sample {
 
-	return Sample{
+	return &Sample{
 		sampleRepository: container.Repositories.SampleRepository,
 	}
 }
