@@ -7,7 +7,7 @@ import (
 
 var resolvedAdapters Adapters
 
-// Resolve all adapters.
+// resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
 
 	resolveDBAdapter(cfg.DBConfig)
@@ -16,7 +16,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 	return resolvedAdapters
 }
 
-// Resolve the database adapter.
+// resolveDBAdapter resolves the database adapter.
 func resolveDBAdapter(cfg config.DBConfig) {
 
 	db, _ := adapters.NewPostgresAdapter(cfg)
@@ -24,6 +24,7 @@ func resolveDBAdapter(cfg config.DBConfig) {
 	resolvedAdapters.DB = db
 }
 
+// resolveLogAdapter resolves the logging adapter.
 func resolveLogAdapter(cfg config.LogConfig) {
 
 	la, _ := adapters.NewLogAdapter(cfg)

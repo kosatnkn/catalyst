@@ -1,6 +1,6 @@
 package adapters
 
-// DBAdapterInterface is implemeted by all database adapters.
+// DBAdapterInterface is implemented by all database adapters.
 type DBAdapterInterface interface {
 
 	// Query runs a query and return the result.

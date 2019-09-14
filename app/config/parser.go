@@ -10,13 +10,14 @@ import (
 func Parse() *Config {
 
 	return &Config{
-		AppConfig: parseAppConfig(),
-		DBConfig:  parseDBConfig(),
-		LogConfig: parseLogConfig(),
+		AppConfig:      parseAppConfig(),
+		DBConfig:       parseDBConfig(),
+		LogConfig:      parseLogConfig(),
+		ServicesConfig: parseServicesConfig(),
 	}
 }
 
-// Parse application configurations.
+// parseAppConfig parses application configurations.
 func parseAppConfig() AppConfig {
 
 	content := read("app.yaml")
@@ -32,7 +33,7 @@ func parseAppConfig() AppConfig {
 	return cfg
 }
 
-// Parse application configurations.
+// parseLogConfig parses logger configurations.
 func parseLogConfig() LogConfig {
 
 	content := read("logger.yaml")
@@ -48,7 +49,7 @@ func parseLogConfig() LogConfig {
 	return cfg
 }
 
-// Parse database configurations.
+// parseDBConfig parses database configurations.
 func parseDBConfig() DBConfig {
 
 	content := read("database.yaml")
@@ -62,4 +63,20 @@ func parseDBConfig() DBConfig {
 	}
 
 	return cfg
+}
+
+// parseServicesConfig parses configurations of all services
+func parseServicesConfig() []ServiceConfig {
+
+	content := read("services.yaml")
+
+	cfgs := []ServiceConfig{}
+
+	err := yaml.Unmarshal(content, &cfgs)
+
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
+
+	return cfgs
 }

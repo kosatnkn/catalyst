@@ -4,10 +4,12 @@ import (
 	"github.com/kosatnkn/catalyst/externals/repositories"
 )
 
-// Resolve all repositories.
+var resolvedRepositories Repositories
+
+// resolveRepositories resolve all repositories.
 func resolveRepositories() Repositories {
 
-	return Repositories{
-		TestRepository: &repositories.TestRepository{DBAdapter: resolvedAdapters.DB},
-	}
+	resolvedRepositories.SampleRepository = repositories.NewSampleRepository(resolvedAdapters.DB)
+
+	return resolvedRepositories
 }
