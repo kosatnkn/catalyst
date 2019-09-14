@@ -2,11 +2,14 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/app/error"
 	"github.com/kosatnkn/catalyst/app/transport/response"
 	"github.com/kosatnkn/catalyst/app/transport/response/transformers"
+	"github.com/kosatnkn/catalyst/app/validator"
 	"github.com/kosatnkn/catalyst/domain/globals"
 	"github.com/kosatnkn/catalyst/domain/usecases/sample"
 )
@@ -32,7 +35,7 @@ func NewSampleController(container *container.Container) *SampleController {
 	}
 }
 
-// Get handles retreiving a list of samples
+// Get handles retreiving a list of samples.
 func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 
 	// get the context
@@ -50,6 +53,43 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 
 	// transform
 	tr := response.Transform(samples, transformers.NewSampleTransformer(), true)
+
+	// send response
+	response.Send(w, tr, http.StatusOK)
+}
+
+// GetByID handles retreiving a single sample.
+func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
+
+	// get the context
+	ctx := r.Context()
+
+	// append a prefix value to the context passed within the request
+	ctx = globals.AppendToContextPrefix(ctx, "SampleController.GetByID")
+
+	// get id from request
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// validate
+	// NOTE: here a validation is not actually needed since query parameters
+	// are validated to a certain extent by putting parameter validations in
+	// routes and by data type conversions done in the controller
+	errs := validator.ValidateField(id, "required,gt=0")
+	if errs != nil {
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// get data
+	sample, err := ctl.SampleUseCase.GetByID(ctx, id)
+	if err != nil {
+		error.Handle(ctx, err, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// transform
+	tr := response.Transform(sample, transformers.NewSampleTransformer(), false)
 
 	// send response
 	response.Send(w, tr, http.StatusOK)
