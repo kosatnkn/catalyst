@@ -11,7 +11,7 @@ func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 
 	// business logic here
 
-	err := s.SampleRepository.Add(ctx, sample)
+	err := s.sampleRepository.Add(ctx, sample)
 	if err != nil {
 		return err
 	}

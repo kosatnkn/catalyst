@@ -9,7 +9,7 @@ func (s *Sample) Delete(ctx context.Context, id int) error {
 
 	// business logic here
 
-	err := s.SampleRepository.Delete(ctx, id)
+	err := s.sampleRepository.Delete(ctx, id)
 	if err != nil {
 		return err
 	}

@@ -10,7 +10,7 @@ import (
 func (s *Sample) Get(ctx context.Context) ([]entities.Sample, error) {
 
 	// get samples
-	samples, err := s.SampleRepository.Get(ctx)
+	samples, err := s.sampleRepository.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +22,7 @@ func (s *Sample) Get(ctx context.Context) ([]entities.Sample, error) {
 func (s *Sample) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 
 	// get sample
-	sample, err := s.SampleRepository.GetByID(ctx, id)
+	sample, err := s.sampleRepository.GetByID(ctx, id)
 	if err != nil {
 		return entities.Sample{}, err
 	}

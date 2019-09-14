@@ -11,7 +11,7 @@ func (s *Sample) Edit(ctx context.Context, id int, sample entities.Sample) error
 
 	// business logic here
 
-	err := s.SampleRepository.Edit(ctx, id, sample)
+	err := s.sampleRepository.Edit(ctx, id, sample)
 	if err != nil {
 		return err
 	}

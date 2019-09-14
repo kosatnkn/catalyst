@@ -26,15 +26,10 @@ type SampleController struct {
 // NewSampleController returns a base type for this controller
 func NewSampleController(container *container.Container) *SampleController {
 
-	// init use cases
-	sampleUseCase := sample.Sample{
-		SampleRepository: container.Repositories.SampleRepository,
-	}
-
 	// create instance of controller
 	return &SampleController{
 		container:     container,
-		sampleUseCase: sampleUseCase,
+		sampleUseCase: sample.NewSample(container),
 	}
 }
 
