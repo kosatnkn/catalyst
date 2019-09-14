@@ -1,7 +1,5 @@
 package unpackers
 
-import "github.com/kosatnkn/catalyst/app/transport/request"
-
 // SampleUnpacker contains the unpacking structure for the address sent in request payload.
 type SampleUnpacker struct {
 	Street string `json:"street" validate:"required"`
@@ -11,7 +9,7 @@ type SampleUnpacker struct {
 }
 
 // NewSampleUnpacker creates a new instance of the unpacker.
-func NewSampleUnpacker() request.UnpackerInterface {
+func NewSampleUnpacker() *SampleUnpacker {
 
 	return &SampleUnpacker{}
 }

@@ -1,8 +1,6 @@
 package validator
 
 import (
-	"fmt"
-
 	localsEn "github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
@@ -61,12 +59,8 @@ func ValidateField(field interface{}, rules string) map[string]string {
 		return nil
 	}
 
-	fmt.Println(err)
-
 	// from here you can create your own error messages in whatever language you wish
 	errs := err.(validator.ValidationErrors)
-
-	fmt.Println(errs)
 
 	return errs.Translate(trans)
 }
