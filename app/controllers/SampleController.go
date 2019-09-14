@@ -128,6 +128,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 		Password: sampleUnpacker.Planet,
 	}
 
+	// add
 	err = ctl.SampleUseCase.Add(ctx, sample)
 	if err != nil {
 		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
@@ -139,4 +140,87 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 
 	// send response
 	response.Send(w, nil, http.StatusCreated)
+}
+
+// Edit updates an existing sample entry.
+func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
+
+	// get the context
+	ctx := r.Context()
+
+	// append a prefix value to the context passed within the request
+	ctx = globals.AppendToContextPrefix(ctx, "SampleController.Edit")
+
+	// unpack request
+	sampleUnpacker := unpackers.NewSampleUnpacker()
+	err := request.Unpack(r, sampleUnpacker)
+	if err != nil {
+		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// get id from request
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// validate request parameters
+	errs := validator.ValidateField(id, "required,gt=0")
+	if errs != nil {
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// validate unpacked data
+	errs = validator.Validate(sampleUnpacker)
+	if errs != nil {
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// bind unpacked data to entities
+	sample := entities.Sample{
+		Name:     sampleUnpacker.Street,
+		Password: sampleUnpacker.Planet,
+	}
+
+	// edit
+	err = ctl.SampleUseCase.Edit(ctx, id, sample)
+	if err != nil {
+		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// send response
+	response.Send(w, nil, http.StatusNoContent)
+}
+
+// Delete deletes an existing sample entry.
+func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
+
+	// get the context
+	ctx := r.Context()
+
+	// append a prefix value to the context passed within the request
+	ctx = globals.AppendToContextPrefix(ctx, "SampleController.Delete")
+
+	// get id from request
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// validate request parameters
+	errs := validator.ValidateField(id, "required,gt=0")
+	if errs != nil {
+		error.HandleValidationErrors(r.Context(), errs, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// delete
+	err := ctl.SampleUseCase.Delete(ctx, id)
+	if err != nil {
+		error.Handle(r.Context(), err, w, ctl.Container.Adapters.Log)
+		return
+	}
+
+	// send response
+	response.Send(w, nil, http.StatusNoContent)
 }
