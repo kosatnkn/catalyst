@@ -64,7 +64,7 @@ func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 
 	payload := transformers.ValidationErrorTransformer{}
 	payload.Type = "Validation Errors"
-	payload.Trace = formatUnpackerPayload(err.Error())
+	payload.Trace = err.Error()
 
 	return payload
 }
@@ -106,10 +106,4 @@ func formatValidationPayload(p map[string]string) map[string]string {
 	}
 
 	return ep
-}
-
-// formatUnpackerPayload formats the unpacker error.
-func formatUnpackerPayload(p string) string {
-
-	return p
 }

@@ -27,7 +27,7 @@ func Handle(ctx context.Context, err error, w http.ResponseWriter, logger adapte
 		response.Send(w, format(err), http.StatusBadRequest)
 		break
 	case *types.ValidationError:
-		logger.Error(ctx, "Validation Structure Error", err)
+		logger.Error(ctx, "Unpacker Error", err)
 		response.Send(w, format(err), http.StatusUnprocessableEntity)
 		break
 	default:
