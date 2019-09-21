@@ -18,9 +18,9 @@ func NewSampleUnpacker() *SampleUnpacker {
 func (u *SampleUnpacker) RequiredFormat() string {
 
 	return `{
-		"street": <string>,
-		"city": <string>,
-		"planet": <string>,
-		"phone": <string>
+		"street": "<string>",
+		"city": "<string>",
+		"planet": "<string>",
+		"phone": "<string>"
 	}`
 }
