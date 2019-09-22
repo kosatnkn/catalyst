@@ -87,12 +87,12 @@ func (a *LogAdapter) log(ctx context.Context, logLevel string, message string, o
 		return
 	}
 
-	nowVal := time.Now().Format("2006/01/02 15:04:05.000000")
-	uuidVal := ctx.Value(globals.UUIDKey)
-	prefixVal := ctx.Value(globals.PrefixKey)
-	logLevelVal := a.setTag(logLevel)
+	now := time.Now().Format("2006/01/02 15:04:05.000000")
+	uuid := ctx.Value(globals.UUIDKey)
+	prefix := ctx.Value(globals.PrefixKey)
+	level := a.setTag(logLevel)
 
-	formattedMessage := fmt.Sprintf("%s %s [%s] [%v] [%v] [%v]", nowVal, logLevelVal, uuidVal, prefixVal, message, options)
+	formattedMessage := fmt.Sprintf("%s %s [%s] [%v] [%v] [%v]", now, level, uuid, prefix, message, options)
 
 	a.logToConsole(formattedMessage)
 	a.logToFile(formattedMessage)
