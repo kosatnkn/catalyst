@@ -2,12 +2,17 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
+var configDir string
+
 // Parse parses all configuration to a single Config object.
-func Parse() *Config {
+func Parse(cfgDir string) *Config {
+
+	setConfigDir(cfgDir)
 
 	return &Config{
 		AppConfig:      parseAppConfig(),
@@ -17,18 +22,28 @@ func Parse() *Config {
 	}
 }
 
+// setConfigDir sets the configuration directory.
+func setConfigDir(dir string) {
+
+	// get last char of dir path
+	c := dir[len(dir)-1]
+
+	if os.IsPathSeparator(c) {
+
+		configDir = dir
+
+		return
+	}
+
+	configDir = dir + string(os.PathSeparator)
+}
+
 // parseAppConfig parses application configurations.
 func parseAppConfig() AppConfig {
 
-	content := read("app.yaml")
-
 	cfg := AppConfig{}
 
-	err := yaml.Unmarshal(content, &cfg)
-
-	if err != nil {
-		panic(fmt.Sprintf("error: %v", err))
-	}
+	parseConfig("app.yaml", &cfg)
 
 	return cfg
 }
@@ -36,15 +51,9 @@ func parseAppConfig() AppConfig {
 // parseLogConfig parses logger configurations.
 func parseLogConfig() LogConfig {
 
-	content := read("logger.yaml")
-
 	cfg := LogConfig{}
 
-	err := yaml.Unmarshal(content, &cfg)
-
-	if err != nil {
-		panic(fmt.Sprintf("error: %v", err))
-	}
+	parseConfig("logger.yaml", &cfg)
 
 	return cfg
 }
@@ -52,15 +61,9 @@ func parseLogConfig() LogConfig {
 // parseDBConfig parses database configurations.
 func parseDBConfig() DBConfig {
 
-	content := read("database.yaml")
-
 	cfg := DBConfig{}
 
-	err := yaml.Unmarshal(content, &cfg)
-
-	if err != nil {
-		panic(fmt.Sprintf("error: %v", err))
-	}
+	parseConfig("database.yaml", &cfg)
 
 	return cfg
 }
@@ -68,15 +71,21 @@ func parseDBConfig() DBConfig {
 // parseServicesConfig parses configurations of all services
 func parseServicesConfig() []ServiceConfig {
 
-	content := read("services.yaml")
-
 	cfgs := []ServiceConfig{}
 
-	err := yaml.Unmarshal(content, &cfgs)
+	parseConfig("services.yaml", &cfgs)
 
+	return cfgs
+}
+
+// parseConfig reads configuration values from the given file and
+// populates the given config struct.
+func parseConfig(fileName string, unpacker interface{}) {
+
+	content := read(fileName)
+
+	err := yaml.Unmarshal(content, unpacker)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
-
-	return cfgs
 }
