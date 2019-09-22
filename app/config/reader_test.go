@@ -1,18 +1,22 @@
 package config
 
-// func TestRead(t *testing.T) {
+import (
+	"testing"
+)
 
-// 	// input
-// 	file := "../../config/app.yaml"
+func TestRead(t *testing.T) {
 
-// 	// run
-// 	c := read(file)
+	// // input
+	// file := "../../config/app.yaml"
 
-// 	// check
-// 	need := reflect.TypeOf([]byte)
-// 	got := reflect.TypeOf(c)
+	// // run
+	// c := read(file)
 
-// 	if got != need {
-// 		t.Errorf("Required %v, got %v", need, got)
-// 	}
-// }
+	// // check
+	// need := reflect.TypeOf([]byte)
+	// got := reflect.TypeOf(c)
+
+	// if got != need {
+	// 	t.Errorf("Required %v, got %v", need, got)
+	// }
+}
