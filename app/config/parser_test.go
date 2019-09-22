@@ -10,6 +10,12 @@ func TestParse(t *testing.T) {
 	// get parsed config
 	c := Parse("../../config")
 
-	// check validity
-	t.Log(reflect.TypeOf(c))
+	// check data structure type
+	need := reflect.TypeOf(&Config{})
+	got := reflect.TypeOf(c)
+
+	if got != need {
+
+		t.Errorf("Required %v, got %v", need, got)
+	}
 }
