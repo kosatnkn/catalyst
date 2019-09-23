@@ -24,6 +24,22 @@ func TestParse(t *testing.T) {
 	}
 }
 
+func TestParseInvalidDir(t *testing.T) {
+
+	// check panic
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Expected to panic but did not")
+		}
+	}()
+
+	// input
+	dir := "./invalid_config_dir/"
+
+	// run
+	_ = Parse(dir)
+}
+
 func TestGetConfigDirTailing(t *testing.T) {
 
 	// input
