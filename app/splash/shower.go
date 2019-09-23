@@ -9,7 +9,7 @@ Go Clean Architecture Base Project for RESTful Services
 `
 
 // Show a splash screen in one of several types.
-func Show(stryle string) {
-	fmt.Print(stryle)
+func Show(style string) {
+	fmt.Print(style)
 	fmt.Print(serviceDetails)
 }

@@ -7,85 +7,82 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var configDir string
-
 // Parse parses all configuration to a single Config object.
 func Parse(cfgDir string) *Config {
 
-	setConfigDir(cfgDir)
+	// set config directory
+	dir := getConfigDir(cfgDir)
 
 	return &Config{
-		AppConfig:      parseAppConfig(),
-		DBConfig:       parseDBConfig(),
-		LogConfig:      parseLogConfig(),
-		ServicesConfig: parseServicesConfig(),
+		AppConfig:      parseAppConfig(dir),
+		DBConfig:       parseDBConfig(dir),
+		LogConfig:      parseLogConfig(dir),
+		ServicesConfig: parseServicesConfig(dir),
 	}
-}
-
-// setConfigDir sets the configuration directory.
-func setConfigDir(dir string) {
-
-	// get last char of dir path
-	c := dir[len(dir)-1]
-
-	if os.IsPathSeparator(c) {
-
-		configDir = dir
-
-		return
-	}
-
-	configDir = dir + string(os.PathSeparator)
 }
 
 // parseAppConfig parses application configurations.
-func parseAppConfig() AppConfig {
+func parseAppConfig(dir string) AppConfig {
 
 	cfg := AppConfig{}
 
-	parseConfig("app.yaml", &cfg)
+	parseConfig(dir+"app.yaml", &cfg)
 
 	return cfg
 }
 
 // parseLogConfig parses logger configurations.
-func parseLogConfig() LogConfig {
+func parseLogConfig(dir string) LogConfig {
 
 	cfg := LogConfig{}
 
-	parseConfig("logger.yaml", &cfg)
+	parseConfig(dir+"logger.yaml", &cfg)
 
 	return cfg
 }
 
 // parseDBConfig parses database configurations.
-func parseDBConfig() DBConfig {
+func parseDBConfig(dir string) DBConfig {
 
 	cfg := DBConfig{}
 
-	parseConfig("database.yaml", &cfg)
+	parseConfig(dir+"database.yaml", &cfg)
 
 	return cfg
 }
 
 // parseServicesConfig parses configurations of all services
-func parseServicesConfig() []ServiceConfig {
+func parseServicesConfig(dir string) []ServiceConfig {
 
 	cfgs := []ServiceConfig{}
 
-	parseConfig("services.yaml", &cfgs)
+	parseConfig(dir+"services.yaml", &cfgs)
 
 	return cfgs
 }
 
 // parseConfig reads configuration values from the given file and
 // populates the given config struct.
-func parseConfig(fileName string, unpacker interface{}) {
+func parseConfig(file string, unpacker interface{}) {
 
-	content := read(fileName)
+	content := read(file)
 
 	err := yaml.Unmarshal(content, unpacker)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
+}
+
+// getConfigDir returns config directory path after analysing and correcting.
+func getConfigDir(dir string) string {
+
+	// get last char of dir path
+	c := dir[len(dir)-1]
+
+	if os.IsPathSeparator(c) {
+
+		return dir
+	}
+
+	return dir + string(os.PathSeparator)
 }

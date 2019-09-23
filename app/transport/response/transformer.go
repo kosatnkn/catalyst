@@ -2,6 +2,8 @@ package response
 
 import (
 	"encoding/json"
+
+	"github.com/kosatnkn/catalyst/app/transport/response/mappers"
 )
 
 // Transform transforms a dataset in to a relevent structure and marshal to JSON.
@@ -26,9 +28,9 @@ func transformByCriteria(data interface{}, t TransformerInterface, isCollection 
 }
 
 // wrapInDataMapper wraps payload in a data object.
-func wrapInDataMapper(data interface{}) Data {
+func wrapInDataMapper(data interface{}) mappers.Data {
 
-	wrapper := Data{}
+	wrapper := mappers.Data{}
 	wrapper.Payload = data
 
 	return wrapper

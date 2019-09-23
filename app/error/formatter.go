@@ -9,14 +9,14 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/error/transformers"
 	"github.com/kosatnkn/catalyst/app/error/types"
-	"github.com/kosatnkn/catalyst/app/transport/response"
+	"github.com/kosatnkn/catalyst/app/transport/response/mappers"
 	domainError "github.com/kosatnkn/catalyst/domain/error"
 )
 
 // format formats the error by error type.
 func format(err error) []byte {
 
-	wrapper := response.Error{}
+	wrapper := mappers.Error{}
 	var payload interface{}
 
 	switch err.(type) {
@@ -73,7 +73,7 @@ func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 // These are errors thrown when field wise validations of the data structure fails.
 func formatValidationErrors(p map[string]string) []byte {
 
-	wrapper := response.Error{}
+	wrapper := mappers.Error{}
 
 	payload := transformers.ValidationErrorTransformer{}
 	payload.Type = "Validation Errors"
