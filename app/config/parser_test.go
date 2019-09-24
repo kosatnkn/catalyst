@@ -74,3 +74,22 @@ func TestGetConfigDirNoTailing(t *testing.T) {
 		t.Errorf("Required %v, got %v", need, got)
 	}
 }
+
+func TestParseConfigUnmatchedUnpacker(t *testing.T) {
+
+	// check panic
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Expected to panic but did not")
+		}
+	}()
+
+	// input
+	file := "../../config/app.yaml"
+	var unpacker string // some data type that cannot be unmarshalled in to
+
+	// run
+	parseConfig(file, &unpacker)
+
+	t.Log(unpacker)
+}
