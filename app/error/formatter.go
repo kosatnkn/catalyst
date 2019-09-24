@@ -2,6 +2,7 @@ package error
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -101,9 +102,27 @@ func formatValidationPayload(p map[string]string) map[string]string {
 	ep := make(map[string]string)
 
 	for k, v := range p {
-		ek := strcase.ToSnake(k)
+
+		fmt.Printf("Key: %s, Val: %s", k, v)
+
+		ek := formatKey(k)
 		ep[ek] = v
 	}
 
 	return ep
+}
+
+// formatKey formats the key as a snake case string consisting only of lowecase characters.
+func formatKey(k string) string {
+
+	kParts := strings.Split(k, ".")
+
+	// remove unpacker name
+	kParts = kParts[1:]
+
+	for i, part := range kParts {
+		kParts[i] = strcase.ToSnake(part)
+	}
+
+	return strings.Join(kParts, ".")
 }
