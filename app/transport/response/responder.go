@@ -22,7 +22,7 @@ func Send(w http.ResponseWriter, payload []byte, code int) {
 }
 
 // Error formats and sends the error response.
-func Error(ctx context.Context, err interface{}, w http.ResponseWriter, logger adapters.LogAdapterInterface) {
+func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger adapters.LogAdapterInterface) {
 
 	var msg []byte = []byte("Unknown error type")
 	var code int = 500
