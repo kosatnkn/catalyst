@@ -28,6 +28,7 @@ paths:
         Provides information about the API like `name`, `version`, `purpose`.
       responses:
         '200':
+          description: API Details
           content:
             application/json:
               schema:
@@ -36,15 +37,15 @@ paths:
                   name:
                     type: string
                     enum:
-                      - $ref: '#info/title'
+                      - $ref: '#/info/title'
                   version:
                     type: string
                     enum:
-                      - $ref: '#info/version'
+                      - $ref: '#/info/version'
                   purpose:
                     type: string
                     enum:
-                      - $ref: '#info/description'
+                      - $ref: '#/info/description'
 
 
 # -------------------------------------------------
