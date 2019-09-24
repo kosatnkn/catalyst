@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/error"
 	errTypes "github.com/kosatnkn/catalyst/app/error/types"
+	"github.com/kosatnkn/catalyst/app/transport/response"
 )
 
 // RequestCheckerMiddleware validates the request header.
@@ -16,17 +16,17 @@ type RequestCheckerMiddleware struct {
 }
 
 // Init initialize a new instance of RequestCheckerMiddleware.
-func (rtm *RequestCheckerMiddleware) Init(ctr *container.Container) {
+func (m *RequestCheckerMiddleware) Init(ctr *container.Container) {
 
-	rtm.container = ctr
+	m.container = ctr
 
-	rtm.omittedRoutes = []string{
+	m.omittedRoutes = []string{
 		"/favicon.ico",
 	}
 }
 
 // Middleware executes middleware rules of RequestCheckerMiddleware.
-func (rtm *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
+func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -34,7 +34,7 @@ func (rtm *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler 
 		contentType := r.Header.Get("Content-Type")
 
 		// skip omitted routes
-		for _, v := range rtm.omittedRoutes {
+		for _, v := range m.omittedRoutes {
 
 			if v == requestURI {
 				next.ServeHTTP(w, r)
@@ -45,7 +45,9 @@ func (rtm *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler 
 		// check content type
 		if contentType != "application/json" {
 
-			error.Handle(r.Context(), errTypes.NewMiddlewareError(fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType), 100, ""), w, rtm.container.Adapters.Log)
+			err := errTypes.NewMiddlewareError(fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType), 100, "")
+
+			response.Error(r.Context(), err, w, m.container.Adapters.Log)
 
 			return
 		}
