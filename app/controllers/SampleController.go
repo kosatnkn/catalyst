@@ -21,10 +21,9 @@ type SampleController struct {
 	sampleUseCase *sample.Sample
 }
 
-// NewSampleController returns a base type for this controller
+// NewSampleController creates a new instance of the controller.
 func NewSampleController(container *container.Container) *SampleController {
 
-	// create instance of controller
 	return &SampleController{
 		container:     container,
 		sampleUseCase: sample.NewSample(container),

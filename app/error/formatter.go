@@ -17,7 +17,6 @@ import (
 // format formats the error by error type.
 func format(err error) []byte {
 
-	wrapper := mappers.Error{}
 	var payload interface{}
 
 	switch err.(type) {
@@ -37,7 +36,10 @@ func format(err error) []byte {
 		break
 	}
 
-	wrapper.Payload = payload
+	wrapper := mappers.Error{
+		Payload: payload,
+	}
+
 	message, _ := json.Marshal(wrapper)
 
 	return message
@@ -49,13 +51,12 @@ func formatCustomError(err error) transformers.ErrorTransformer {
 	errorDetails := strings.Split(err.Error(), "|")
 	errCode, _ := strconv.Atoi(errorDetails[1])
 
-	payload := transformers.ErrorTransformer{}
-	payload.Msg = errorDetails[0]
-	payload.Code = errCode
-	payload.Type = errorDetails[2]
-	payload.Trace = errorDetails[3]
-
-	return payload
+	return transformers.ErrorTransformer{
+		Msg:   errorDetails[0],
+		Code:  errCode,
+		Type:  errorDetails[2],
+		Trace: errorDetails[3],
+	}
 }
 
 // formatUnpackerError formats request payload unpacking errors.
@@ -63,24 +64,25 @@ func formatCustomError(err error) transformers.ErrorTransformer {
 // An UnpackerError is a type of ValidationError.
 func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 
-	payload := transformers.ValidationErrorTransformer{}
-	payload.Type = "Validation Errors"
-	payload.Trace = err.Error()
-
-	return payload
+	return transformers.ValidationErrorTransformer{
+		Type:  "Validation Errors",
+		Trace: err.Error(),
+	}
 }
 
 // formatValidationErrors formats validation errors.
 // These are errors thrown when field wise validations of the data structure fails.
 func formatValidationErrors(p map[string]string) []byte {
 
-	wrapper := mappers.Error{}
+	payload := transformers.ValidationErrorTransformer{
+		Type:  "Validation Errors",
+		Trace: formatValidationPayload(p),
+	}
 
-	payload := transformers.ValidationErrorTransformer{}
-	payload.Type = "Validation Errors"
-	payload.Trace = formatValidationPayload(p)
+	wrapper := mappers.Error{
+		Payload: payload,
+	}
 
-	wrapper.Payload = payload
 	message, _ := json.Marshal(wrapper)
 
 	return message
@@ -89,11 +91,10 @@ func formatValidationErrors(p map[string]string) []byte {
 // formatUnknownError formats errors of unknown error types.
 func formatUnknownError(err error) transformers.ErrorTransformer {
 
-	payload := transformers.ErrorTransformer{}
-	payload.Type = "Unknown Error"
-	payload.Msg = err.Error()
-
-	return payload
+	return transformers.ErrorTransformer{
+		Type: "Unknown Error",
+		Msg:  err.Error(),
+	}
 }
 
 // formatValidationPayload does a final round of formatting to validation errors.
