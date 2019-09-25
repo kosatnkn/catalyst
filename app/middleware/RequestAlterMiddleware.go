@@ -12,8 +12,13 @@ import (
 // RequestAlterMiddleware alrers the request.
 type RequestAlterMiddleware struct{}
 
+// NewRequestAlterMiddleware returns a new instance of RequestAlterMiddleware.
+func NewRequestAlterMiddleware() *RequestAlterMiddleware {
+	return &RequestAlterMiddleware{}
+}
+
 // Middleware executes middleware rules of RequestAlterMiddleware.
-func (rtm *RequestAlterMiddleware) Middleware(next http.Handler) http.Handler {
+func (m *RequestAlterMiddleware) Middleware(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

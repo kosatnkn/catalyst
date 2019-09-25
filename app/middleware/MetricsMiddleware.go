@@ -12,8 +12,13 @@ import (
 // MetricsMiddleware attaches metrics to the request.
 type MetricsMiddleware struct{}
 
+// NewMetricsMiddleware returns a new instance of MetricsMiddleware.
+func NewMetricsMiddleware() *MetricsMiddleware {
+	return &MetricsMiddleware{}
+}
+
 // Middleware executes middleware rules of MetricsMiddleware.
-func (rtm *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
+func (m *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -24,25 +29,8 @@ func (rtm *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(lrw, r)
 
 		duration := float64(time.Since(startTime).Nanoseconds() / 1000000)
-		metrics.HTTPReqDuration.WithLabelValues(strconv.Itoa(lrw.statusCode), r.Method, generalizePath(r.URL.Path)).Observe(duration)
+		metrics.HTTPReqDuration.WithLabelValues(strconv.Itoa(lrw.statusCode), r.Method, m.generalizePath(r.URL.Path)).Observe(duration)
 	})
-}
-
-// The loggingResponseWriter is created embedding http.ResponseWriter
-// https://golang.org/doc/effective_go.html#embedding
-// https://ndersson.me/post/capturing_status_code_in_net_http/
-type loggingResponseWriter struct {
-	http.ResponseWriter
-	statusCode int
-}
-
-func newLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
-	return &loggingResponseWriter{w, http.StatusOK}
-}
-
-func (lrw *loggingResponseWriter) WriteHeader(code int) {
-	lrw.statusCode = code
-	lrw.ResponseWriter.WriteHeader(code)
 }
 
 // generalizePath genrates a common signature for the given route endpoint.
@@ -55,7 +43,7 @@ func (lrw *loggingResponseWriter) WriteHeader(code int) {
 // '/resource/123', '/resource/456' and '/resource/-789' will be converted to '/resource/id'
 // '/resource/79.5' and '/resource/-5.5' will be converted to '/resource/val'
 // '/resource/123/lon/79.5/lat/5.5' will be converted to '/resource/id/lon/val/lat/val'
-func generalizePath(path string) string {
+func (m *MetricsMiddleware) generalizePath(path string) string {
 
 	routeParts := strings.Split(path, "/")
 
@@ -75,4 +63,24 @@ func generalizePath(path string) string {
 	}
 
 	return strings.Join(routeParts, "/")
+}
+
+// The loggingResponseWriter is created embedding http.ResponseWriter
+// https://golang.org/doc/effective_go.html#embedding
+// https://ndersson.me/post/capturing_status_code_in_net_http/
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+// newLoggingResponseWriter creates a new instance of loggingResponseWriter.
+func newLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
+	return &loggingResponseWriter{w, http.StatusOK}
+}
+
+// WriteHeader intercepts the actual WriteHeader function of ResponseWriter
+// and stores the status code in statusCode.
+func (lrw *loggingResponseWriter) WriteHeader(code int) {
+	lrw.statusCode = code
+	lrw.ResponseWriter.WriteHeader(code)
 }

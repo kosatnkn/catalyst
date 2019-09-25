@@ -13,18 +13,15 @@ import (
 )
 
 // Init initializes the router.
-func Init(container *container.Container) *mux.Router {
+func Init(ctr *container.Container) *mux.Router {
 
 	// create new router
 	r := mux.NewRouter()
 
 	// initialize middleware
-	requestCheckerMiddleware := middleware.RequestCheckerMiddleware{}
-	requestCheckerMiddleware.Init(container)
-
-	requestAlterMidleware := middleware.RequestAlterMiddleware{}
-
-	metricsMidleware := middleware.MetricsMiddleware{}
+	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
+	requestAlterMidleware := middleware.NewRequestAlterMiddleware()
+	metricsMidleware := middleware.NewMetricsMiddleware()
 
 	// add middleware to router
 	// NOTE: middleware will execute in the order they are added to the router
@@ -34,7 +31,7 @@ func Init(container *container.Container) *mux.Router {
 	r.Use(requestAlterMidleware.Middleware)
 
 	// initialize controllers
-	sampleController := controllers.NewSampleController(container)
+	sampleController := controllers.NewSampleController(ctr)
 
 	// bind controller functions to routes
 

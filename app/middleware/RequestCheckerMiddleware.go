@@ -15,14 +15,16 @@ type RequestCheckerMiddleware struct {
 	omittedRoutes []string
 }
 
-// Init initialize a new instance of RequestCheckerMiddleware.
-func (m *RequestCheckerMiddleware) Init(ctr *container.Container) {
+// NewRequestCheckerMiddleware returns a new instance of RequestCheckerMiddleware.
+func NewRequestCheckerMiddleware(ctr *container.Container) *RequestCheckerMiddleware {
 
-	m.container = ctr
-
-	m.omittedRoutes = []string{
-		"/favicon.ico",
+	return &RequestCheckerMiddleware{
+		container: ctr,
+		omittedRoutes: []string{
+			"/favicon.ico",
+		},
 	}
+
 }
 
 // Middleware executes middleware rules of RequestCheckerMiddleware.
