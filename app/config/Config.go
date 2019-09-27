@@ -10,16 +10,16 @@ type Config struct {
 
 // AppConfig holds application configurations.
 type AppConfig struct {
-	Name     string  `yaml:"name"`
-	Mode     string  `yaml:"mode"`
-	Host     string  `yaml:"host"`
-	Port     int     `yaml:"port"`
-	Timezone string  `yaml:"timezone"`
-	Metrics  Metrics `yaml:"metrics"`
+	Name     string        `yaml:"name"`
+	Mode     string        `yaml:"mode"`
+	Host     string        `yaml:"host"`
+	Port     int           `yaml:"port"`
+	Timezone string        `yaml:"timezone"`
+	Metrics  MetricsConfig `yaml:"metrics"`
 }
 
-// Metrics holds application metric configurations.
-type Metrics struct {
+// MetricsConfig holds application metric configurations.
+type MetricsConfig struct {
 	Enabled bool   `yaml:"enabled"`
 	Port    int    `yaml:"port"`
 	Route   string `yaml:"route"`
