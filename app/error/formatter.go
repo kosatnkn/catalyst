@@ -2,7 +2,6 @@ package error
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -103,8 +102,6 @@ func formatValidationPayload(p map[string]string) map[string]string {
 	ep := make(map[string]string)
 
 	for k, v := range p {
-
-		fmt.Printf("Key: %s, Val: %s", k, v)
 
 		ek := formatKey(k)
 		ep[ek] = v
