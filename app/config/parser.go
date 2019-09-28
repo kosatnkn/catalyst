@@ -8,8 +8,7 @@ import (
 )
 
 // Parse parses all configuration to a single Config object.
-//
-// cfgDir The path of the configuration directory
+// `cfgDir` is the path of the configuration directory.
 func Parse(cfgDir string) *Config {
 
 	// set config directory
