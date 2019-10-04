@@ -1,5 +1,6 @@
 # Catalyst
-Go clean architecture RESTful API
+
+A RESTful API base that is written in **Go** using the **Clean Architecture** paradigm.
 
 [![Build Status](https://travis-ci.org/kosatnkn/catalyst.svg?branch=master)](https://travis-ci.org/kosatnkn/catalyst)
 [![Coverage Status](https://coveralls.io/repos/github/kosatnkn/catalyst/badge.svg?branch=master)](https://coveralls.io/github/kosatnkn/catalyst?branch=master)
