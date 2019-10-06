@@ -85,6 +85,11 @@ Use go mod in projects that are within the `GOPATH`
     export GO111MODULE=on
 ```
 
+Initialize go mod
+```bash
+    go mod init github.com/my/repo
+```
+
 View final versions that will be used in a build for all direct and indirect dependencies
 ```bash
     go list -m all
