@@ -2,7 +2,7 @@ package splash
 
 import "fmt"
 
-// A breif description of the service.
+// A brief description of the service.
 const serviceDetails string = `
 Go Clean Architecture Base Project for RESTful Services
 
