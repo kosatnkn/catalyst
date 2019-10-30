@@ -28,6 +28,66 @@ A REST API base that is written in **Go** using the **Clean Architecture** parad
 - Initialize router
 - Run server
 
+## Creating a New Project using Catalyst
+
+A new project can be created in one of two ways.
+
+### Use Cauldron
+
+The easiest way to create a project using `Catalyst` as the base is to use `Cauldron`. It is a small tool that enables you to set up a new project in no time.
+
+More information about `Cauldron` can be found [here](https://github.com/kosatnkn/cauldron)
+
+Clone and install `Cauldron`
+```bash
+    git clone https://github.com/kosatnkn/cauldron.git
+
+    cd  cauldron
+
+    go install
+```
+
+Create a new project
+```bash
+    $ cauldron -n=ProjectOne -ns=github.com/example [-t=v1.0.0]
+```
+> NOTE: 
+> - -n Project name (ex: ProjectOne)
+> - -ns Namespace for the project (ex: github.com/example)
+> - -t Release version of Catalyst to be used. The latest version will be used if -t is not provided
+> - -help or -h Show help message
+ 
+Cauldron will do a git init on the newly created project but you will have to stage all the files in the project and do the first commit yourself.
+```shell
+    git add .
+
+    git commit -m "first commit"
+```
+
+### Cloning
+
+This is the work intensive approach.
+
+Clone `Catalyst`
+```bash
+    git clone https://github.com/kosatnkn/catalyst.git <new_project_name>
+```
+
+Remove `.git`
+```bash
+    cd <new_project_name>
+
+    rm -rf .git
+```
+
+Change import paths
+> NOTE: Since `Catalyst` uses go mod the the newly created application will still work. But all the import paths would be as in `Catalyst` base project which is not what you will want.
+- First change the module name in the `go.mod` file to a module name of your choice
+- Then do a `Find & Replace` in the entire project to update all the import paths
+- You may also need to change the splash text in `app/splash/styles.go`
+- Now run and see whether the project compiles and run properly
+- If so you can do a `git init` to the project
+
 
 ## Request Response Cycle
 ```text
