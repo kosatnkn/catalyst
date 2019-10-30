@@ -13,7 +13,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/metrics"
 )
 
-// Expose metrics as a seperate Prometheus metric server.
+// Expose metrics as a separate Prometheus metric server.
 func exposeMetrics(cfg config.AppConfig, ctr *container.Container) {
 
 	if !cfg.Metrics.Enabled {

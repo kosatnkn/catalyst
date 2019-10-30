@@ -96,7 +96,7 @@ func (a *PostgresAdapter) convertQuery(query string) (string, []string) {
 	namedParams := exp.FindAllString(query, -1)
 
 	for i := 0; i < len(namedParams); i++ {
-		namedParams[i] = strings.TrimPrefix(namedParams[i], "?")
+		namedParams[i] = strings.TrimPrefix(namedParams[i], a.pqPrefix)
 	}
 
 	paramPosition := 0
