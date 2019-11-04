@@ -47,7 +47,7 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 }
 
 // Query runs a query and returns the result.
-func (a *PostgresAdapter) Query(query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *PostgresAdapter) Query(tx *sql.Tx, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
 
 	convertedQuery, placeholders := a.convertQuery(query)
 
@@ -78,6 +78,12 @@ func (a *PostgresAdapter) Query(query string, parameters map[string]interface{})
 	}
 
 	return a.prepareResultSet(result)
+}
+
+// NewTransaction creates a new database transaction.
+func (a *PostgresAdapter) NewTransaction() (*sql.Tx, error) {
+
+	return a.pool.Begin()
 }
 
 // Destruct will close the Postgres adapter releasing all resources.
