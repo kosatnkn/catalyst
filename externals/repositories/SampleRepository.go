@@ -23,27 +23,20 @@ func NewSampleRepository(dbAdapter adapters.DBAdapterInterface) repositories.Sam
 // Get retrieves a collection of Samples.
 func (repo *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 
-	// temporarily added
-	var m []entities.Sample
+	query := `SELECT id, name
+				FROM public.sample`
 
-	m = tempGetMockedData()
+	parameters := map[string]interface{}{
+		"id":   4,
+		"name": "Name 4",
+	}
 
-	return m, nil
+	result, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return nil, err
+	}
 
-	// query := `SELECT id, name
-	// 			FROM public.sample`
-
-	// parameters := map[string]interface{}{
-	// 	"id":   4,
-	// 	"name": "Name 4",
-	// }
-
-	// result, err := repo.db.Query(query, parameters)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return mapResult(result), nil
+	return mapResult(result), nil
 }
 
 // GetByID retrieves a single Sample.
@@ -74,7 +67,7 @@ func (repo *SampleRepository) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
-// Map results to entities.
+// mapResult maps the result to entities.
 func mapResult(result []map[string]interface{}) []entities.Sample {
 
 	var m []entities.Sample
@@ -91,21 +84,4 @@ func mapResult(result []map[string]interface{}) []entities.Sample {
 	}
 
 	return m
-}
-
-func tempGetMockedData() []entities.Sample {
-
-	const NumRecords int = 3
-	var samples []entities.Sample
-
-	for i := 0; i < NumRecords; i++ {
-
-		samples = append(samples, entities.Sample{
-			ID:       int64(i),
-			Name:     fmt.Sprintf("Name %d", i),
-			Password: fmt.Sprintf("Password %d", i),
-		})
-	}
-
-	return samples
 }

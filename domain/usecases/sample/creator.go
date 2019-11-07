@@ -2,7 +2,6 @@ package sample
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
@@ -12,7 +11,7 @@ func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 
 	// business logic here
 
-	_, err := s.transaction.Wrap(func(*sql.Tx) (interface{}, error) {
+	_, err := s.transaction.Wrap(ctx, func(ctx context.Context) (interface{}, error) {
 
 		err := s.sampleRepository.Add(ctx, sample)
 		if err != nil {
@@ -21,7 +20,6 @@ func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 
 		return nil, nil
 	})
-
 	if err != nil {
 		return err
 	}

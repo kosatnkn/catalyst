@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"regexp"
@@ -47,7 +48,7 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 }
 
 // Query runs a query and returns the result.
-func (a *PostgresAdapter) Query(tx *sql.Tx, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *PostgresAdapter) Query(ctx context.Context, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
 
 	convertedQuery, placeholders := a.convertQuery(query)
 
@@ -55,6 +56,9 @@ func (a *PostgresAdapter) Query(tx *sql.Tx, query string, parameters map[string]
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: check whether there is a transaction attached to the context
+	// if so use the transaction to prepare statement else use the pool
 
 	statement, err := a.pool.Prepare(convertedQuery)
 	if err != nil {
