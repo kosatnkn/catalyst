@@ -2,10 +2,8 @@ package unpackers
 
 // SampleUnpacker contains the unpacking structure for the address sent in request payload.
 type SampleUnpacker struct {
-	Street string `json:"street" validate:"required"`
-	City   string `json:"city" validate:"required"`
-	Planet string `json:"planet" validate:"required"`
-	Phone  string `json:"phone" validate:"required"`
+	Name     string `json:"name" validate:"required"`
+	Password string `json:"password" validate:"required"`
 }
 
 // NewSampleUnpacker creates a new instance of the unpacker.
@@ -18,9 +16,7 @@ func NewSampleUnpacker() *SampleUnpacker {
 func (u *SampleUnpacker) RequiredFormat() string {
 
 	return `{
-		"street": "<string>",
-		"city": "<string>",
-		"planet": "<string>",
-		"phone": "<string>"
+		"name": "<string>",
+		"password": "<string>"
 	}`
 }

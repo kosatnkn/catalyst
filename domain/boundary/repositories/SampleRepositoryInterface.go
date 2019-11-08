@@ -19,7 +19,7 @@ type SampleRepositoryInterface interface {
 	Add(ctx context.Context, sample entities.Sample) error
 
 	// Edit updates an existing sample identified by the id.
-	Edit(ctx context.Context, id int, sample entities.Sample) error
+	Edit(ctx context.Context, sample entities.Sample) error
 
 	// Delete deletes an existing sample identified by id.
 	Delete(ctx context.Context, id int) error

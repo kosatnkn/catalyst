@@ -27,5 +27,9 @@ func (s *Sample) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 		return entities.Sample{}, err
 	}
 
+	if sample.ID == 0 {
+		return entities.Sample{}, s.errorNoSample(id)
+	}
+
 	return sample, nil
 }
