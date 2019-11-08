@@ -13,6 +13,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/config"
 	errTypes "github.com/kosatnkn/catalyst/app/error/types"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
+	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
 // PostgresAdapter is used to communicate with a Postgres database.
@@ -57,10 +58,7 @@ func (a *PostgresAdapter) Query(ctx context.Context, query string, parameters ma
 		return nil, err
 	}
 
-	// TODO: check whether there is a transaction attached to the context
-	// if so use the transaction to prepare statement else use the pool
-
-	statement, err := a.pool.Prepare(convertedQuery)
+	statement, err := a.prepareStatement(ctx, convertedQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -92,6 +90,7 @@ func (a *PostgresAdapter) NewTransaction() (*sql.Tx, error) {
 
 // Destruct will close the Postgres adapter releasing all resources.
 func (a *PostgresAdapter) Destruct() {
+
 	a.pool.Close()
 }
 
@@ -140,6 +139,20 @@ func (a *PostgresAdapter) reorderParameters(params map[string]interface{}, named
 	}
 
 	return reorderedParams, nil
+}
+
+// prepareStatement creates a prepared statement using the query.
+//
+// Checks whether there is a transaction attached to the context.
+// If so use that transaction to prepare statement else use the pool.
+func (a *PostgresAdapter) prepareStatement(ctx context.Context, query string) (*sql.Stmt, error) {
+
+	tx := ctx.Value(globals.TxKey)
+	if tx != nil {
+		return tx.(*sql.Tx).Prepare(query)
+	}
+
+	return a.pool.Prepare(query)
 }
 
 // Prepare the return dataset for select statements.
