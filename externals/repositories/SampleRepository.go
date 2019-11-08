@@ -128,11 +128,11 @@ func mapResult(result []map[string]interface{}) []entities.Sample {
 
 	for _, row := range result {
 
-		id, _ := row["id"].(int)
+		id, _ := row["id"].(int64)
 		name, _ := row["name"].(string)
 
 		m = append(m, entities.Sample{
-			ID:   id,
+			ID:   int(id),
 			Name: name,
 		})
 	}
