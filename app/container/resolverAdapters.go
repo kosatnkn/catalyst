@@ -11,6 +11,7 @@ var resolvedAdapters Adapters
 func resolveAdapters(cfg *config.Config) Adapters {
 
 	resolveDBAdapter(cfg.DBConfig)
+	resolveDBTransactionAdapter()
 	resolveLogAdapter(cfg.LogConfig)
 	resolveValidatorAdapter()
 
@@ -23,6 +24,14 @@ func resolveDBAdapter(cfg config.DBConfig) {
 	db, _ := adapters.NewPostgresAdapter(cfg)
 
 	resolvedAdapters.DB = db
+}
+
+// resolveDBTransactionAdapter resolves the database transaction adapter.
+func resolveDBTransactionAdapter() {
+
+	tx := adapters.NewPostgresTxAdapter(resolvedAdapters.DB)
+
+	resolvedAdapters.DBTrans = tx
 }
 
 // resolveLogAdapter resolves the logging adapter.

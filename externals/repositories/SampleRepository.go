@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
@@ -23,47 +22,82 @@ func NewSampleRepository(dbAdapter adapters.DBAdapterInterface) repositories.Sam
 // Get retrieves a collection of Samples.
 func (repo *SampleRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 
-	// temporarily added
-	var m []entities.Sample
+	query := `SELECT id, name, password
+				FROM test.sample`
 
-	m = tempGetMockedData()
+	parameters := map[string]interface{}{}
 
-	return m, nil
+	result, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return nil, err
+	}
 
-	// query := `SELECT id, name
-	// 			FROM public.sample`
-
-	// parameters := map[string]interface{}{
-	// 	"id":   4,
-	// 	"name": "Name 4",
-	// }
-
-	// result, err := repo.db.Query(query, parameters)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return mapResult(result), nil
+	return mapResult(result), nil
 }
 
 // GetByID retrieves a single Sample.
 func (repo *SampleRepository) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 
-	return entities.Sample{
-		ID:       int64(id),
-		Name:     fmt.Sprintf("Name %d", id),
-		Password: fmt.Sprintf("Password %d", id),
-	}, nil
+	query := `SELECT id, name, password
+				FROM test.sample
+				WHERE id=?id`
+
+	parameters := map[string]interface{}{
+		"id": id,
+	}
+
+	result, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return entities.Sample{}, err
+	}
+
+	mapped := mapResult(result)
+	if len(mapped) == 0 {
+		return entities.Sample{}, nil
+	}
+
+	return mapped[0], nil
 }
 
 // Add adds a new sample.
 func (repo *SampleRepository) Add(ctx context.Context, sample entities.Sample) error {
 
+	query := `INSERT INTO test.sample
+				("name", "password")
+				VALUES(?name, ?password)
+				`
+
+	parameters := map[string]interface{}{
+		"name":     sample.Name,
+		"password": sample.Password,
+	}
+
+	_, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // Edit updates an existing sample identified by the id.
-func (repo *SampleRepository) Edit(ctx context.Context, id int, sample entities.Sample) error {
+func (repo *SampleRepository) Edit(ctx context.Context, sample entities.Sample) error {
+
+	query := `UPDATE test.sample
+				SET "name"=?name, "password"=?password
+				WHERE id=?id
+				`
+
+	parameters := map[string]interface{}{
+		"id":       sample.ID,
+		"name":     sample.Name,
+		"password": sample.Password,
+	}
+
+	_, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -71,10 +105,23 @@ func (repo *SampleRepository) Edit(ctx context.Context, id int, sample entities.
 // Delete deletes an existing sample identified by id.
 func (repo *SampleRepository) Delete(ctx context.Context, id int) error {
 
+	query := `DELETE FROM test.sample
+				WHERE id=?id
+				`
+
+	parameters := map[string]interface{}{
+		"id": id,
+	}
+
+	_, err := repo.db.Query(ctx, query, parameters)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-// Map results to entities.
+// mapResult maps the result to entities.
 func mapResult(result []map[string]interface{}) []entities.Sample {
 
 	var m []entities.Sample
@@ -85,27 +132,10 @@ func mapResult(result []map[string]interface{}) []entities.Sample {
 		name, _ := row["name"].(string)
 
 		m = append(m, entities.Sample{
-			ID:   id,
+			ID:   int(id),
 			Name: name,
 		})
 	}
 
 	return m
-}
-
-func tempGetMockedData() []entities.Sample {
-
-	const NumRecords int = 3
-	var samples []entities.Sample
-
-	for i := 0; i < NumRecords; i++ {
-
-		samples = append(samples, entities.Sample{
-			ID:       int64(i),
-			Name:     fmt.Sprintf("Name %d", i),
-			Password: fmt.Sprintf("Password %d", i),
-		})
-	}
-
-	return samples
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
-// RequestAlterMiddleware alrers the request.
+// RequestAlterMiddleware alerts the request.
 type RequestAlterMiddleware struct{}
 
 // NewRequestAlterMiddleware returns a new instance of RequestAlterMiddleware.

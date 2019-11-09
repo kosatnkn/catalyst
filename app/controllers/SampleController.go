@@ -116,8 +116,8 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 
 	// bind unpacked data to entities
 	sample := entities.Sample{
-		Name:     sampleUnpacker.Street,
-		Password: sampleUnpacker.Planet,
+		Name:     sampleUnpacker.Name,
+		Password: sampleUnpacker.Password,
 	}
 
 	// add
@@ -171,12 +171,13 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 
 	// bind unpacked data to entities
 	sample := entities.Sample{
-		Name:     sampleUnpacker.Street,
-		Password: sampleUnpacker.Planet,
+		ID:       id,
+		Name:     sampleUnpacker.Name,
+		Password: sampleUnpacker.Password,
 	}
 
 	// edit
-	err = ctl.sampleUseCase.Edit(ctx, id, sample)
+	err = ctl.sampleUseCase.Edit(ctx, sample)
 	if err != nil {
 		response.Error(ctx, w, err, ctl.container.Adapters.Log)
 		return

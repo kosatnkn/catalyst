@@ -6,7 +6,7 @@ import (
 	domainErr "github.com/kosatnkn/catalyst/domain/error"
 )
 
-func (r *Sample) throwNoSampleError(id int) error {
+func (r *Sample) errorNoSample(id int) error {
 
 	return (&domainErr.DomainError{}).New("Sample not found",
 		1000,

@@ -1,6 +1,7 @@
 package adapters
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"regexp"
@@ -12,6 +13,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/config"
 	errTypes "github.com/kosatnkn/catalyst/app/error/types"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
+	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
 // PostgresAdapter is used to communicate with a Postgres database.
@@ -47,7 +49,7 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 }
 
 // Query runs a query and returns the result.
-func (a *PostgresAdapter) Query(query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *PostgresAdapter) Query(ctx context.Context, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
 
 	convertedQuery, placeholders := a.convertQuery(query)
 
@@ -56,7 +58,7 @@ func (a *PostgresAdapter) Query(query string, parameters map[string]interface{})
 		return nil, err
 	}
 
-	statement, err := a.pool.Prepare(convertedQuery)
+	statement, err := a.prepareStatement(ctx, convertedQuery)
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +82,15 @@ func (a *PostgresAdapter) Query(query string, parameters map[string]interface{})
 	return a.prepareResultSet(result)
 }
 
+// NewTransaction creates a new database transaction.
+func (a *PostgresAdapter) NewTransaction() (*sql.Tx, error) {
+
+	return a.pool.Begin()
+}
+
 // Destruct will close the Postgres adapter releasing all resources.
 func (a *PostgresAdapter) Destruct() {
+
 	a.pool.Close()
 }
 
@@ -130,6 +139,20 @@ func (a *PostgresAdapter) reorderParameters(params map[string]interface{}, named
 	}
 
 	return reorderedParams, nil
+}
+
+// prepareStatement creates a prepared statement using the query.
+//
+// Checks whether there is a transaction attached to the context.
+// If so use that transaction to prepare statement else use the pool.
+func (a *PostgresAdapter) prepareStatement(ctx context.Context, query string) (*sql.Stmt, error) {
+
+	tx := ctx.Value(globals.TxKey)
+	if tx != nil {
+		return tx.(*sql.Tx).Prepare(query)
+	}
+
+	return a.pool.Prepare(query)
 }
 
 // Prepare the return dataset for select statements.

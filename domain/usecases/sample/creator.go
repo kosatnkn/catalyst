@@ -11,7 +11,15 @@ func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 
 	// business logic here
 
-	err := s.sampleRepository.Add(ctx, sample)
+	_, err := s.transaction.Wrap(ctx, func(ctx context.Context) (interface{}, error) {
+
+		err := s.sampleRepository.Add(ctx, sample)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	})
 	if err != nil {
 		return err
 	}
