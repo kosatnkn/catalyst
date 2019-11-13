@@ -28,7 +28,7 @@ A REST API base that is written in **Go** using the **Clean Architecture** parad
 - Initialize router
 - Run server
 
-## Creating a New Project using Catalyst
+## Creating a New Project Using Catalyst
 
 A new project can be created in one of two ways.
 
@@ -106,9 +106,9 @@ Change import paths
      + --------------------------- +     ||
                                 /\       ||
                                 ||       \/
-                            + -------------- +  =>  + --------- +
-                            |   Controller   |      | Validator |
-                            + -------------- +  <=  + --------- +
+                            + -------------- +  =>  + -------------------- +
+                            |   Controller   |      | Unpacker | Validator |
+                            + -------------- +  <=  + -------------------- +
                                 /\       ||
                                 ||       \/
                             + -------------- +
