@@ -1,4 +1,4 @@
-// Catalyst is a RESTful API starter written using the Clean Architecture paradigm.
+// Catalyst is a REST API base that is written in Go using the Clean Architecture paradigm.
 // Out of the box it contain following features.
 //
 // 	- A server to handle web requests
@@ -36,9 +36,9 @@
 //  + --------------------------- +     ||
 //                             /\       ||
 //                             ||       \/
-//                         + -------------- +  =>  + --------- +
-//                         |   Controller   |      | Validator |
-//                         + -------------- +  <=  + --------- +
+//                         + -------------- +  =>  + -------------------- +
+//                         |   Controller   |      | Unpacker | Validator |
+//                         + -------------- +  <=  + -------------------- +
 //                             /\       ||
 //                             ||       \/
 //                         + -------------- +

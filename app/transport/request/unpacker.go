@@ -22,7 +22,7 @@ func Unpack(r *http.Request, unpacker UnpackerInterface) error {
 	return nil
 }
 
-// formatUnpackerMessage returns any special chatacters from the message string.
+// formatUnpackerMessage removes any special chatacters from the message string.
 func formatUnpackerMessage(p string) string {
 
 	// catch carrage returns and new lines
