@@ -28,8 +28,6 @@ type MetricConfig struct {
 // LogConfig holds application log configurations.
 type LogConfig struct {
 	Level     string `yaml:"level"`
-	Remote    bool   `yaml:"remote_log"`
-	FilePath  bool   `yaml:"file_path_enabled"`
 	Colors    bool   `yaml:"colors"`
 	Console   bool   `yaml:"console"`
 	File      bool   `yaml:"file"`

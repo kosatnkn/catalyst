@@ -6,8 +6,6 @@
 #  - INFO
 #  - WARN
 level: "ERROR"
-remote_log: true
-file_path_enabled: true
 
 # "colors" define whether logging colors will be enabled or not
 colors: true
