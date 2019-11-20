@@ -25,7 +25,7 @@ func Send(w http.ResponseWriter, payload []byte, code int) {
 func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger adapters.LogAdapterInterface) {
 
 	var msg []byte = []byte("Unknown error type")
-	var code int = 500
+	var code int = http.StatusInternalServerError
 
 	// check whether err is a general error or a validation error
 	errG, isG := err.(error)
