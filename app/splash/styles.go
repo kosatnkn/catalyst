@@ -3,8 +3,8 @@ package splash
 // More is available at following link.
 // https://www.kammerl.de/ascii/AsciiSignature.php
 
-// StyleShadow shadow style
-const StyleShadow string = `
+// StyleDefault uses the shadow style
+const StyleDefault string = `
 
   ___|       |         |            |  
  |      _' | __|  _' | | |   |  __| __|
