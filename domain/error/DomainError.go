@@ -9,8 +9,8 @@ type DomainError struct {
 	details string
 }
 
-// New creates a new DomainError instance.
-func (e *DomainError) New(message string, code int, details string) error {
+// NewDomainError creates a new DomainError.
+func NewDomainError(message string, code int, details string) error {
 
 	err := &DomainError{}
 

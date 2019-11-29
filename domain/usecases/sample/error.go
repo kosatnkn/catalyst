@@ -3,12 +3,12 @@ package sample
 import (
 	"fmt"
 
-	domainErr "github.com/kosatnkn/catalyst/domain/error"
+	err "github.com/kosatnkn/catalyst/domain/error"
 )
 
 func (r *Sample) errorNoSample(id int) error {
 
-	return (&domainErr.DomainError{}).New("Sample not found",
+	return err.NewDomainError("Sample not found",
 		1000,
 		fmt.Sprintf("No sample found for id %d", id))
 }
