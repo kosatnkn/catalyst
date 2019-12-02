@@ -1,6 +1,8 @@
 package container
 
 import (
+	"fmt"
+
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/externals/adapters"
 )
@@ -21,7 +23,10 @@ func resolveAdapters(cfg *config.Config) Adapters {
 // resolveDBAdapter resolves the database adapter.
 func resolveDBAdapter(cfg config.DBConfig) {
 
-	db, _ := adapters.NewPostgresAdapter(cfg)
+	db, err := adapters.NewPostgresAdapter(cfg)
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
 
 	resolvedAdapters.DB = db
 }
@@ -37,7 +42,10 @@ func resolveDBTransactionAdapter() {
 // resolveLogAdapter resolves the logging adapter.
 func resolveLogAdapter(cfg config.LogConfig) {
 
-	la, _ := adapters.NewLogAdapter(cfg)
+	la, err := adapters.NewLogAdapter(cfg)
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
 
 	resolvedAdapters.Log = la
 }
@@ -45,7 +53,10 @@ func resolveLogAdapter(cfg config.LogConfig) {
 // resolveValidatorAdapter resolves the validator adapter.
 func resolveValidatorAdapter() {
 
-	va, _ := adapters.NewValidatorAdapter()
+	va, err := adapters.NewValidatorAdapter()
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
 
 	resolvedAdapters.Validator = va
 }
