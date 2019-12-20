@@ -1,0 +1,18 @@
+# IDE metadata
+/.idea
+/.vscode
+*.out
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Dependancies
+/vendor
+glide.lock

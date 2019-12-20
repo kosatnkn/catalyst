@@ -37,5 +37,5 @@ func exposeMetrics(cfg config.AppConfig, ctr *container.Container) {
 		}
 	}()
 
-	fmt.Println(fmt.Sprintf("Exposing metrics on %v ...", address))
+	fmt.Println(fmt.Sprintf("Exposing metrics on %v%s ...", address, cfg.Metrics.Route))
 }
