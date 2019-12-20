@@ -174,3 +174,23 @@ Optional step to create a vendor directory
 ```bash
     go mod vendor
 ```
+
+## Docker
+
+Catalyst provides a basic multistage Dockerfile so you have a starting point for creating Docker images.
+
+```bash
+    docker build -t <tag_name>:<tag_version> .
+```
+
+> NOTE: Do not forget the tailing `.` that indicates the current directory
+
+**Example**
+```bash
+    docker build -t kosatnkn/catalyst:1.0.0 .
+```
+
+You can use it as follows
+```bash
+    docker run --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
+```

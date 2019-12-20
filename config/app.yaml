@@ -1,6 +1,6 @@
 name: catalyst
 mode: DEBUG
-host: localhost
+host:
 port: 3000
 timezone: GMT+0530
 
