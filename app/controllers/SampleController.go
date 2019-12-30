@@ -10,6 +10,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/transport/request/unpackers"
 	"github.com/kosatnkn/catalyst/app/transport/response"
 	"github.com/kosatnkn/catalyst/app/transport/response/transformers"
+	"github.com/kosatnkn/catalyst/app/validator"
 	"github.com/kosatnkn/catalyst/domain/entities"
 	"github.com/kosatnkn/catalyst/domain/globals"
 	"github.com/kosatnkn/catalyst/domain/usecases/sample"
@@ -70,7 +71,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// NOTE: here a validation is not actually needed since query parameters
 	// are validated to a certain extent by putting parameter validations in
 	// routes and by data type conversions done in the controller
-	errs := ctl.container.Adapters.Validator.ValidateField(id, "required,gt=0")
+	errs := validator.ValidateField(id, "required, gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return
@@ -108,7 +109,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// validate unpacked data
-	errs := ctl.container.Adapters.Validator.Validate(sampleUnpacker)
+	errs := validator.Validate(sampleUnpacker)
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return
@@ -156,14 +157,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
-	errs := ctl.container.Adapters.Validator.ValidateField(id, "required,gt=0")
+	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return
 	}
 
 	// validate unpacked data
-	errs = ctl.container.Adapters.Validator.Validate(sampleUnpacker)
+	errs = validator.Validate(sampleUnpacker)
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return
@@ -201,7 +202,7 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
-	errs := ctl.container.Adapters.Validator.ValidateField(id, "required,gt=0")
+	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return

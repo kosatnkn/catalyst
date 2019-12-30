@@ -15,7 +15,6 @@ func resolveAdapters(cfg *config.Config) Adapters {
 	resolveDBAdapter(cfg.DBConfig)
 	resolveDBTransactionAdapter()
 	resolveLogAdapter(cfg.LogConfig)
-	resolveValidatorAdapter()
 
 	return resolvedAdapters
 }
@@ -48,15 +47,4 @@ func resolveLogAdapter(cfg config.LogConfig) {
 	}
 
 	resolvedAdapters.Log = la
-}
-
-// resolveValidatorAdapter resolves the validator adapter.
-func resolveValidatorAdapter() {
-
-	va, err := adapters.NewValidatorAdapter()
-	if err != nil {
-		panic(fmt.Sprintf("error: %v", err))
-	}
-
-	resolvedAdapters.Validator = va
 }
