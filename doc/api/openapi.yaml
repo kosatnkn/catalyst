@@ -1,25 +1,22 @@
 openapi: 3.0.0
 
-
 info:
   title: Catalyst
   description: >
     Go clean architecture RESTful API
   version: v1.1.0
 
-  
 servers:
   - url: http://localhost:8000
     description: Mock  
 
 paths:
 
-# -------------------------------------------------
-# API Information
-# -------------------------------------------------
+  # -------------------------------------------------
+  # API Information
+  # -------------------------------------------------
 
   /:
-
     get: # Get API information
       tags:
         - information
@@ -47,24 +44,49 @@ paths:
                     enum:
                       - $ref: '#/info/description'
 
-
-# -------------------------------------------------
-# Sample
-# -------------------------------------------------
+  # -------------------------------------------------
+  # Sample
+  # -------------------------------------------------
 
   /samples:
-
     get: # Get samples
       tags:
         - samples
       summary: Return a collection of samples
+      parameters:
+        - name: filters
+          in: query
+          description: Additional filters JSON in string serialized format
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/filter'
+        - in: query
+          name: paginator
+          description: Paginator JSON in string serialized format
+          schema:
+            $ref: '#/components/schemas/paginator'
       responses:
-        '200':
-          $ref: '#/components/responses/data/sample/array'
-        '400':
-          $ref: '#/components/responses/exceptions/domain'
-        '500':
-          $ref: '#/components/responses/exceptions/server'
+        200:
+          description: Samples collection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/sample'
+        400:
+          description: Domain Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+        500:
+          description: Service Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
 
     post: # Create new sample
       tags:
@@ -73,263 +95,208 @@ paths:
       description: >
         Create new sample from provided data.
       requestBody:
-        $ref: '#/components/requests/payloads/sample_create'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sample'
+        required: true
       responses:
-        '201':
-          $ref: '#/components/responses/resource_created'
-        '400':
-          $ref: '#/components/responses/exceptions/domain'
-        '422':
-          $ref: '#/components/responses/exceptions/validation'
-        '500':
-          $ref: '#/components/responses/exceptions/server'
+        201:
+          description: Sample created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/identifier'
+        400:
+          description: Domain Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validation_error'
+        500:
+          description: Service Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
 
   /samples/{id}:
-    
     get: # Get sample by id
       tags:
         - samples
       summary: Return a single sample by id
       parameters:
-        - $ref: '#/components/requests/query_params/identifier'
+        - name: id
+          in: path
+          description: Identifier
+          required: true
+          schema:
+            type: integer
       responses:
-        '200':
-          $ref: '#/components/responses/data/sample/item'
-        '400':
-          $ref: '#/components/responses/exceptions/domain'
-        '500':
-          $ref: '#/components/responses/exceptions/server'
+        200:
+          description: Sample
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sample'
+        400:
+          description: Domain Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+        500:
+          description: Service Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
 
     put: # Edit sample
       tags:
         - samples
       summary: Update a sample
       parameters:
-        - $ref: '#/components/requests/query_params/identifier'
+        - name: id
+          in: path
+          description: Identifier
+          required: true
+          schema:
+            type: integer
       requestBody:
-          $ref: '#/components/requests/payloads/sample_update'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sample'
+        required: true
       responses:
-        '204':
-          $ref: '#/components/responses/resource_updated'
-        '400':
-          $ref: '#/components/responses/exceptions/domain'
-        '422':
-          $ref: '#/components/responses/exceptions/validation'
-        '500':
-          $ref: '#/components/responses/exceptions/server'
+        204:
+          description: Sample updated
+        400:
+          description: Domain Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+        422:
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validation_error'
+        500:
+          description: Service Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
 
     delete: # Delete sample
       tags:
         - samples
       summary: Delete a sample
       parameters:
-        - $ref: '#/components/requests/query_params/identifier'
+        - name: id
+          in: path
+          description: Identifier
+          required: true
+          schema:
+            type: integer
       responses:
-        '204':
-          $ref: '#/components/responses/resource_deleted'
-        '400':
-          $ref: '#/components/responses/exceptions/domain'
-        '500':
-          $ref: '#/components/responses/exceptions/server'
-  
+        204:
+          description: Sample deleted
+        400:
+          description: Domain Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+        500:
+          description: Service Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generic_error'
+
 
 # -------------------------------------------------
-# Common Components
+# Components
 # -------------------------------------------------
 
 components:
 
-  # Requests
-  requests:
-
-    # Query Parameters
-    query_params: 
-      identifier: # Resource Identifier
-        in: path
-        name: id
-        description: Resource identifier
-        required: true
-        schema:
-          $ref: '#/components/schemas/query_params/identifier'
-      paginator: # Paginator
-        in: path
-        name: paginator
-        description: Paginator
-        required: false
-        schema:
-          $ref: '#/components/schemas/query_params/paginator'
-
-    # Request Payloads
-    payloads:
-      sample_create: # Sample Create
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/payloads/sample'
-      sample_update: # Sample Update
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/payloads/sample'
-
-  # Responses
-  responses:
-
-    # Resource Created
-    resource_created:
-      description: Resource created
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              data:
-                $ref: '#/components/schemas/data/identifier'
-    resource_updated:
-      description: Resource updated
-      content:
-        application/json:
-          schemas:
-            AnyValue: {}
-    resource_deleted:
-      description: Resource deleted
-      content:
-        application/json:
-          schemas:
-            AnyValue: {}
-      
-    # Response Payload Data
-    data:
-      sample: # Sample
-        item:
-          description: A sample object
-          content:
-            application/json:
-              schema: 
-                type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/data/sample'
-        array:
-          description: An array of samples
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items: 
-                      $ref: '#/components/schemas/data/sample'
-      
-    # Exceptions
-    exceptions:
-      domain: # Domain Exception
-        description: Domain Exceptions
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/exceptions/general'
-      validation: # Validation Exception
-        description: Validation Exceptions
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/exceptions/validation'
-      server: # Server Exception
-        description: Server Exceptions
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/exceptions/general'
-
-
-  # -------------------------------------------------
-  # Schemas
-  # -------------------------------------------------
-
   schemas:
-
-    # Request Query Parameters
-    query_params:
-      identifier: # Resource Identifier
-        $ref: '#/components/schemas/commons/identifier'
-      paginator: # Paginator
-        type: object
-        properties:
-          page:
-            type: integer
-            minimum: 1
-            default: 1
-          size:
-            type: integer
-            default: 10
-      
-    # Request Payloads
-    payloads:
-      sample: # Sample Create and Update
-        type: object
-        properties:
-          street:
-            type: string
-          city:
-            type: string
-          planet:
-            type: string
-          phone:
-            type: string
-            
-    # Response Payloads
-    data:
-      identifier: # Resource Identifier
-        type: object
-        properties:
-          id:
-            $ref: '#/components/schemas/commons/identifier'
-      sample: # Sample
-        type: object
-        properties:
-          transformed_id:
-            $ref: '#/components/schemas/commons/identifier'
-          transformed_name:
-            type: string
-
-    # Common Schemas
-    commons:
-      identifier: # Identifier
-        type: integer
-        minimum: 1
-        maximum: 99999
-      
-    # Exceptions
-    exceptions: 
-      general: # General Exception
-        type: object
-        properties:
-          errors:
-            type: object
-            properties:
-              code:
+  
+    identifier: 
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          maximum: 99999
+    
+    filter:
+      type: object
+      properties:
+        field:
+          type: string
+        value:
+          type: string
+  
+    paginator: 
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 1
+          default: 1
+        size:
+          type: integer
+          default: 10
+    
+    sample: 
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        planet:
+          type: string
+        phone:
+          type: string
+          
+    generic_error:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            trace:
+              type: string
+          required:
+            - code
+            - message
+    
+    validation_error:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            field: 
+              type: array
+              items: 
                 type: string
-              message:
-                type: string
-              trace:
-                type: string
-            required:
-              - code
-              - message
-      validation: # Validation Exception
-        type: object
-        properties:
-          errors:
-            type: object
-            properties:
-              field: 
-                type: array
-                items: 
-                  type: string
-        required:
-          - errors
-
+      required:
+        - errors
