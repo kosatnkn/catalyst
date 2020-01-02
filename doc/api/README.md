@@ -2,9 +2,12 @@
 
 ### Perishable Container
 
+**Linux**
 ```bash
-# Need to be in `doc/api/`
-cd doc/api
+docker run -it --rm -p 3000:8080 -v $PWD/doc/api/openapi.yaml:/openapi/openapi.yaml -e "SWAGGER_MOCK_SPECIFICATION_URL=/openapi/openapi.yaml" swaggermock/swagger-mock
+```
 
-docker run -p 3000:8080 -v $PWD/openapi.yaml:/openapi/openapi.yaml -e "SWAGGER_MOCK_SPECIFICATION_URL=/openapi/openapi.yaml" --rm swaggermock/swagger-mock
+**Windows**
+```bash
+docker run -it --rm -p 3000:8080 -v %cd%\\doc\\api\\openapi.yaml:/openapi/openapi.yaml -e "SWAGGER_MOCK_SPECIFICATION_URL=/openapi/openapi.yaml" swaggermock/swagger-mock
 ```
