@@ -200,3 +200,8 @@ You can use it as follows
 ```bash
     docker run --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
 ```
+
+Do both in one go
+```bash
+    docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
+```
