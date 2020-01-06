@@ -35,7 +35,7 @@ func resolveDBTransactionAdapter() {
 
 	tx := adapters.NewPostgresTxAdapter(resolvedAdapters.DB)
 
-	resolvedAdapters.DBTrans = tx
+	resolvedAdapters.DBTx = tx
 }
 
 // resolveLogAdapter resolves the logging adapter.
