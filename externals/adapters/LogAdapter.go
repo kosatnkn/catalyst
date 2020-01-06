@@ -23,12 +23,13 @@ type LogAdapter struct {
 // NewLogAdapter creates a new Log adapter instance.
 func NewLogAdapter(cfg config.LogConfig) (adapters.LogAdapterInterface, error) {
 
-	a := &LogAdapter{}
+	a := &LogAdapter{
+		cfg: cfg,
+	}
 
-	a.cfg = cfg
-
-	if a.cfg.File {
-		a.lf = a.initLogFile()
+	err := a.initLogFile()
+	if err != nil {
+		return nil, err
 	}
 
 	return a, nil
@@ -63,17 +64,22 @@ func (a *LogAdapter) Destruct() {
 }
 
 // Initialize the log file.
-func (a *LogAdapter) initLogFile() *os.File {
+func (a *LogAdapter) initLogFile() error {
+
+	if !a.cfg.File {
+		return nil
+	}
 
 	ld := a.cfg.Directory
 
 	f, err := os.OpenFile(filepath.Join(ld, "out.log"), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	return f
+	a.lf = f
+
+	return nil
 }
 
 // Logs a message using the following format.
@@ -87,15 +93,21 @@ func (a *LogAdapter) log(ctx context.Context, logLevel string, message string, o
 		return
 	}
 
+	m := a.formatMessage(ctx, logLevel, message, options)
+
+	a.logToConsole(m)
+	a.logToFile(m)
+}
+
+// formatMessage formats the log message.
+func (a *LogAdapter) formatMessage(ctx context.Context, logLevel string, message string, options ...interface{}) string {
+
 	now := time.Now().Format("2006/01/02 15:04:05.000000")
 	uuid := ctx.Value(globals.UUIDKey)
 	prefix := ctx.Value(globals.PrefixKey)
 	level := a.setTag(logLevel)
 
-	formattedMessage := fmt.Sprintf("%s %s [%s] [%v] [%v] [%v]", now, level, uuid, prefix, message, options)
-
-	a.logToConsole(formattedMessage)
-	a.logToFile(formattedMessage)
+	return fmt.Sprintf("%s %s [%s] [%v] [%v] [%v]", now, level, uuid, prefix, message, options)
 }
 
 // Check whether the message should be logged depending on the log level setting.
@@ -157,7 +169,6 @@ func (a *LogAdapter) logToFile(message string) {
 	}
 
 	_, err := a.lf.WriteString(message + "\n")
-
 	if err != nil {
 		fmt.Println(err)
 	}
