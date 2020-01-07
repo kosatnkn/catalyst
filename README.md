@@ -181,6 +181,7 @@ Optional step to create a vendor directory
     go mod vendor
 ```
 
+
 ## Docker
 
 Catalyst provides a basic multistage Dockerfile so you have a starting point for creating Docker images.
