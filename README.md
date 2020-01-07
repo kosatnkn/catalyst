@@ -205,3 +205,8 @@ Do both in one go
 ```bash
     docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
 ```
+
+
+## Wiki
+
+Wiki pages on technical aspects of the project can be found [here](https://github.com/kosatnkn/catalyst/wiki)
