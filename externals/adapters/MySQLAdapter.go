@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	// database driver for postgres
-	_ "github.com/lib/pq"
+	// database driver for mysql
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/kosatnkn/catalyst/app/config"
 	errTypes "github.com/kosatnkn/catalyst/app/error/types"
@@ -16,20 +16,20 @@ import (
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
-// MariaDBAdapter is used to communicate with a Postgres database.
-type MariaDBAdapter struct {
+// MySQLAdapter is used to communicate with a MySQL/MariaDB databases.
+type MySQLAdapter struct {
 	cfg      config.DBConfig
 	pool     *sql.DB
 	pqPrefix string
 }
 
 // NewPostgresAdapter creates a new Postgres adapter instance.
-func NewMariaDBAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
+func NewMySQLAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 
-	connString := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%d sslmode=disable",
-		cfg.User, cfg.Password, cfg.Database, cfg.Host, cfg.Port)
+	connString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
 
-	db, err := sql.Open("postgres", connString)
+	db, err := sql.Open("mysql", connString)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func NewMariaDBAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error)
 	//db.SetMaxIdleConns(2)
 	//db.SetConnMaxLifetime(time.Hour)
 
-	a := &MariaDBAdapter{
+	a := &MySQLAdapter{
 		cfg:      cfg,
 		pool:     db,
 		pqPrefix: "?",
@@ -49,7 +49,7 @@ func NewMariaDBAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error)
 }
 
 // Query runs a query and returns the result.
-func (a *MariaDBAdapter) Query(ctx context.Context, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *MySQLAdapter) Query(ctx context.Context, query string, parameters map[string]interface{}) ([]map[string]interface{}, error) {
 
 	convertedQuery, placeholders := a.convertQuery(query)
 
@@ -83,13 +83,13 @@ func (a *MariaDBAdapter) Query(ctx context.Context, query string, parameters map
 }
 
 // NewTransaction creates a new database transaction.
-func (a *MariaDBAdapter) NewTransaction() (*sql.Tx, error) {
+func (a *MySQLAdapter) NewTransaction() (*sql.Tx, error) {
 
 	return a.pool.Begin()
 }
 
 // Destruct will close the Postgres adapter releasing all resources.
-func (a *MariaDBAdapter) Destruct() {
+func (a *MySQLAdapter) Destruct() {
 
 	a.pool.Close()
 }
@@ -97,7 +97,7 @@ func (a *MariaDBAdapter) Destruct() {
 // Convert the named parameter query to a placeholder query that Postgres library understands.
 // This will return the query and a slice of strings containing named parameter name in the order that they are found
 // in the query.
-func (a *MariaDBAdapter) convertQuery(query string) (string, []string) {
+func (a *MySQLAdapter) convertQuery(query string) (string, []string) {
 
 	query = strings.TrimSpace(query)
 	exp := regexp.MustCompile(`\` + a.pqPrefix + `\w+`)
@@ -122,7 +122,7 @@ func (a *MariaDBAdapter) convertQuery(query string) (string, []string) {
 }
 
 // Reorder the parameters map in the order of named parameters slice.
-func (a *MariaDBAdapter) reorderParameters(params map[string]interface{}, namedParams []string) ([]interface{}, error) {
+func (a *MySQLAdapter) reorderParameters(params map[string]interface{}, namedParams []string) ([]interface{}, error) {
 
 	var reorderedParams []interface{}
 
@@ -145,7 +145,7 @@ func (a *MariaDBAdapter) reorderParameters(params map[string]interface{}, namedP
 //
 // Checks whether there is a transaction attached to the context.
 // If so use that transaction to prepare statement else use the pool.
-func (a *MariaDBAdapter) prepareStatement(ctx context.Context, query string) (*sql.Stmt, error) {
+func (a *MySQLAdapter) prepareStatement(ctx context.Context, query string) (*sql.Stmt, error) {
 
 	tx := ctx.Value(globals.TxKey)
 	if tx != nil {
@@ -157,7 +157,7 @@ func (a *MariaDBAdapter) prepareStatement(ctx context.Context, query string) (*s
 
 // Prepare the return dataset for select statements.
 // Source: https://kylewbanks.com/blog/query-result-to-map-in-golang
-func (a *MariaDBAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
+func (a *MySQLAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
 
 	defer rows.Close()
 
@@ -196,7 +196,7 @@ func (a *MariaDBAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{
 }
 
 // Prepare the resultset for all other queries.
-func (a *MariaDBAdapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
+func (a *MySQLAdapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
 
 	var data []map[string]interface{}
 
