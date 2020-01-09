@@ -23,7 +23,7 @@ type MySQLAdapter struct {
 	pqPrefix string
 }
 
-// NewPostgresAdapter creates a new Postgres adapter instance.
+// NewMySQLAdapter creates a new MySQL adapter instance.
 func NewMySQLAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 
 	connString := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
@@ -88,13 +88,14 @@ func (a *MySQLAdapter) NewTransaction() (*sql.Tx, error) {
 	return a.pool.Begin()
 }
 
-// Destruct will close the Postgres adapter releasing all resources.
+// Destruct will close the MySQL adapter releasing all resources.
 func (a *MySQLAdapter) Destruct() {
 
 	a.pool.Close()
 }
 
-// Convert the named parameter query to a placeholder query that Postgres library understands.
+// Convert the named parameter query to a placeholder query that MySQL library understands.
+//
 // This will return the query and a slice of strings containing named parameter name in the order that they are found
 // in the query.
 func (a *MySQLAdapter) convertQuery(query string) (string, []string) {
@@ -148,6 +149,7 @@ func (a *MySQLAdapter) prepareStatement(ctx context.Context, query string) (*sql
 }
 
 // Prepare the return dataset for select statements.
+//
 // Source: https://kylewbanks.com/blog/query-result-to-map-in-golang
 func (a *MySQLAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
 

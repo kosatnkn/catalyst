@@ -95,6 +95,7 @@ func (a *PostgresAdapter) Destruct() {
 }
 
 // Convert the named parameter query to a placeholder query that Postgres library understands.
+//
 // This will return the query and a slice of strings containing named parameter name in the order that they are found
 // in the query.
 func (a *PostgresAdapter) convertQuery(query string) (string, []string) {
@@ -155,6 +156,7 @@ func (a *PostgresAdapter) prepareStatement(ctx context.Context, query string) (*
 }
 
 // Prepare the return dataset for select statements.
+//
 // Source: https://kylewbanks.com/blog/query-result-to-map-in-golang
 func (a *PostgresAdapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
 
