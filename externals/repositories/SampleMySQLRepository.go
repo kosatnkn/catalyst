@@ -127,7 +127,7 @@ func (repo *SampleMySQLRepository) Delete(ctx context.Context, id int) error {
 // mapResult maps the result to entities.
 func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) []entities.Sample {
 
-	var m []entities.Sample
+	m := make([]entities.Sample, 0)
 
 	for _, row := range result {
 
