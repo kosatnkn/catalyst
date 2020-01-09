@@ -71,7 +71,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// NOTE: here a validation is not actually needed since query parameters
 	// are validated to a certain extent by putting parameter validations in
 	// routes and by data type conversions done in the controller
-	errs := validator.ValidateField(id, "required, gt=0")
+	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
 		return

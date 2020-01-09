@@ -63,7 +63,7 @@ func (repo *SampleRepository) GetByID(ctx context.Context, id int) (entities.Sam
 func (repo *SampleRepository) Add(ctx context.Context, sample entities.Sample) error {
 
 	query := `INSERT INTO test.sample
-				("name", "password")
+				(name, password)
 				VALUES(?name, ?password)
 				`
 
@@ -84,7 +84,7 @@ func (repo *SampleRepository) Add(ctx context.Context, sample entities.Sample) e
 func (repo *SampleRepository) Edit(ctx context.Context, sample entities.Sample) error {
 
 	query := `UPDATE test.sample
-				SET "name"=?name, "password"=?password
+				SET name=?name, password=?password
 				WHERE id=?id
 				`
 

@@ -7,8 +7,8 @@ info:
   version: v1.1.0
 
 servers:
-  - url: http://localhost:8000
-    description: Mock  
+  - url: http://localhost:3000
+    description: Development
 
 paths:
 
@@ -74,7 +74,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/sample'
+                  $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
@@ -98,7 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/sample'
+              $ref: '#/components/schemas/req_sample'
         required: true
       responses:
         201:
@@ -144,7 +144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/sample'
+                $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
@@ -173,7 +173,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/sample'
+              $ref: '#/components/schemas/req_sample'
         required: true
       responses:
         204:
@@ -260,16 +260,20 @@ components:
           type: integer
           default: 10
     
-    sample: 
+    req_sample: 
       type: object
       properties:
-        street:
+        name:
           type: string
-        city:
+        password:
           type: string
-        planet:
-          type: string
-        phone:
+    
+    res_sample: 
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
           type: string
           
     generic_error:

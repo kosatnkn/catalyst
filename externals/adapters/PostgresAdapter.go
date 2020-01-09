@@ -109,7 +109,6 @@ func (a *PostgresAdapter) convertQuery(query string) (string, []string) {
 	}
 
 	paramPosition := 0
-	//query = string(exp.ReplaceAllFunc([]byte(query), a.replaceNamedParam))
 	query = string(exp.ReplaceAllFunc([]byte(query), func(param []byte) []byte {
 
 		paramPosition++

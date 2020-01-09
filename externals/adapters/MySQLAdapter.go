@@ -108,15 +108,7 @@ func (a *MySQLAdapter) convertQuery(query string) (string, []string) {
 		namedParams[i] = strings.TrimPrefix(namedParams[i], a.pqPrefix)
 	}
 
-	paramPosition := 0
-	//query = string(exp.ReplaceAllFunc([]byte(query), a.replaceNamedParam))
-	query = string(exp.ReplaceAllFunc([]byte(query), func(param []byte) []byte {
-
-		paramPosition++
-		paramName := fmt.Sprintf("$%d", paramPosition)
-
-		return []byte(paramName)
-	}))
+	query = exp.ReplaceAllString(query, "?")
 
 	return query, namedParams
 }
