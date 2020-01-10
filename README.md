@@ -44,6 +44,8 @@ Clone and install `Cauldron`
 
     cd  cauldron
 
+    git checkout tags/<tag_name> -b <tag_name>
+    
     go install
 ```
 
