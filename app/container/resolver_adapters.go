@@ -22,7 +22,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 // resolveDBAdapter resolves the database adapter.
 func resolveDBAdapter(cfg config.DBConfig) {
 
-	db, err := adapters.NewPostgresAdapter(cfg)
+	db, err := adapters.NewMySQLAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
@@ -33,7 +33,7 @@ func resolveDBAdapter(cfg config.DBConfig) {
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	tx := adapters.NewPostgresTxAdapter(resolvedAdapters.DB)
+	tx := adapters.NewMySQLTxAdapter(resolvedAdapters.DB)
 
 	resolvedAdapters.DBTx = tx
 }
