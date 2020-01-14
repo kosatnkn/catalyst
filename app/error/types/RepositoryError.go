@@ -12,13 +12,11 @@ type RepositoryError struct {
 // NewRepositoryError creates a new RepositoryError instance.
 func NewRepositoryError(message string, code int, details string) error {
 
-	err := &RepositoryError{}
-
-	err.msg = message
-	err.code = code
-	err.details = details
-
-	return err
+	return &RepositoryError{
+		msg:     message,
+		code:    code,
+		details: details,
+	}
 }
 
 // Error returns the RepositoryError message.

@@ -12,13 +12,11 @@ type DomainError struct {
 // NewDomainError creates a new DomainError.
 func NewDomainError(message string, code int, details string) error {
 
-	err := &DomainError{}
-
-	err.msg = message
-	err.code = code
-	err.details = details
-
-	return err
+	return &DomainError{
+		msg:     message,
+		code:    code,
+		details: details,
+	}
 }
 
 // Error returns the DomainError message.

@@ -12,13 +12,11 @@ type ServerError struct {
 // NewServerError creates a new ServerError instance.
 func NewServerError(message string, code int, details string) error {
 
-	err := &ServerError{}
-
-	err.msg = message
-	err.code = code
-	err.details = details
-
-	return err
+	return &ServerError{
+		msg:     message,
+		code:    code,
+		details: details,
+	}
 }
 
 // Error returns the ServerError message.

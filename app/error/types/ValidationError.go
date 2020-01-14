@@ -8,11 +8,9 @@ type ValidationError struct {
 // NewValidationError creates a new ValidationError instance.
 func NewValidationError(details string) error {
 
-	err := &ValidationError{}
-
-	err.details = details
-
-	return err
+	return &ValidationError{
+		details: details,
+	}
 }
 
 // Error returns the ValidationError message.

@@ -12,13 +12,11 @@ type AdapterError struct {
 // NewAdapterError creates a new AdapterError instance.
 func NewAdapterError(message string, code int, details string) error {
 
-	err := &AdapterError{}
-
-	err.msg = message
-	err.code = code
-	err.details = details
-
-	return err
+	return &AdapterError{
+		msg:     message,
+		code:    code,
+		details: details,
+	}
 }
 
 // Error returns the AdapterError message.

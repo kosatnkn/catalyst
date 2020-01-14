@@ -12,13 +12,11 @@ type MiddlewareError struct {
 // NewMiddlewareError creates a new MiddlewareError instance.
 func NewMiddlewareError(message string, code int, details string) error {
 
-	err := &MiddlewareError{}
-
-	err.msg = message
-	err.code = code
-	err.details = details
-
-	return err
+	return &MiddlewareError{
+		msg:     message,
+		code:    code,
+		details: details,
+	}
 }
 
 // Error returns the MiddlewareError message.
