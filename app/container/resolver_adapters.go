@@ -27,15 +27,15 @@ func resolveDBAdapter(cfg config.DBConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.DB = db
+	resolvedAdapters.DBAdapter = db
 }
 
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	tx := adapters.NewMySQLTxAdapter(resolvedAdapters.DB)
+	tx := adapters.NewMySQLTxAdapter(resolvedAdapters.DBAdapter)
 
-	resolvedAdapters.DBTx = tx
+	resolvedAdapters.DBTxAdapter = tx
 }
 
 // resolveLogAdapter resolves the logging adapter.
@@ -46,5 +46,5 @@ func resolveLogAdapter(cfg config.LogConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.Log = la
+	resolvedAdapters.LogAdapter = la
 }

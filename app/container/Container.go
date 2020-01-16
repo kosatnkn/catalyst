@@ -16,9 +16,9 @@ type Container struct {
 // Adapters hold resolved adapter instances.
 // These are wrappers around third party libraries. All adapters will be of a corresponding adapter interface type.
 type Adapters struct {
-	DB   adapters.DBAdapterInterface
-	DBTx adapters.DBTxAdapterInterface
-	Log  adapters.LogAdapterInterface
+	DBAdapter   adapters.DBAdapterInterface
+	DBTxAdapter adapters.DBTxAdapterInterface
+	LogAdapter  adapters.LogAdapterInterface
 }
 
 // Repositories hold resolved repository instances.

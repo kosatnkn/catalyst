@@ -16,7 +16,7 @@ type Sample struct {
 func NewSample(container *container.Container) *Sample {
 
 	return &Sample{
-		transaction:      container.Adapters.DBTx,
+		transaction:      container.Adapters.DBTxAdapter,
 		sampleRepository: container.Repositories.SampleRepository,
 	}
 }
