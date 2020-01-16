@@ -10,16 +10,16 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/gorilla/mux"
-
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
+	"github.com/kosatnkn/catalyst/app/router"
 )
 
 // Run runs the application server.
-func Run(cfg config.AppConfig, r *mux.Router, ctr *container.Container) {
+func Run(cfg config.AppConfig, ctr *container.Container) {
 
-	var wait time.Duration
+	// initialize the router
+	r := router.Init(ctr)
 
 	srv := &http.Server{
 		Addr: cfg.Host + ":" + strconv.Itoa(cfg.Port),
@@ -59,6 +59,8 @@ func Run(cfg config.AppConfig, r *mux.Router, ctr *container.Container) {
 	<-c
 
 	// Create a deadline to wait for
+	var wait time.Duration
+
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 
