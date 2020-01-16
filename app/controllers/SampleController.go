@@ -43,7 +43,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	// get data
 	samples, err := ctl.sampleUseCase.Get(ctx)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -73,14 +73,14 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// routes and by data type conversions done in the controller
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
+		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
 	// get data
 	sample, err := ctl.sampleUseCase.GetByID(ctx, id)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -104,14 +104,14 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
 	// validate unpacked data
 	errs := validator.Validate(sampleUnpacker)
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
+		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -124,7 +124,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	// add
 	err = ctl.sampleUseCase.Add(ctx, sample)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -148,7 +148,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -159,14 +159,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
+		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
 	// validate unpacked data
 	errs = validator.Validate(sampleUnpacker)
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
+		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -180,7 +180,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// edit
 	err = ctl.sampleUseCase.Edit(ctx, sample)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
@@ -204,14 +204,14 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.Log)
+		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
 		return
 	}
 
 	// delete
 	err := ctl.sampleUseCase.Delete(ctx, id)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.Log)
+		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
 		return
 	}
 

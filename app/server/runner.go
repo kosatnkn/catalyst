@@ -76,8 +76,8 @@ func Run(cfg config.AppConfig, r *mux.Router, ctr *container.Container) {
 func destruct(ctr *container.Container) {
 
 	fmt.Println("Closing database connections...")
-	ctr.Adapters.DB.Destruct()
+	ctr.Adapters.DBAdapter.Destruct()
 
 	fmt.Println("Closing logger...")
-	ctr.Adapters.Log.Destruct()
+	ctr.Adapters.LogAdapter.Destruct()
 }
