@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
 	"strconv"
 	"time"
 
@@ -16,7 +14,7 @@ import (
 )
 
 // Run runs the application server.
-func Run(cfg config.AppConfig, ctr *container.Container) {
+func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 
 	// initialize the router
 	r := router.Init(ctr)
@@ -49,32 +47,21 @@ func Run(cfg config.AppConfig, ctr *container.Container) {
 	// expose application metrics
 	exposeMetrics(cfg, ctr)
 
-	c := make(chan os.Signal, 1)
+	return srv
+}
 
-	// We'll accept graceful shutdowns when quit via SIGINT (Ctrl+C)
-	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught.
-	signal.Notify(c, os.Interrupt)
+// Gracefully close all additional resources.
+func Stop(ctx context.Context, srv *http.Server, ctr *container.Container) {
 
-	// Block until we receive our signal
-	<-c
-
-	// Create a deadline to wait for
-	var wait time.Duration
-
-	ctx, cancel := context.WithTimeout(context.Background(), wait)
-	defer cancel()
-
-	// gracefully release all additional resources
 	destruct(ctr)
 
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
-	srv.Shutdown(ctx)
 	fmt.Println("Service shutting down...")
-	os.Exit(0)
+
+	srv.Shutdown(ctx)
 }
 
-// Gracefully close all additional resources.
 func destruct(ctr *container.Container) {
 
 	fmt.Println("Closing database connections...")
