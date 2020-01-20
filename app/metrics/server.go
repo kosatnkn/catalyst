@@ -1,4 +1,4 @@
-package server
+package metrics
 
 import (
 	"fmt"
@@ -10,18 +10,17 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/metrics"
 )
 
-// Expose metrics as a separate Prometheus metric server.
-func exposeMetrics(cfg config.AppConfig, ctr *container.Container) {
+// Expose exposes metrics as a separate Prometheus metric server.
+func Expose(cfg config.AppConfig, ctr *container.Container) {
 
 	if !cfg.Metrics.Enabled {
 		return
 	}
 
 	// register defined metrics
-	metrics.Init()
+	registerMetrics()
 
 	// set metric exposing port and endpoint
 	address := cfg.Host + ":" + strconv.Itoa(cfg.Metrics.Port)

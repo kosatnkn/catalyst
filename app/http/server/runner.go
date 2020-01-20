@@ -44,9 +44,6 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 	fmt.Println("Service started...")
 	fmt.Println(fmt.Sprintf("Listening on %v ...", srv.Addr))
 
-	// expose application metrics
-	exposeMetrics(cfg, ctr)
-
 	return srv
 }
 

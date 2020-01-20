@@ -9,6 +9,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/app/http/server"
+	"github.com/kosatnkn/catalyst/app/metrics"
 	"github.com/kosatnkn/catalyst/app/splash"
 )
 
@@ -26,6 +27,9 @@ func main() {
 	// start the server to handle requests
 	srv := server.Run(cfg.AppConfig, ctr)
 
+	// expose application metrics
+	metrics.Expose(cfg.AppConfig, ctr)
+
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
 
@@ -33,16 +37,16 @@ func main() {
 	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught
 	signal.Notify(c, os.Interrupt)
 
-	// Block until we receive our signal
+	// block until a registered signal is received
 	<-c
 
-	// Create a deadline to wait for
+	// create a deadline to wait for
 	var wait time.Duration
 
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 
-	// gracefully release all additional resources
+	// gracefully stop the server
 	server.Stop(ctx, srv, ctr)
 
 	os.Exit(0)
