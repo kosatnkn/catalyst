@@ -3,7 +3,7 @@ package response
 import (
 	"encoding/json"
 
-	"github.com/kosatnkn/catalyst/app/transport/response/mappers"
+	"github.com/kosatnkn/catalyst/app/http/response/mappers"
 )
 
 // Transform transforms a dataset in to a relevent structure and marshal to JSON.

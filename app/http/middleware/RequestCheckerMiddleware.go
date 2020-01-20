@@ -6,7 +6,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/container"
 	errTypes "github.com/kosatnkn/catalyst/app/error/types"
-	"github.com/kosatnkn/catalyst/app/transport/response"
+	"github.com/kosatnkn/catalyst/app/http/response"
 )
 
 // RequestCheckerMiddleware validates the request header.

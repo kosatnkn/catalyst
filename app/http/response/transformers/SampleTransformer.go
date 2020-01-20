@@ -1,7 +1,7 @@
 package transformers
 
 import (
-	"github.com/kosatnkn/catalyst/app/transport/response"
+	"github.com/kosatnkn/catalyst/app/http/response"
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 

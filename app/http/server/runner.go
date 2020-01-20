@@ -12,7 +12,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/router"
+	"github.com/kosatnkn/catalyst/app/http/router"
 )
 
 // Run runs the application server.

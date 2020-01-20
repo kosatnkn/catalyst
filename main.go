@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/server"
+	"github.com/kosatnkn/catalyst/app/http/server"
 	"github.com/kosatnkn/catalyst/app/splash"
 )
 
