@@ -59,6 +59,7 @@ func formatCustomError(err error) transformers.ErrorTransformer {
 }
 
 // formatUnpackerError formats request payload unpacking errors.
+//
 // These occur when the format of the sent data structure does not match the expected format.
 // An UnpackerError is a type of ValidationError.
 func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
@@ -70,6 +71,7 @@ func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 }
 
 // formatValidationErrors formats validation errors.
+//
 // These are errors thrown when field wise validations of the data structure fails.
 func formatValidationErrors(p map[string]string) []byte {
 
