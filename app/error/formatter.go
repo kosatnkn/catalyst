@@ -9,7 +9,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/error/transformers"
 	"github.com/kosatnkn/catalyst/app/error/types"
-	"github.com/kosatnkn/catalyst/app/transport/response/mappers"
+	"github.com/kosatnkn/catalyst/app/http/response/mappers"
 	domainError "github.com/kosatnkn/catalyst/domain/error"
 )
 
