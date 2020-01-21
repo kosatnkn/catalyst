@@ -7,9 +7,9 @@ import (
 
 	"github.com/iancoleman/strcase"
 
-	"github.com/kosatnkn/catalyst/app/error/transformers"
-	"github.com/kosatnkn/catalyst/app/error/types"
+	baseErr "github.com/kosatnkn/catalyst/app/error"
 	"github.com/kosatnkn/catalyst/app/http/response/mappers"
+	"github.com/kosatnkn/catalyst/app/http/response/transformers"
 	domainError "github.com/kosatnkn/catalyst/domain/error"
 )
 
@@ -19,15 +19,15 @@ func format(err error) []byte {
 	var payload interface{}
 
 	switch err.(type) {
-	case *types.ServerError,
-		*types.MiddlewareError,
-		*types.AdapterError,
-		*types.RepositoryError,
-		*types.ServiceError,
+	case *baseErr.ServerError,
+		*baseErr.MiddlewareError,
+		*baseErr.AdapterError,
+		*baseErr.RepositoryError,
+		*baseErr.ServiceError,
 		*domainError.DomainError:
 		payload = formatCustomError(err)
 		break
-	case *types.ValidationError:
+	case *baseErr.ValidationError:
 		payload = formatUnpackerError(err)
 		break
 	default:

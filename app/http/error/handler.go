@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/app/error/types"
+	baseErr "github.com/kosatnkn/catalyst/app/error"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	domainError "github.com/kosatnkn/catalyst/domain/error"
 )
@@ -17,23 +17,23 @@ func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface)
 
 	switch err.(type) {
 
-	case *types.ServerError:
+	case *baseErr.ServerError:
 		logger.Error(ctx, "Server Error", err)
 		errMessage = format(err)
 		status = http.StatusInternalServerError
 		break
 
-	case *types.AdapterError,
-		*types.MiddlewareError,
-		*types.RepositoryError,
-		*types.ServiceError,
+	case *baseErr.AdapterError,
+		*baseErr.MiddlewareError,
+		*baseErr.RepositoryError,
+		*baseErr.ServiceError,
 		*domainError.DomainError:
 		logger.Error(ctx, "Other Error", err)
 		errMessage = format(err)
 		status = http.StatusBadRequest
 		break
 
-	case *types.ValidationError:
+	case *baseErr.ValidationError:
 		logger.Error(ctx, "Unpacker Error", err)
 		errMessage = format(err)
 		status = http.StatusUnprocessableEntity

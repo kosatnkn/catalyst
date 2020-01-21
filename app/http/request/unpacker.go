@@ -7,16 +7,17 @@ import (
 
 	"fmt"
 
-	errTypes "github.com/kosatnkn/catalyst/app/error/types"
+	httpErrs "github.com/kosatnkn/catalyst/app/error"
+	"github.com/kosatnkn/catalyst/app/http/request/unpackers"
 )
 
 // Unpack the request in to the given unpacker struct.
-func Unpack(r *http.Request, unpacker UnpackerInterface) error {
+func Unpack(r *http.Request, unpacker unpackers.UnpackerInterface) error {
 
 	err := json.NewDecoder(r.Body).Decode(unpacker)
 
 	if err != nil {
-		return errTypes.NewValidationError(formatUnpackerMessage(unpacker.RequiredFormat()))
+		return httpErrs.NewValidationError(formatUnpackerMessage(unpacker.RequiredFormat()))
 	}
 
 	return nil

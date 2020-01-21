@@ -1,4 +1,4 @@
-package response
+package transformers
 
 // TransformerInterface is the interface implemented by all transformers.
 type TransformerInterface interface {

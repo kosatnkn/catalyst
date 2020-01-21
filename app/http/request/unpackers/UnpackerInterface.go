@@ -1,4 +1,4 @@
-package request
+package unpackers
 
 // UnpackerInterface is the interface implemented by all unpacker data structures.
 type UnpackerInterface interface {

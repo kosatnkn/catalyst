@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/kosatnkn/catalyst/app/http/response/mappers"
+	"github.com/kosatnkn/catalyst/app/http/response/transformers"
 )
 
 // Transform transforms a dataset in to a relevent structure and marshal to JSON.
-func Transform(data interface{}, t TransformerInterface, isCollection bool) []byte {
+func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) []byte {
 
 	tData := transformByCriteria(data, t, isCollection)
 
@@ -18,7 +19,7 @@ func Transform(data interface{}, t TransformerInterface, isCollection bool) []by
 
 // transformByCriteria transforms data either as an object or as a collection
 // depending on the `isCollection` boolean value
-func transformByCriteria(data interface{}, t TransformerInterface, isCollection bool) interface{} {
+func transformByCriteria(data interface{}, t transformers.TransformerInterface, isCollection bool) interface{} {
 
 	if isCollection {
 		return t.TransformAsCollection(data)
