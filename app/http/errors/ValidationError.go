@@ -1,4 +1,4 @@
-package types
+package errors
 
 // ValidationError is the type of errors thrown by the request validator.
 type ValidationError struct {

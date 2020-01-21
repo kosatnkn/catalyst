@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/kosatnkn/catalyst/app/container"
-	httpErrs "github.com/kosatnkn/catalyst/app/error"
+	httpErrs "github.com/kosatnkn/catalyst/app/errors"
 	"github.com/kosatnkn/catalyst/app/http/response"
 )
 

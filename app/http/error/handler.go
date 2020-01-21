@@ -4,9 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	baseErr "github.com/kosatnkn/catalyst/app/error"
+	baseErrs "github.com/kosatnkn/catalyst/app/errors"
+	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
-	domainError "github.com/kosatnkn/catalyst/domain/error"
+	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 )
 
 // Handle handles all errors globally.
@@ -17,23 +19,23 @@ func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface)
 
 	switch err.(type) {
 
-	case *baseErr.ServerError:
+	case *baseErrs.ServerError:
 		logger.Error(ctx, "Server Error", err)
 		errMessage = format(err)
 		status = http.StatusInternalServerError
 		break
 
-	case *baseErr.AdapterError,
-		*baseErr.MiddlewareError,
-		*baseErr.RepositoryError,
-		*baseErr.ServiceError,
-		*domainError.DomainError:
+	case *externalErrs.AdapterError,
+		*httpErrs.MiddlewareError,
+		*externalErrs.RepositoryError,
+		*externalErrs.ServiceError,
+		*domainErrs.DomainError:
 		logger.Error(ctx, "Other Error", err)
 		errMessage = format(err)
 		status = http.StatusBadRequest
 		break
 
-	case *baseErr.ValidationError:
+	case *httpErrs.ValidationError:
 		logger.Error(ctx, "Unpacker Error", err)
 		errMessage = format(err)
 		status = http.StatusUnprocessableEntity

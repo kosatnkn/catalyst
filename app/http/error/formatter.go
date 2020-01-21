@@ -7,10 +7,12 @@ import (
 
 	"github.com/iancoleman/strcase"
 
-	baseErr "github.com/kosatnkn/catalyst/app/error"
+	baseErrs "github.com/kosatnkn/catalyst/app/errors"
+	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
 	"github.com/kosatnkn/catalyst/app/http/response/mappers"
 	"github.com/kosatnkn/catalyst/app/http/response/transformers"
-	domainError "github.com/kosatnkn/catalyst/domain/error"
+	domainErrs "github.com/kosatnkn/catalyst/domain/error"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // format formats the error by error type.
@@ -19,15 +21,15 @@ func format(err error) []byte {
 	var payload interface{}
 
 	switch err.(type) {
-	case *baseErr.ServerError,
-		*baseErr.MiddlewareError,
-		*baseErr.AdapterError,
-		*baseErr.RepositoryError,
-		*baseErr.ServiceError,
-		*domainError.DomainError:
-		payload = formatCustomError(err)
+	case *baseErrs.ServerError,
+		*httpErrs.MiddlewareError,
+		*externalErrs.AdapterError,
+		*externalErrs.RepositoryError,
+		*externalErrs.ServiceError,
+		*domainErrs.DomainError:
+		payload = formatGenericError(err)
 		break
-	case *baseErr.ValidationError:
+	case *httpErrs.ValidationError:
 		payload = formatUnpackerError(err)
 		break
 	default:
@@ -44,8 +46,8 @@ func format(err error) []byte {
 	return message
 }
 
-// formatCustomError formats all generic errors.
-func formatCustomError(err error) transformers.ErrorTransformer {
+// formatGenericError formats all generic errors.
+func formatGenericError(err error) transformers.ErrorTransformer {
 
 	errorDetails := strings.Split(err.Error(), "|")
 	errCode, _ := strconv.Atoi(errorDetails[1])
