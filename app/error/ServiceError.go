@@ -4,8 +4,9 @@ import "fmt"
 
 // ServiceError is the type of errors thrown by services talking to third party APIs.
 type ServiceError struct {
-	msg     string
+	errType string
 	code    int
+	msg     string
 	details string
 }
 
@@ -13,13 +14,14 @@ type ServiceError struct {
 func NewServiceError(message string, code int, details string) error {
 
 	return &ServiceError{
-		msg:     message,
+		errType: "ServiceError",
 		code:    code,
+		msg:     message,
 		details: details,
 	}
 }
 
 // Error returns the ServiceError message.
 func (e *ServiceError) Error() string {
-	return fmt.Sprintf("%s|%d|ServiceError|%s", e.msg, e.code, e.details)
+	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
 }

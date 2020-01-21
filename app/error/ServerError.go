@@ -4,8 +4,9 @@ import "fmt"
 
 // ServerError is the type of errors thrown by the framework while booting.
 type ServerError struct {
-	msg     string
+	errType string
 	code    int
+	msg     string
 	details string
 }
 
@@ -13,13 +14,14 @@ type ServerError struct {
 func NewServerError(message string, code int, details string) error {
 
 	return &ServerError{
-		msg:     message,
+		errType: "ServerError",
 		code:    code,
+		msg:     message,
 		details: details,
 	}
 }
 
 // Error returns the ServerError message.
 func (e *ServerError) Error() string {
-	return fmt.Sprintf("%s|%d|ServerError|%s", e.msg, e.code, e.details)
+	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
 }

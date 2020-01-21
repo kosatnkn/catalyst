@@ -4,8 +4,9 @@ import "fmt"
 
 // DomainError is the type of errors thrown by business logic.
 type DomainError struct {
-	msg     string
+	errType string
 	code    int
+	msg     string
 	details string
 }
 
@@ -13,13 +14,14 @@ type DomainError struct {
 func NewDomainError(message string, code int, details string) error {
 
 	return &DomainError{
-		msg:     message,
+		errType: "ServiceError",
 		code:    code,
+		msg:     message,
 		details: details,
 	}
 }
 
 // Error returns the DomainError message.
 func (e *DomainError) Error() string {
-	return fmt.Sprintf("%s|%d|DomainError|%s", e.msg, e.code, e.details)
+	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
 }

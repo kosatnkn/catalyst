@@ -51,9 +51,9 @@ func formatCustomError(err error) transformers.ErrorTransformer {
 	errCode, _ := strconv.Atoi(errorDetails[1])
 
 	return transformers.ErrorTransformer{
-		Msg:   errorDetails[0],
+		Type:  errorDetails[0],
 		Code:  errCode,
-		Type:  errorDetails[2],
+		Msg:   errorDetails[2],
 		Trace: errorDetails[3],
 	}
 }
