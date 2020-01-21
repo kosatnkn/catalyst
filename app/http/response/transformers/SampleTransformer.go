@@ -1,7 +1,6 @@
 package transformers
 
 import (
-	"github.com/kosatnkn/catalyst/app/http/response/transformers"
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 
@@ -12,7 +11,7 @@ type SampleTransformer struct {
 }
 
 // NewSampleTransformer creates a new instance of the transformer.
-func NewSampleTransformer() transformers.TransformerInterface {
+func NewSampleTransformer() TransformerInterface {
 	return &SampleTransformer{}
 }
 
