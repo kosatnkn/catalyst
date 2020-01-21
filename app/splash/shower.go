@@ -4,7 +4,7 @@ import "fmt"
 
 // A brief description of the service.
 const serviceDetails string = `
-Go Clean Architecture Base Project for RESTful Services
+Go Clean Architecture Base Project for REST Services
 
 `
 
