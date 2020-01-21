@@ -6,9 +6,9 @@ import (
 
 	baseErrs "github.com/kosatnkn/catalyst/app/errors"
 	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
-	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // Handle handles all errors globally.
