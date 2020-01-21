@@ -11,7 +11,7 @@ import (
 	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
 	"github.com/kosatnkn/catalyst/app/http/response/mappers"
 	"github.com/kosatnkn/catalyst/app/http/response/transformers"
-	domainErrs "github.com/kosatnkn/catalyst/domain/error"
+	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 

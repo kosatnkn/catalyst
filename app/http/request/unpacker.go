@@ -7,7 +7,7 @@ import (
 
 	"fmt"
 
-	httpErrs "github.com/kosatnkn/catalyst/app/error"
+	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
 	"github.com/kosatnkn/catalyst/app/http/request/unpackers"
 )
 

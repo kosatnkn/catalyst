@@ -11,7 +11,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/kosatnkn/catalyst/app/config"
-	externalErrs "github.com/kosatnkn/catalyst/app/error"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
