@@ -47,23 +47,10 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 	return srv
 }
 
-// Gracefully close all additional resources.
+// Stop stops the server.
 func Stop(ctx context.Context, srv *http.Server, ctr *container.Container) {
 
-	destruct(ctr)
-
-	// Doesn't block if no connections, but will otherwise wait
-	// until the timeout deadline.
 	fmt.Println("Service shutting down...")
 
 	srv.Shutdown(ctx)
-}
-
-func destruct(ctr *container.Container) {
-
-	fmt.Println("Closing database connections...")
-	ctr.Adapters.DBAdapter.Destruct()
-
-	fmt.Println("Closing logger...")
-	ctr.Adapters.LogAdapter.Destruct()
 }
