@@ -3,7 +3,7 @@ package sample
 import (
 	"fmt"
 
-	err "github.com/kosatnkn/catalyst/domain/error"
+	err "github.com/kosatnkn/catalyst/domain/errors"
 )
 
 func (r *Sample) errorNoSample(id int) error {
