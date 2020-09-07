@@ -11,6 +11,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/http/response"
 	"github.com/kosatnkn/catalyst/app/http/response/transformers"
 	"github.com/kosatnkn/catalyst/app/validator"
+	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/entities"
 	"github.com/kosatnkn/catalyst/domain/globals"
 	"github.com/kosatnkn/catalyst/domain/usecases/sample"
@@ -18,16 +19,16 @@ import (
 
 // SampleController contains controller logic for endpoints.
 type SampleController struct {
-	container     *container.Container
 	sampleUseCase *sample.Sample
+	logger        adapters.LogAdapterInterface
 }
 
 // NewSampleController creates a new instance of the controller.
 func NewSampleController(container *container.Container) *SampleController {
 
 	return &SampleController{
-		container:     container,
 		sampleUseCase: sample.NewSample(container),
+		logger:        container.Adapters.LogAdapter,
 	}
 }
 
@@ -43,7 +44,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	// get data
 	samples, err := ctl.sampleUseCase.Get(ctx)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
@@ -73,14 +74,14 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// routes and by data type conversions done in the controller
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
 	// get data
 	sample, err := ctl.sampleUseCase.GetByID(ctx, id)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
@@ -104,14 +105,14 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
 	// validate unpacked data
 	errs := validator.Validate(sampleUnpacker)
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
@@ -124,7 +125,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	// add
 	err = ctl.sampleUseCase.Add(ctx, sample)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
@@ -148,7 +149,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	sampleUnpacker := unpackers.NewSampleUnpacker()
 	err := request.Unpack(r, sampleUnpacker)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
@@ -159,14 +160,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
 	// validate unpacked data
 	errs = validator.Validate(sampleUnpacker)
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
@@ -180,7 +181,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// edit
 	err = ctl.sampleUseCase.Edit(ctx, sample)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
@@ -204,14 +205,14 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	// validate request parameters
 	errs := validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
-		response.Error(ctx, w, errs, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
 	// delete
 	err := ctl.sampleUseCase.Delete(ctx, id)
 	if err != nil {
-		response.Error(ctx, w, err, ctl.container.Adapters.LogAdapter)
+		response.Error(ctx, w, err, ctl.logger)
 		return
 	}
 
