@@ -44,7 +44,7 @@ func Init(ctr *container.Container) *mux.Router {
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		name := "Catalyst"
-		version := "v1.0.0"
+		version := "v2.1.0"
 		purpose := "REST API base written in Golang"
 
 		response.Send(
