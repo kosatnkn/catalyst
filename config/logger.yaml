@@ -1,5 +1,6 @@
 # Logger Configurations
-# "level" defines the log level
+
+# log level
 # available options
 #  - ERROR (default)
 #  - DEBUG
@@ -7,14 +8,15 @@
 #  - WARN
 level: "ERROR"
 
-# "colors" define whether logging colors will be enabled or not
+# enable logging colors
 colors: true
 
-# "targets" define logging targets
-# available options
+# enable console logging
 console: true
+
+# enable file logging
 file: false
 
-# "directory" defines the directory to be used for logging
-# will use "logs" directory in the project root directory as default
+# directory to be used for logging
+# will use "logs" directory in the project's root directory as the default
 directory: "logs"

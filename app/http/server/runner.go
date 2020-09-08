@@ -48,7 +48,7 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 }
 
 // Stop stops the server.
-func Stop(ctx context.Context, srv *http.Server, ctr *container.Container) {
+func Stop(ctx context.Context, srv *http.Server) {
 
 	fmt.Println("Service shutting down...")
 

@@ -52,7 +52,7 @@ func main() {
 	ctr.Destruct()
 
 	// gracefully stop the server
-	server.Stop(ctx, srv, ctr)
+	server.Stop(ctx, srv)
 
 	os.Exit(0)
 }
