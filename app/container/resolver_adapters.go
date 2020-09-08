@@ -27,6 +27,12 @@ func resolveDBAdapter(cfg config.DBConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
+	// check whether the db is accessible
+	err = db.Ping()
+	if err != nil {
+		panic(fmt.Sprintf("error: %v", err))
+	}
+
 	resolvedAdapters.DBAdapter = db
 }
 

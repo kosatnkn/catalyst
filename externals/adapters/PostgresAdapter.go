@@ -11,9 +11,9 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/kosatnkn/catalyst/app/config"
-	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // PostgresAdapter is used to communicate with a Postgres database.
@@ -46,6 +46,12 @@ func NewPostgresAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error
 	}
 
 	return a, nil
+}
+
+// Ping checks wether the database is accessible.
+func (a *PostgresAdapter) Ping() error {
+
+	return a.pool.Ping()
 }
 
 // Query runs a query and returns the result.

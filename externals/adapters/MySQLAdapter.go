@@ -11,9 +11,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/kosatnkn/catalyst/app/config"
-	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
+	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // MySQLAdapter is used to communicate with a MySQL/MariaDB databases.
@@ -46,6 +46,12 @@ func NewMySQLAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 	}
 
 	return a, nil
+}
+
+// Ping checks wether the database is accessible.
+func (a *MySQLAdapter) Ping() error {
+
+	return a.pool.Ping()
 }
 
 // Query runs a query and returns the result.

@@ -13,7 +13,7 @@ type MySQLTxAdapter struct {
 	dba adapters.DBAdapterInterface
 }
 
-// NewPostgresTxAdapter creates a new Postgres transaction adapter instance.
+// NewMySQLTxAdapter creates a new Postgres transaction adapter instance.
 func NewMySQLTxAdapter(dba adapters.DBAdapterInterface) adapters.DBTxAdapterInterface {
 
 	return &MySQLTxAdapter{
