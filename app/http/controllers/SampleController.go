@@ -19,16 +19,16 @@ import (
 
 // SampleController contains controller logic for endpoints.
 type SampleController struct {
-	sampleUseCase *sample.Sample
 	logger        adapters.LogAdapterInterface
+	sampleUseCase *sample.Sample
 }
 
 // NewSampleController creates a new instance of the controller.
 func NewSampleController(container *container.Container) *SampleController {
 
 	return &SampleController{
-		sampleUseCase: sample.NewSample(container),
 		logger:        container.Adapters.LogAdapter,
+		sampleUseCase: sample.NewSample(container),
 	}
 }
 
