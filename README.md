@@ -5,6 +5,7 @@
 ![Open Issues](https://img.shields.io/github/issues/kosatnkn/catalyst)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kosatnkn/catalyst)
 [![GoDoc](https://godoc.org/github.com/kosatnkn/catalyst?status.svg)](https://godoc.org/github.com/kosatnkn/catalyst)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
 A REST API base that is written in **Go** using the **Clean Architecture** paradigm.
 

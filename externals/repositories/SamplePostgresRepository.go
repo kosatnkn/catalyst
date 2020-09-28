@@ -13,7 +13,7 @@ type SamplePostgresRepository struct {
 	db adapters.DBAdapterInterface
 }
 
-// NewSampleMySQLRepository creates a new instance of the repository.
+// NewSamplePostgresRepository creates a new instance of the repository.
 func NewSamplePostgresRepository(dbAdapter adapters.DBAdapterInterface) repositories.SampleRepositoryInterface {
 
 	return &SamplePostgresRepository{db: dbAdapter}

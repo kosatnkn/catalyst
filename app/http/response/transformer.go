@@ -7,7 +7,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/http/response/transformers"
 )
 
-// Transform transforms a dataset in to a relevent structure and marshal to JSON.
+// Transform transforms a dataset in to a relevant structure and marshal to JSON.
 func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) []byte {
 
 	tData := transformByCriteria(data, t, isCollection)

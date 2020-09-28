@@ -33,7 +33,7 @@ func (m *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
 	})
 }
 
-// generalizePath genrates a common signature for the given route endpoint.
+// generalizePath generates a common signature for the given route endpoint.
 //
 // This is to avoid creating a large number of redundant metric values using path variables.
 // Such metrics will carry little value and will have to be aggregated afterwords. And it will
