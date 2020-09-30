@@ -184,6 +184,17 @@ Optional step to create a vendor directory
     go mod vendor
 ```
 
+## Testing
+
+To run test and output coverage report
+```bash
+    go test -covermode=count -coverprofile=cover.out ./...
+```
+
+To get coverage as a percentage of overall codebase use `-coverpkg=./...`
+```bash
+    go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
+```
 
 ## Docker
 
