@@ -8,26 +8,28 @@ import (
 )
 
 var resolvedServices Services
-var serviceConfigs []config.ServiceConfig
 
 // resolveServices resolves all services.
 func resolveServices(cfgs []config.ServiceConfig) Services {
 
-	serviceConfigs = cfgs
-
-	resolvedServices.SampleService = services.NewSampleService(getConfigByName("sample"))
+	resolveSampleService(getConfigByName(cfgs, "sample"))
 
 	return resolvedServices
 }
 
+func resolveSampleService(cfg config.ServiceConfig) {
+
+	resolvedServices.SampleService = services.NewSampleService(cfg)
+}
+
 // getConfigByName returns the service config by name of the service
-func getConfigByName(name string) config.ServiceConfig {
+func getConfigByName(cfgs []config.ServiceConfig, name string) config.ServiceConfig {
 
-	for i := range serviceConfigs {
+	for i := range cfgs {
 
-		if serviceConfigs[i].Name == name {
+		if cfgs[i].Name == name {
 
-			return serviceConfigs[i]
+			return cfgs[i]
 		}
 	}
 
