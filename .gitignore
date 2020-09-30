@@ -14,7 +14,7 @@
 *.test
 
 # Coverage reports
-profile.cov
+cover.out
 
 # Dependancies
 /vendor
