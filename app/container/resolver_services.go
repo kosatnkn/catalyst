@@ -17,12 +17,13 @@ func resolveServices(cfgs []config.ServiceConfig) Services {
 	return resolvedServices
 }
 
+// resolveSampleService resolves the sample service.
 func resolveSampleService(cfg config.ServiceConfig) {
 
 	resolvedServices.SampleService = services.NewSampleService(cfg)
 }
 
-// getConfigByName returns the service config by name of the service
+// getConfigByName returns the service config by name of the service.
 func getConfigByName(cfgs []config.ServiceConfig, name string) config.ServiceConfig {
 
 	for i := range cfgs {
