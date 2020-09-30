@@ -13,6 +13,9 @@
 # Test binary, built with `go test -c`
 *.test
 
+# Coverage reports
+profile.cov
+
 # Dependancies
 /vendor
 glide.lock
