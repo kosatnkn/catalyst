@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Destruct the container releaseing resources.
+// Destruct releases all necessary resources that needs to be released.
 func (ctr *Container) Destruct() {
 
 	fmt.Println("")
