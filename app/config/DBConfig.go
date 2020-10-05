@@ -8,4 +8,5 @@ type DBConfig struct {
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	PoolSize int    `yaml:"pool_size"`
+	Check    bool   `yaml:"check"`
 }

@@ -45,6 +45,11 @@ func NewMySQLAdapter(cfg config.DBConfig) (adapters.DBAdapterInterface, error) {
 		pqPrefix: "?",
 	}
 
+	// check whether the db is accessible
+	if cfg.Check {
+		return a, a.Ping()
+	}
+
 	return a, nil
 }
 

@@ -4,3 +4,4 @@ database: test
 user: postgres
 password: admin
 pool_size: 10
+check: false

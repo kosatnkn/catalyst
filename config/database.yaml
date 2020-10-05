@@ -4,3 +4,4 @@ database: test
 user: root
 password: root
 pool_size: 10
+check: false
