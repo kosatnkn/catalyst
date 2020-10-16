@@ -5,10 +5,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// registerMetrics registers declared metrics.
+// Register registers declared metrics.
 //
 // This is the central location to register metrics from different
 // layers of the service.
-func registerMetrics() {
+func Register() {
 	prometheus.MustRegister(httpMetrics.HTTPReqDuration)
 }

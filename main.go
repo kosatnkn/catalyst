@@ -8,9 +8,10 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/metrics"
 	"github.com/kosatnkn/catalyst/app/splash"
 	"github.com/kosatnkn/catalyst/channels/http/server"
+	httpServer "github.com/kosatnkn/catalyst/channels/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/channels/metrics/server"
 )
 
 func main() {
@@ -25,10 +26,10 @@ func main() {
 	ctr := container.Resolve(cfg)
 
 	// start the server to handle http requests
-	srv := server.Run(cfg.AppConfig, ctr)
+	srv := httpServer.Run(cfg.AppConfig, ctr)
 
-	// expose application metrics
-	metrics.Expose(cfg.AppConfig, ctr)
+	// start the server to expose application metrics
+	metricsServer.Run(cfg.AppConfig, ctr)
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
