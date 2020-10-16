@@ -9,7 +9,6 @@ import (
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/app/splash"
-	"github.com/kosatnkn/catalyst/channels/http/server"
 	httpServer "github.com/kosatnkn/catalyst/channels/http/server"
 	metricsServer "github.com/kosatnkn/catalyst/channels/metrics/server"
 )
@@ -52,8 +51,8 @@ func main() {
 	// release resources
 	ctr.Destruct()
 
-	// gracefully stop the server
-	server.Stop(ctx, srv)
+	// gracefully stop the http server
+	httpServer.Stop(ctx, srv)
 
 	os.Exit(0)
 }
