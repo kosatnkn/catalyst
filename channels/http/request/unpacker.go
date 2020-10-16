@@ -7,8 +7,8 @@ import (
 
 	"fmt"
 
-	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
-	"github.com/kosatnkn/catalyst/app/http/request/unpackers"
+	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
+	"github.com/kosatnkn/catalyst/channels/http/request/unpackers"
 )
 
 // Unpack the request in to the given unpacker struct.

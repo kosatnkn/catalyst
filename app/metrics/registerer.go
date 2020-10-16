@@ -1,7 +1,7 @@
 package metrics
 
 import (
-	httpMetrics "github.com/kosatnkn/catalyst/app/http/metrics"
+	httpMetrics "github.com/kosatnkn/catalyst/channels/http/metrics"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

@@ -8,9 +8,9 @@ import (
 	"github.com/iancoleman/strcase"
 
 	baseErrs "github.com/kosatnkn/catalyst/app/errors"
-	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
-	"github.com/kosatnkn/catalyst/app/http/response/mappers"
-	"github.com/kosatnkn/catalyst/app/http/response/transformers"
+	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
+	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
+	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )

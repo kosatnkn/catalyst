@@ -10,10 +10,10 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/http/router"
+	"github.com/kosatnkn/catalyst/channels/http/router"
 )
 
-// Run runs the application server.
+// Run runs the http server.
 func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 
 	// initialize the router

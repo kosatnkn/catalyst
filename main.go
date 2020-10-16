@@ -8,9 +8,9 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/http/server"
 	"github.com/kosatnkn/catalyst/app/metrics"
 	"github.com/kosatnkn/catalyst/app/splash"
+	"github.com/kosatnkn/catalyst/channels/http/server"
 )
 
 func main() {

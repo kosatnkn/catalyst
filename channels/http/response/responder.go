@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	errHandler "github.com/kosatnkn/catalyst/app/http/error"
+	errHandler "github.com/kosatnkn/catalyst/channels/http/error"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 )
 
