@@ -19,7 +19,7 @@ func main() {
 	splash.Show(splash.StyleDefault)
 
 	// parse all configurations
-	cfg := config.Parse("./config")
+	cfg := config.Parse("./configs")
 
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
