@@ -8,9 +8,9 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/http/server"
-	"github.com/kosatnkn/catalyst/app/metrics"
 	"github.com/kosatnkn/catalyst/app/splash"
+	httpServer "github.com/kosatnkn/catalyst/channels/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/channels/metrics/server"
 )
 
 func main() {
@@ -19,16 +19,16 @@ func main() {
 	splash.Show(splash.StyleDefault)
 
 	// parse all configurations
-	cfg := config.Parse("./config")
+	cfg := config.Parse("./configs")
 
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
 	// start the server to handle http requests
-	srv := server.Run(cfg.AppConfig, ctr)
+	srv := httpServer.Run(cfg.AppConfig, ctr)
 
-	// expose application metrics
-	metrics.Expose(cfg.AppConfig, ctr)
+	// start the server to expose application metrics
+	metricsServer.Run(cfg.AppConfig, ctr)
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
@@ -51,8 +51,8 @@ func main() {
 	// release resources
 	ctr.Destruct()
 
-	// gracefully stop the server
-	server.Stop(ctx, srv)
+	// gracefully stop the http server
+	httpServer.Stop(ctx, srv)
 
 	os.Exit(0)
 }

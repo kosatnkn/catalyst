@@ -10,17 +10,18 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/app/container"
+	"github.com/kosatnkn/catalyst/app/metrics"
 )
 
-// Expose exposes metrics as a separate Prometheus metric server.
-func Expose(cfg config.AppConfig, ctr *container.Container) {
+// Run runs a server to exposes metrics as a separate Prometheus metric server.
+func Run(cfg config.AppConfig, ctr *container.Container) {
 
 	if !cfg.Metrics.Enabled {
 		return
 	}
 
 	// register defined metrics
-	registerMetrics()
+	metrics.Register()
 
 	// set metric exposing port and endpoint
 	address := cfg.Host + ":" + strconv.Itoa(cfg.Metrics.Port)

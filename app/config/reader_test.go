@@ -8,7 +8,7 @@ import (
 func TestRead(t *testing.T) {
 
 	// input
-	file := "../../config/app.yaml"
+	file := "../../configs/app.yaml"
 
 	// run
 	c := read(file)

@@ -1,14 +1,14 @@
 package metrics
 
 import (
-	httpMetrics "github.com/kosatnkn/catalyst/app/http/metrics"
+	httpMetrics "github.com/kosatnkn/catalyst/channels/http/metrics"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-// registerMetrics registers declared metrics.
+// Register registers declared metrics.
 //
 // This is the central location to register metrics from different
 // layers of the service.
-func registerMetrics() {
+func Register() {
 	prometheus.MustRegister(httpMetrics.HTTPReqDuration)
 }

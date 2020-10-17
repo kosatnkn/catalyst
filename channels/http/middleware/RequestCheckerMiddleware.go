@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/kosatnkn/catalyst/app/container"
-	httpErrs "github.com/kosatnkn/catalyst/app/http/errors"
-	"github.com/kosatnkn/catalyst/app/http/response"
+	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
+	"github.com/kosatnkn/catalyst/channels/http/response"
 )
 
 // RequestCheckerMiddleware validates the request header.

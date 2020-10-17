@@ -10,7 +10,7 @@ import (
 func TestParse(t *testing.T) {
 
 	// input
-	dir := "../../config/"
+	dir := "../../configs/"
 
 	// run
 	c := Parse(dir)
@@ -85,7 +85,7 @@ func TestParseConfigUnmatchedUnpacker(t *testing.T) {
 	}()
 
 	// input
-	file := "../../config/app.yaml"
+	file := "../../configs/app.yaml"
 	var unpacker string // some data type that cannot be unmarshalled in to
 
 	// run
