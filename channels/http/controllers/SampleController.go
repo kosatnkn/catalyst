@@ -6,7 +6,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/validator"
 	"github.com/kosatnkn/catalyst/channels/http/request"
 	"github.com/kosatnkn/catalyst/channels/http/request/unpackers"
 	"github.com/kosatnkn/catalyst/channels/http/response"
@@ -20,6 +19,7 @@ import (
 // SampleController contains controller logic for endpoints.
 type SampleController struct {
 	logger        adapters.LogAdapterInterface
+	validator     adapters.ValidatorAdapterInterface
 	sampleUseCase *sample.Sample
 }
 
@@ -28,6 +28,7 @@ func NewSampleController(container *container.Container) *SampleController {
 
 	return &SampleController{
 		logger:        container.Adapters.LogAdapter,
+		validator:     container.Adapters.ValidatorAdapter,
 		sampleUseCase: sample.NewSample(container),
 	}
 }
@@ -72,7 +73,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// NOTE: here a validation is not actually needed since query parameters
 	// are validated to a certain extent by putting parameter validations in
 	// routes and by data type conversions done in the controller
-	errs := validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.logger)
 		return
@@ -110,7 +111,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// validate unpacked data
-	errs := validator.Validate(sampleUnpacker)
+	errs := ctl.validator.Validate(sampleUnpacker)
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.logger)
 		return
@@ -158,14 +159,14 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
-	errs := validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.logger)
 		return
 	}
 
 	// validate unpacked data
-	errs = validator.Validate(sampleUnpacker)
+	errs = ctl.validator.Validate(sampleUnpacker)
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.logger)
 		return
@@ -203,7 +204,7 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
-	errs := validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField(id, "required,gt=0")
 	if errs != nil {
 		response.Error(ctx, w, errs, ctl.logger)
 		return

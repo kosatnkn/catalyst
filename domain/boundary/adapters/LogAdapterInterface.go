@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// LogAdapterInterface is implemeted by all looging adapters.
+// LogAdapterInterface is implemented by all logging adapters.
 type LogAdapterInterface interface {
 
 	// Error logs a message as of error type.
