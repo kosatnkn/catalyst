@@ -83,7 +83,7 @@ func (a *LogAdapter) initLogFile() error {
 }
 
 // Logs a message using the following format.
-// <date> <time_in_24h_foramt_plus_milliseconds> [<message_type>] [<uuid>] [<prefix>] [<message>] [<additional_inforamtion>]
+// <date> <time_in_24h_foramt_plus_milliseconds> [<message_type>] [<uuid>] [<prefix>] [<message>] [<additional_information>]
 // ex:
 //		2019/01/14 12:13:29.435517 [ERROR] [b2e1bfc7-11ed-40e5-ab08-abeadef079e6] [usecases.TestUsecase.TestFunc] [error message] [key1: value1, ...]
 func (a *LogAdapter) log(ctx context.Context, logLevel string, message string, options ...interface{}) {
