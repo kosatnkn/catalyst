@@ -3,9 +3,9 @@ package adapters
 import (
 	localsEn "github.com/go-playground/locales/en"
 	ut "github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
+	enTranslations "github.com/go-playground/validator/v10/translations/en"
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
-	"gopkg.in/go-playground/validator.v9"
-	enTranslations "gopkg.in/go-playground/validator.v9/translations/en"
 )
 
 // ValidatorAdapter is used to validate structures and variables
