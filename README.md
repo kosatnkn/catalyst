@@ -39,15 +39,9 @@ The easiest way to create a project using `Catalyst` as the base is to use `Caul
 
 More information about `Cauldron` can be found [here](https://github.com/kosatnkn/cauldron)
 
-Clone and install `Cauldron`
+Install `Cauldron`
 ```bash
-    git clone https://github.com/kosatnkn/cauldron.git
-
-    cd  cauldron
-
-    git checkout tags/<tag_name> -b <tag_name>
-    
-    go install
+    go get github.com/kosatnkn/cauldron
 ```
 
 Create a new project
@@ -91,12 +85,26 @@ Change import paths
 - Now run and see whether the project compiles and run properly
 - If so you can do a `git init` to the project
 
-## The Sample Set
+## Special Notes
+
+### The Sample Set
 We have included a sample set of endpoints and their corresponding controller and domain logic by default.
 
 This is to make it easier for you to follow through and understand how Catalyst handles the request response cycle for a given request.
 
 The sample set will cover all basic CRUD operations that a REST API will normally need.
+
+There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
+
+### Database Adapters
+Catalyst comes with support for connection with couple of databases by the use of **Database Adapters**. 
+These are in `externals/adapters` directory and will provide a starting point to creating DB adapters that much suite
+your needs.
+
+There are adapters to connect to a database as well as to manage database transactions for following databases.
+- MySQL / MariaDB
+- PostgresSQL
+
 
 ## Request Response Cycle
 ```text
