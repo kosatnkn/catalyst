@@ -2,7 +2,7 @@
 
 ![catalyst_logo](./docs/images/catalyst_logo_256.png)
 
-[![Build Status](https://travis-ci.org/kosatnkn/catalyst.svg?branch=master)](https://travis-ci.org/kosatnkn/catalyst)
+[![Actions Status](https://github.com/kosatnkn/catalyst/workflows/CI/badge.svg)](https://github.com/kosatnkn/catalyst/actions)
 [![Coverage Status](https://coveralls.io/repos/github/kosatnkn/catalyst/badge.svg?branch=master)](https://coveralls.io/github/kosatnkn/catalyst?branch=master)
 ![Open Issues](https://img.shields.io/github/issues/kosatnkn/catalyst)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kosatnkn/catalyst)
