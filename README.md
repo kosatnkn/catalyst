@@ -9,7 +9,7 @@
 [![GoDoc](https://godoc.org/github.com/kosatnkn/catalyst?status.svg)](https://godoc.org/github.com/kosatnkn/catalyst)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
-A REST API base that is written in **Go** using the **Clean Architecture** paradigm.
+A REST API base implemented as a microservice written in **Go** using the **Clean Architecture** paradigm.
 
 ## Features
 - A server to handle web requests
