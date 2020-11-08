@@ -6,9 +6,9 @@ info:
     Go clean architecture RESTful API
   version: v2.2.0
 
-# servers:
-#   - url: http://localhost:3000
-#     description: Development
+servers:
+  - url: http://localhost:3000/api
+    description: Mock
 
 paths:
 
