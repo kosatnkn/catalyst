@@ -20,6 +20,13 @@ jobs:
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
+    
+    - name: Create config files
+      run: |
+        mv configs/app.yaml.example configs/app.yaml
+        mv configs/database.yaml.example configs/database.yaml
+        mv configs/logger.yaml.example configs/logger.yaml
+        mv configs/services.yaml.example configs/services.yaml
 
     - name: Get dependencies
       run: |
