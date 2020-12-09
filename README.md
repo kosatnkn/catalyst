@@ -89,6 +89,11 @@ Change import paths
 
 ## Special Notes
 
+### Configurations
+Configuration files for a `Catalyst` project can be found in `configs` directory.
+
+Initially you will have a set of config files with the extension of `.yaml.example`. You can create `.yaml` configuration files using these **example** files as a template.
+
 ### The Sample Set
 We have included a sample set of endpoints and their corresponding controller and domain logic by default.
 
