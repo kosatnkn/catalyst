@@ -1,0 +1,10 @@
+name: catalyst
+mode: DEBUG
+host:
+port: 3000
+timezone: GMT+0530
+
+metrics:
+  enabled: true
+  port: 3001
+  route: /metrics

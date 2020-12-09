@@ -1,0 +1,7 @@
+- name: sample
+  url: http://localhost:8080/
+  timeout: 10
+
+- name: service_2
+  url: http://localhost:8081/
+  timeout: 10
