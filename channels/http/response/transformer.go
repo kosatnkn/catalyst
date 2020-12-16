@@ -8,18 +8,24 @@ import (
 )
 
 // Transform transforms a dataset in to a relevant structure and marshal to JSON.
-func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) []byte {
+func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) ([]byte, error) {
 
-	tData := transformByCriteria(data, t, isCollection)
+	tData, err := transformByCriteria(data, t, isCollection)
+	if err != nil {
+		return nil, err
+	}
 
-	message, _ := json.Marshal(wrapInDataMapper(tData))
+	message, err := json.Marshal(wrapInDataMapper(tData))
+	if err != nil {
+		return nil, err
+	}
 
-	return message
+	return message, nil
 }
 
 // transformByCriteria transforms data either as an object or as a collection
 // depending on the `isCollection` boolean value
-func transformByCriteria(data interface{}, t transformers.TransformerInterface, isCollection bool) interface{} {
+func transformByCriteria(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
 
 	if isCollection {
 		return t.TransformAsCollection(data)

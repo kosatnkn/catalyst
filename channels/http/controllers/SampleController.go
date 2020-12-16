@@ -50,7 +50,11 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// transform
-	tr := response.Transform(samples, transformers.NewSampleTransformer(), true)
+	tr, err := response.Transform(samples, transformers.NewSampleTransformer(), true)
+	if err != nil {
+		response.Error(ctx, w, err, ctl.logger)
+		return
+	}
 
 	// send response
 	response.Send(w, tr, http.StatusOK)
@@ -87,7 +91,11 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// transform
-	tr := response.Transform(sample, transformers.NewSampleTransformer(), false)
+	tr, err := response.Transform(sample, transformers.NewSampleTransformer(), false)
+	if err != nil {
+		response.Error(ctx, w, err, ctl.logger)
+		return
+	}
 
 	// send response
 	response.Send(w, tr, http.StatusOK)
