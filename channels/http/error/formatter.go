@@ -23,6 +23,7 @@ func format(err error) []byte {
 	switch err.(type) {
 	case *baseErrs.ServerError,
 		*httpErrs.MiddlewareError,
+		*httpErrs.TransformerError,
 		*externalErrs.AdapterError,
 		*externalErrs.RepositoryError,
 		*externalErrs.ServiceError,

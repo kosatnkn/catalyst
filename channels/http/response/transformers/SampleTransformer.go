@@ -1,8 +1,6 @@
 package transformers
 
 import (
-	"errors"
-
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 
@@ -25,7 +23,7 @@ func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, er
 	// https://tour.golang.org/methods/15
 	sample, ok := data.(entities.Sample)
 	if !ok {
-		return nil, errors.New("Unmatched data type")
+		return nil, unknownDataTypeError("Sample")
 	}
 
 	tr := SampleTransformer{
@@ -47,7 +45,7 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 
 	samples, ok := data.([]entities.Sample)
 	if !ok {
-		return nil, errors.New("Unmatched data type")
+		return nil, unknownDataTypeError("[]Sample")
 	}
 
 	for _, sample := range samples {
@@ -59,7 +57,7 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 
 		trSample, ok := tr.(SampleTransformer)
 		if !ok {
-			return nil, errors.New("Unmatched data type")
+			return nil, unknownDataTypeError("Sample")
 		}
 
 		trSamples = append(trSamples, trSample)

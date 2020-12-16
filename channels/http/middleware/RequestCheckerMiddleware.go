@@ -24,7 +24,6 @@ func NewRequestCheckerMiddleware(ctr *container.Container) *RequestCheckerMiddle
 			"/favicon.ico",
 		},
 	}
-
 }
 
 // Middleware executes middleware rules of RequestCheckerMiddleware.

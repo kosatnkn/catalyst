@@ -131,19 +131,19 @@ func (a *LogAdapter) setTag(logLevel string) interface{} {
 
 		switch logLevel {
 		case "ERROR":
-			logLevelVal = aurora.BgRed("[ERROR]")
+			logLevelVal = aurora.Red("[ERROR]")
 			break
 		case "DEBUG":
-			logLevelVal = aurora.BgGreen("[DEBUG]")
+			logLevelVal = aurora.Green("[DEBUG]")
 			break
 		case "INFO":
-			logLevelVal = aurora.BgCyan("[INFO]")
+			logLevelVal = aurora.Cyan("[INFO]")
 			break
 		case "WARN":
-			logLevelVal = aurora.BgBrown("[WARN]")
+			logLevelVal = aurora.Brown("[WARN]")
 			break
 		default:
-			logLevelVal = aurora.BgMagenta("[UNKNOWN]")
+			logLevelVal = aurora.Magenta("[UNKNOWN]")
 			break
 		}
 
