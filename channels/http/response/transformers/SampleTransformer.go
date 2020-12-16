@@ -43,6 +43,9 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 	// https://apoorvam.github.io/blog/2017/golang-json-marshal-slice-as-empty-array-not-null/
 	trSamples := make([]SampleTransformer, 0)
 
+	// NOTE: Make sure to do the type assertion in this manner so that assertion failures
+	// 		 will not result in a panic.
+	// https://tour.golang.org/methods/15
 	samples, ok := data.([]entities.Sample)
 	if !ok {
 		return nil, unknownDataTypeError("[]Sample")

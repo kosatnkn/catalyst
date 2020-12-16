@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
@@ -32,7 +33,7 @@ func (repo *SampleMySQLRepository) Get(ctx context.Context) ([]entities.Sample, 
 		return nil, err
 	}
 
-	return repo.mapResult(result), nil
+	return repo.mapResult(result)
 }
 
 // GetByID retrieves a single Sample.
@@ -54,7 +55,11 @@ func (repo *SampleMySQLRepository) GetByID(ctx context.Context, id int) (entitie
 		return entities.Sample{}, err
 	}
 
-	mapped := repo.mapResult(result)
+	mapped, err := repo.mapResult(result)
+	if err != nil {
+		return entities.Sample{}, err
+	}
+
 	if len(mapped) == 0 {
 		return entities.Sample{}, nil
 	}
@@ -125,14 +130,25 @@ func (repo *SampleMySQLRepository) Delete(ctx context.Context, id int) error {
 }
 
 // mapResult maps the result to entities.
-func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) []entities.Sample {
+func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) ([]entities.Sample, error) {
 
 	m := make([]entities.Sample, 0)
 
 	for _, row := range result {
 
-		id, _ := row["id"].(int64)
-		name, _ := row["name"].([]byte)
+		// NOTE: Make sure to do the type assertion in this manner so that assertion failures
+		// 		 will not result in a panic.
+		// https://tour.golang.org/methods/15
+
+		id, ok := row["id"].(int64)
+		if !ok {
+			return nil, dataTypeMismatchError("id")
+		}
+
+		name, ok := row["name"].([]byte)
+		if !ok {
+			return nil, dataTypeMismatchError("name")
+		}
 
 		m = append(m, entities.Sample{
 			ID:   int(id),
@@ -140,5 +156,10 @@ func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) []
 		})
 	}
 
-	return m
+	return m, nil
+}
+
+// dataTypeMismatchError returns a data type mismatch error for the field.
+func dataTypeMismatchError(field string) error {
+	return fmt.Errorf("Data type mismatch for field '%s' in 'SampleRepository'", field)
 }
