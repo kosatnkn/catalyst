@@ -1,6 +1,8 @@
 package unpackers
 
-// SampleUnpacker contains the unpacking structure for the address sent in request payload.
+// SampleUnpacker contains the unpacking structure for sample in request payload.
+//
+// https://pkg.go.dev/gopkg.in/go-playground/validator.v10#section-documentation
 type SampleUnpacker struct {
 	Name     string `json:"name" validate:"required"`
 	Password string `json:"password" validate:"required"`
