@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
@@ -130,36 +129,24 @@ func (repo *SampleMySQLRepository) Delete(ctx context.Context, id int) error {
 }
 
 // mapResult maps the result to entities.
-func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) ([]entities.Sample, error) {
+func (repo *SampleMySQLRepository) mapResult(result []map[string]interface{}) (samples []entities.Sample, err error) {
 
-	m := make([]entities.Sample, 0)
+	// Applying type assertion in this manner will result in a panic when the db data structure changes.
+	// This defer recover pattern is used to recover from the panic and to return an error instead.
+	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
+	defer func() {
+		if r := recover(); r != nil {
+			err = r.(error)
+		}
+	}()
 
 	for _, row := range result {
 
-		// NOTE: Make sure to do the type assertion in this manner so that assertion failures
-		// 		 will not result in a panic.
-		// https://tour.golang.org/methods/15
-
-		id, ok := row["id"].(int64)
-		if !ok {
-			return nil, dataTypeMismatchError("id")
-		}
-
-		name, ok := row["name"].([]byte)
-		if !ok {
-			return nil, dataTypeMismatchError("name")
-		}
-
-		m = append(m, entities.Sample{
-			ID:   int(id),
-			Name: string(name),
+		samples = append(samples, entities.Sample{
+			ID:   int(row["id"].(int64)),
+			Name: string(row["name"].([]byte)),
 		})
 	}
 
-	return m, nil
-}
-
-// dataTypeMismatchError returns a data type mismatch error for the field.
-func dataTypeMismatchError(field string) error {
-	return fmt.Errorf("Data type mismatch for field '%s' in 'SampleRepository'", field)
+	return samples, nil
 }
