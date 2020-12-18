@@ -1,6 +1,7 @@
 package transformers
 
 import (
+	"github.com/kosatnkn/catalyst/channels/http/errors"
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 
@@ -16,15 +17,18 @@ func NewSampleTransformer() TransformerInterface {
 }
 
 // TransformAsObject map data to a transformer object.
-func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, error) {
+func (t *SampleTransformer) TransformAsObject(data interface{}) (_ interface{}, err error) {
 
-	// NOTE: Make sure to do the type assertion in this manner so that assertion failures
-	// 		 will not result in a panic.
-	// https://tour.golang.org/methods/15
-	sample, ok := data.(entities.Sample)
-	if !ok {
-		return nil, unknownDataTypeError("Sample")
-	}
+	// NOTE: Applying type assertion in this manner will result in a panic if the assertion fails.
+	// 		 This defer recover pattern is used to recover from the panic and to return an error instead.
+	// 		 Notice the use of `named returned values` for this function (without which the recover pattern will not work).
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.NewTransformerError(r.(error).Error(), 100, "")
+		}
+	}()
+
+	sample := data.(entities.Sample)
 
 	tr := SampleTransformer{
 		ID:   sample.ID,
@@ -35,7 +39,7 @@ func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, er
 }
 
 // TransformAsCollection map data to a collection of transformer objects.
-func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
+func (t *SampleTransformer) TransformAsCollection(data interface{}) (_ interface{}, err error) {
 
 	// NOTE: Make sure that you declare the transformer slice in this manner.
 	//		 Otherwise the marshaller will return `null` instead of `[]` when
@@ -43,13 +47,16 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 	// https://apoorvam.github.io/blog/2017/golang-json-marshal-slice-as-empty-array-not-null/
 	trSamples := make([]SampleTransformer, 0)
 
-	// NOTE: Make sure to do the type assertion in this manner so that assertion failures
-	// 		 will not result in a panic.
-	// https://tour.golang.org/methods/15
-	samples, ok := data.([]entities.Sample)
-	if !ok {
-		return nil, unknownDataTypeError("[]Sample")
-	}
+	// NOTE: Applying type assertion in this manner will result in a panic if the assertion fails.
+	// 		 This defer recover pattern is used to recover from the panic and to return an error instead.
+	// 		 Notice the use of `named returned values` for this function (without which the recover pattern will not work).
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.NewTransformerError(r.(error).Error(), 100, "")
+		}
+	}()
+
+	samples := data.([]entities.Sample)
 
 	for _, sample := range samples {
 
@@ -58,11 +65,7 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 			return nil, err
 		}
 
-		trSample, ok := tr.(SampleTransformer)
-		if !ok {
-			return nil, unknownDataTypeError("Sample")
-		}
-
+		trSample := tr.(SampleTransformer)
 		trSamples = append(trSamples, trSample)
 	}
 
