@@ -31,18 +31,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  name:
-                    type: string
-                    enum:
-                      - $ref: '#/info/title'
-                  version:
-                    type: string
-                    enum:
-                      - $ref: '#/info/version'
-                  purpose:
-                    type: string
-                    enum:
-                      - $ref: '#/info/description'
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        enum:
+                          - $ref: '#/info/title'
+                      version:
+                        type: string
+                        enum:
+                          - $ref: '#/info/version'
+                      purpose:
+                        type: string
+                        enum:
+                          - $ref: '#/info/description'
 
   # -------------------------------------------------
   # Sample
@@ -70,9 +73,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/res_sample'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
@@ -104,7 +110,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identifier'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/identifier'
         400:
           description: Domain Error
           content:
@@ -142,7 +151,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/res_sample'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
