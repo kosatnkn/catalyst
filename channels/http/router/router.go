@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -9,7 +8,6 @@ import (
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/channels/http/controllers"
 	"github.com/kosatnkn/catalyst/channels/http/middleware"
-	"github.com/kosatnkn/catalyst/channels/http/response"
 )
 
 // Init initializes the router.
@@ -37,25 +35,12 @@ func Init(ctr *container.Container) *mux.Router {
 
 	// initialize controllers
 	sampleController := controllers.NewSampleController(ctr)
+	apiController := controllers.NewAPIController(ctr)
 
 	// bind controller functions to routes
 
 	// api info
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		name := "Catalyst"
-		version := "v2.2.0"
-		purpose := "REST API base written in Golang"
-
-		response.Send(
-			w,
-			[]byte(fmt.Sprintf(`{
-				"name": "%s",
-				"version": "%s",
-				"purpose": "%s"
-			  }`, name, version, purpose)),
-			http.StatusOK)
-	}).Methods(http.MethodGet)
+	r.HandleFunc("/", apiController.GetInfo).Methods(http.MethodGet)
 
 	// sample
 	r.HandleFunc("/samples", sampleController.Get).Methods(http.MethodGet)

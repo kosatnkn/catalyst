@@ -1,25 +1,12 @@
 package response
 
 import (
-	"encoding/json"
-
 	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
 	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
 )
 
-// Transform transforms a dataset in to a relevant structure and marshal to JSON.
-func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) []byte {
-
-	tData := transformByCriteria(data, t, isCollection)
-
-	message, _ := json.Marshal(wrapInDataMapper(tData))
-
-	return message
-}
-
-// transformByCriteria transforms data either as an object or as a collection
-// depending on the `isCollection` boolean value
-func transformByCriteria(data interface{}, t transformers.TransformerInterface, isCollection bool) interface{} {
+// Transform transforms data either as an object or as a collection depending on the `isCollection` boolean value.
+func Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
 
 	if isCollection {
 		return t.TransformAsCollection(data)
@@ -28,11 +15,16 @@ func transformByCriteria(data interface{}, t transformers.TransformerInterface, 
 	return t.TransformAsObject(data)
 }
 
-// wrapInDataMapper wraps payload in a data object.
-func wrapInDataMapper(data interface{}) mappers.Data {
+// Map wraps payload in a standard response payload object.
+func Map(data []interface{}) (m mappers.Payload) {
 
-	wrapper := mappers.Data{}
-	wrapper.Payload = data
+	for _, v := range data {
 
-	return wrapper
+		switch v.(type) {
+		default:
+			m.Data = v
+		}
+	}
+
+	return m
 }

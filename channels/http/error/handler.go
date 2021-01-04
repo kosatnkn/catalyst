@@ -19,7 +19,8 @@ func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface)
 
 	switch err.(type) {
 
-	case *baseErrs.ServerError:
+	case *baseErrs.ServerError,
+		*httpErrs.TransformerError:
 		logger.Error(ctx, "Server Error", err)
 		errMessage = format(err)
 		status = http.StatusInternalServerError

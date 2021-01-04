@@ -32,7 +32,7 @@ func (repo *SamplePostgresRepository) Get(ctx context.Context) ([]entities.Sampl
 		return nil, err
 	}
 
-	return repo.mapResult(result), nil
+	return repo.mapResult(result)
 }
 
 // GetByID retrieves a single Sample.
@@ -54,7 +54,11 @@ func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (enti
 		return entities.Sample{}, err
 	}
 
-	mapped := repo.mapResult(result)
+	mapped, err := repo.mapResult(result)
+	if err != nil {
+		return entities.Sample{}, err
+	}
+
 	if len(mapped) == 0 {
 		return entities.Sample{}, nil
 	}
@@ -125,20 +129,24 @@ func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error 
 }
 
 // mapResult maps the result to entities.
-func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{}) []entities.Sample {
+func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{}) (samples []entities.Sample, err error) {
 
-	var m []entities.Sample
+	// Applying type assertion in this manner will result in a panic when the db data structure changes.
+	// This defer recover pattern is used to recover from the panic and to return an error instead.
+	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
+	defer func() {
+		if r := recover(); r != nil {
+			err = r.(error)
+		}
+	}()
 
 	for _, row := range result {
 
-		id, _ := row["id"].(int64)
-		name, _ := row["name"].([]byte)
-
-		m = append(m, entities.Sample{
-			ID:   int(id),
-			Name: string(name),
+		samples = append(samples, entities.Sample{
+			ID:   int(row["id"].(int64)),
+			Name: string(row["name"].([]byte)),
 		})
 	}
 
-	return m
+	return samples, nil
 }

@@ -4,7 +4,7 @@ info:
   title: Catalyst
   description: >
     Go clean architecture RESTful API
-  version: v2.2.0
+  version: v2.3.0
 
 servers:
   - url: http://localhost:3000/api
@@ -31,18 +31,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  name:
-                    type: string
-                    enum:
-                      - $ref: '#/info/title'
-                  version:
-                    type: string
-                    enum:
-                      - $ref: '#/info/version'
-                  purpose:
-                    type: string
-                    enum:
-                      - $ref: '#/info/description'
+                  data:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        enum:
+                          - $ref: '#/info/title'
+                      version:
+                        type: string
+                        enum:
+                          - $ref: '#/info/version'
+                      purpose:
+                        type: string
+                        enum:
+                          - $ref: '#/info/description'
 
   # -------------------------------------------------
   # Sample
@@ -58,9 +61,7 @@ paths:
           in: query
           description: Additional filters JSON in string serialized format
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/filter'
+            $ref: '#/components/schemas/filters'
         - in: query
           name: paginator
           description: Paginator JSON in string serialized format
@@ -72,9 +73,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/res_sample'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
@@ -106,7 +110,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/identifier'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/identifier'
         400:
           description: Domain Error
           content:
@@ -144,7 +151,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/res_sample'
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/res_sample'
         400:
           description: Domain Error
           content:
@@ -241,25 +251,14 @@ components:
           minimum: 1
           maximum: 99999
     
-    filter:
-      type: object
-      properties:
-        field:
-          type: string
-        value:
-          type: string
+    filters:
+      type: string
+      example: '[{"key": "value"}]'
   
     paginator: 
-      type: object
-      properties:
-        page:
-          type: integer
-          minimum: 1
-          default: 1
-        size:
-          type: integer
-          default: 10
-    
+      type: string
+      example: '{"page": 1, "size": 10}'
+      
     req_sample: 
       type: object
       properties:

@@ -14,8 +14,8 @@ const PrefixKey contextKey = "Prefix"
 // TxKey is the key to attach a database transaction to the context.
 const TxKey contextKey = "Tx"
 
-// AppendToContextPrefix appends the given prefix string to the globals.PrefixKey.
-func AppendToContextPrefix(ctx context.Context, prefix string) context.Context {
+// AddTrace appends the given prefix string to the globals.PrefixKey.
+func AddTrace(ctx context.Context, prefix string) context.Context {
 
 	pfx := ctx.Value(PrefixKey)
 
