@@ -16,7 +16,7 @@ func Transform(data interface{}, t transformers.TransformerInterface, isCollecti
 }
 
 // Map wraps payload in a standard response payload object.
-func Map(data ...interface{}) (m mappers.Payload) {
+func Map(data []interface{}) (m mappers.Payload) {
 
 	for _, v := range data {
 
