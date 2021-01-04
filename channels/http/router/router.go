@@ -34,8 +34,8 @@ func Init(ctr *container.Container) *mux.Router {
 	r.Use(requestAlterMidleware.Middleware)
 
 	// initialize controllers
-	sampleController := controllers.NewSampleController(ctr)
 	apiController := controllers.NewAPIController(ctr)
+	sampleController := controllers.NewSampleController(ctr)
 
 	// bind controller functions to routes
 
