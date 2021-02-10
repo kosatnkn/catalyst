@@ -7,7 +7,7 @@ import (
 // Config is the master config struct that holds all other config structs.
 type Config struct {
 	App      AppConfig
-	DB       DBConfig
+	DB       mysql.Config
 	Log      LogConfig
 	Services []ServiceConfig
 }
@@ -20,11 +20,6 @@ type AppConfig struct {
 	Port     int          `yaml:"port"`
 	Timezone string       `yaml:"timezone"`
 	Metrics  MetricConfig `yaml:"metrics"`
-}
-
-// DBConfig holds database configurations.
-type DBConfig struct {
-	mysql.Config
 }
 
 // LogConfig holds application log configurations.

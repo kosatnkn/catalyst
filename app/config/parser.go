@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kosatnkn/db/mysql"
 	"gopkg.in/yaml.v2"
 )
 
@@ -43,9 +44,9 @@ func parseLogConfig(dir string) LogConfig {
 }
 
 // parseDBConfig parses database configurations.
-func parseDBConfig(dir string) DBConfig {
+func parseDBConfig(dir string) mysql.Config {
 
-	cfg := DBConfig{}
+	cfg := mysql.Config{}
 
 	parseConfig(dir+"database.yaml", &cfg)
 

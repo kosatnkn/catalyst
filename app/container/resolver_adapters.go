@@ -5,6 +5,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/externals/adapters"
+	"github.com/kosatnkn/db/mysql"
 )
 
 var ra Adapters
@@ -21,9 +22,9 @@ func resolveAdapters(cfg *config.Config) Adapters {
 }
 
 // resolveDBAdapter resolves the database adapter.
-func resolveDBAdapter(cfg config.DBConfig) {
+func resolveDBAdapter(cfg mysql.Config) {
 
-	db, err := adapters.NewMySQLAdapter(cfg)
+	db, err := mysql.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
@@ -34,7 +35,7 @@ func resolveDBAdapter(cfg config.DBConfig) {
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	ra.DBTx = adapters.NewMySQLTxAdapter(ra.DB)
+	ra.DBTx = mysql.NewTxAdapter(ra.DB)
 }
 
 // resolveLogAdapter resolves the logging adapter.
