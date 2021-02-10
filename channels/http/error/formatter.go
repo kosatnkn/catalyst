@@ -1,7 +1,6 @@
 package error
 
 import (
-	"encoding/json"
 	"strconv"
 	"strings"
 
@@ -16,7 +15,7 @@ import (
 )
 
 // format formats the error by error type.
-func format(err error) []byte {
+func format(err error) mappers.Error {
 
 	var payload interface{}
 
@@ -38,13 +37,9 @@ func format(err error) []byte {
 		break
 	}
 
-	wrapper := mappers.Error{
+	return mappers.Error{
 		Payload: payload,
 	}
-
-	message, _ := json.Marshal(wrapper)
-
-	return message
 }
 
 // formatGenericError formats all generic errors.
@@ -68,28 +63,24 @@ func formatGenericError(err error) transformers.ErrorTransformer {
 func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 
 	return transformers.ValidationErrorTransformer{
-		Type:  "Validation Errors",
-		Trace: err.Error(),
+		Type: "Validation Errors",
+		Msg:  err.Error(),
 	}
 }
 
 // formatValidationErrors formats validation errors.
 //
 // These are errors thrown when field wise validations of the data structure fails.
-func formatValidationErrors(p map[string]string) []byte {
+func formatValidationErrors(p map[string]string) mappers.Error {
 
 	payload := transformers.ValidationErrorTransformer{
-		Type:  "Validation Errors",
-		Trace: formatValidationPayload(p),
+		Type: "Validation Errors",
+		Msg:  formatValidationPayload(p),
 	}
 
-	wrapper := mappers.Error{
+	return mappers.Error{
 		Payload: payload,
 	}
-
-	message, _ := json.Marshal(wrapper)
-
-	return message
 }
 
 // formatUnknownError formats errors of unknown error types.

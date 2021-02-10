@@ -7,14 +7,15 @@ import (
 	"github.com/kosatnkn/catalyst/app/adapters"
 	baseErrs "github.com/kosatnkn/catalyst/app/errors"
 	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
+	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // Handle handles all errors globally.
-func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface) ([]byte, int) {
+func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface) (mappers.Error, int) {
 
-	var errMessage []byte
+	var errMessage mappers.Error
 	var status int
 
 	switch err.(type) {
@@ -53,11 +54,11 @@ func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface)
 }
 
 // HandleValidationErrors specifically handles validation errors thrown by the validator.
-func HandleValidationErrors(ctx context.Context, errs map[string]string, logger adapters.LogAdapterInterface) ([]byte, int) {
+func HandleValidationErrors(ctx context.Context, errs map[string]string, logger adapters.LogAdapterInterface) (mappers.Error, int) {
 
 	errMessage := formatValidationErrors(errs)
 
-	logger.Error(ctx, "Validation Errors", string(errMessage))
+	logger.Error(ctx, "Validation Errors", errMessage)
 
 	return errMessage, http.StatusUnprocessableEntity
 }
