@@ -1,6 +1,10 @@
 package container
 
-import "github.com/kosatnkn/catalyst/app/config"
+import (
+	"fmt"
+
+	"github.com/kosatnkn/catalyst/app/config"
+)
 
 // Resolve resolves the entire container.
 //
@@ -16,4 +20,19 @@ func Resolve(cfg *config.Config) *Container {
 		Repositories: resolveRepositories(),
 		Services:     resolveServices(cfg.ServicesConfig),
 	}
+}
+
+// getServiceConfigByName returns the service config by name of the service.
+func getServiceConfigByName(cfgs []config.ServiceConfig, name string) config.ServiceConfig {
+
+	for i := range cfgs {
+
+		if cfgs[i].Name == name {
+
+			return cfgs[i]
+		}
+	}
+
+	// must panic if the config is not found
+	panic(fmt.Sprintf("Cannot find service configurations for `%s` service", name))
 }

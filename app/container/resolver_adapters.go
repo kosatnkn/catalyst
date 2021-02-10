@@ -7,7 +7,7 @@ import (
 	"github.com/kosatnkn/catalyst/externals/adapters"
 )
 
-var resolvedAdapters Adapters
+var ra Adapters
 
 // resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
@@ -17,7 +17,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 	resolveLogAdapter(cfg.LogConfig)
 	resolveValidatorAdapter()
 
-	return resolvedAdapters
+	return ra
 }
 
 // resolveDBAdapter resolves the database adapter.
@@ -28,15 +28,13 @@ func resolveDBAdapter(cfg config.DBConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.DBAdapter = db
+	ra.DBAdapter = db
 }
 
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	tx := adapters.NewMySQLTxAdapter(resolvedAdapters.DBAdapter)
-
-	resolvedAdapters.DBTxAdapter = tx
+	ra.DBTxAdapter = adapters.NewMySQLTxAdapter(ra.DBAdapter)
 }
 
 // resolveLogAdapter resolves the logging adapter.
@@ -47,7 +45,7 @@ func resolveLogAdapter(cfg config.LogConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.LogAdapter = la
+	ra.LogAdapter = la
 }
 
 // resolveValidatorAdapter resolves the validation adapter.
@@ -58,5 +56,5 @@ func resolveValidatorAdapter() {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.ValidatorAdapter = v
+	ra.ValidatorAdapter = v
 }
