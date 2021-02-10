@@ -9,7 +9,7 @@ var rr Repositories
 // resolveRepositories resolve all repositories.
 func resolveRepositories() Repositories {
 
-	rr.SampleRepository = repositories.NewSampleMySQLRepository(ra.DBAdapter)
+	rr.SampleRepository = repositories.NewSampleMySQLRepository(ra.DB)
 
 	return rr
 }

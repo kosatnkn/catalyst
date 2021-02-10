@@ -34,7 +34,7 @@ func resolveDBAdapter(cfg config.DBConfig) {
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	ra.DBTx = adapters.NewMySQLTxAdapter(ra.DBAdapter)
+	ra.DBTx = adapters.NewMySQLTxAdapter(ra.DB)
 }
 
 // resolveLogAdapter resolves the logging adapter.

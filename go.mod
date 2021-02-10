@@ -18,3 +18,5 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )
+
+replace github.com/kosatnkn/db => /home/kosala/Development/go/github.com/kosatnkn/db

@@ -20,8 +20,8 @@ type Controller struct {
 func NewController(container *container.Container) *Controller {
 
 	return &Controller{
-		logger:    container.Adapters.LogAdapter,
-		validator: container.Adapters.ValidatorAdapter,
+		logger:    container.Adapters.Log,
+		validator: container.Adapters.Validator,
 	}
 }
 
