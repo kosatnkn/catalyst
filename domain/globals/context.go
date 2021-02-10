@@ -11,9 +11,6 @@ const UUIDKey contextKey = "UUID"
 // PrefixKey is the key to add an additional prefix value to the context.
 const PrefixKey contextKey = "Prefix"
 
-// TxKey is the key to attach a database transaction to the context.
-const TxKey contextKey = "Tx"
-
 // AddTrace appends the given prefix string to the globals.PrefixKey.
 func AddTrace(ctx context.Context, prefix string) context.Context {
 
