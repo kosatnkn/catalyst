@@ -1,8 +1,6 @@
 package adapters
 
-import (
-	"github.com/kosatnkn/db"
-)
+import "github.com/kosatnkn/db"
 
 // DBTxAdapterInterface is implemented by all database transaction adapters.
 type DBTxAdapterInterface interface {

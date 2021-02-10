@@ -6,6 +6,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/catalyst/externals/adapters"
 	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/log"
 )
 
 var ra Adapters
@@ -39,9 +40,9 @@ func resolveDBTransactionAdapter() {
 }
 
 // resolveLogAdapter resolves the logging adapter.
-func resolveLogAdapter(cfg config.LogConfig) {
+func resolveLogAdapter(cfg log.Config) {
 
-	la, err := adapters.NewLogAdapter(cfg)
+	la, err := log.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}

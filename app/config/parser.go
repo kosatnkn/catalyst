@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/log"
 	"gopkg.in/yaml.v2"
 )
 
@@ -34,9 +35,9 @@ func parseAppConfig(dir string) AppConfig {
 }
 
 // parseLogConfig parses logger configurations.
-func parseLogConfig(dir string) LogConfig {
+func parseLogConfig(dir string) log.Config {
 
-	cfg := LogConfig{}
+	cfg := log.Config{}
 
 	parseConfig(dir+"logger.yaml", &cfg)
 

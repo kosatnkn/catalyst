@@ -2,13 +2,14 @@ package config
 
 import (
 	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/log"
 )
 
 // Config is the master config struct that holds all other config structs.
 type Config struct {
 	App      AppConfig
 	DB       mysql.Config
-	Log      LogConfig
+	Log      log.Config
 	Services []ServiceConfig
 }
 
@@ -20,15 +21,6 @@ type AppConfig struct {
 	Port     int          `yaml:"port"`
 	Timezone string       `yaml:"timezone"`
 	Metrics  MetricConfig `yaml:"metrics"`
-}
-
-// LogConfig holds application log configurations.
-type LogConfig struct {
-	Level     string `yaml:"level"`
-	Colors    bool   `yaml:"colors"`
-	Console   bool   `yaml:"console"`
-	File      bool   `yaml:"file"`
-	Directory string `yaml:"directory"`
 }
 
 // MetricConfig holds application metric configurations.
