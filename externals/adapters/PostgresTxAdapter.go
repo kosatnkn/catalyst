@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
+	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 

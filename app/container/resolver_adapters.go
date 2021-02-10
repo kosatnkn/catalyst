@@ -12,9 +12,9 @@ var ra Adapters
 // resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
 
-	resolveDBAdapter(cfg.DBConfig)
+	resolveDBAdapter(cfg.DB)
 	resolveDBTransactionAdapter()
-	resolveLogAdapter(cfg.LogConfig)
+	resolveLogAdapter(cfg.Log)
 	resolveValidatorAdapter()
 
 	return ra

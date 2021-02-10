@@ -25,10 +25,10 @@ func main() {
 	ctr := container.Resolve(cfg)
 
 	// start the server to handle http requests
-	srv := httpServer.Run(cfg.AppConfig, ctr)
+	srv := httpServer.Run(cfg.App, ctr)
 
 	// start the server to expose application metrics
-	metricsServer.Run(cfg.AppConfig, ctr)
+	metricsServer.Run(cfg.App, ctr)
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)

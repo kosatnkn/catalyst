@@ -9,8 +9,8 @@ import (
 
 	"github.com/logrusorgru/aurora"
 
+	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 

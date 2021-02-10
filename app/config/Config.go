@@ -1,11 +1,15 @@
 package config
 
+import (
+	"github.com/kosatnkn/db/mysql"
+)
+
 // Config is the master config struct that holds all other config structs.
 type Config struct {
-	AppConfig      AppConfig
-	DBConfig       DBConfig
-	LogConfig      LogConfig
-	ServicesConfig []ServiceConfig
+	App      AppConfig
+	DB       DBConfig
+	Log      LogConfig
+	Services []ServiceConfig
 }
 
 // AppConfig holds application configurations.
@@ -20,13 +24,7 @@ type AppConfig struct {
 
 // DBConfig holds database configurations.
 type DBConfig struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	Database string `yaml:"database"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	PoolSize int    `yaml:"pool_size"`
-	Check    bool   `yaml:"check"`
+	mysql.Config
 }
 
 // LogConfig holds application log configurations.

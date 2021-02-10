@@ -5,7 +5,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	enTranslations "github.com/go-playground/validator/v10/translations/en"
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
+	"github.com/kosatnkn/catalyst/app/adapters"
 )
 
 // ValidatorAdapter is used to validate structures and variables

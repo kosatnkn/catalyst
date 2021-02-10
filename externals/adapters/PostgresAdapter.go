@@ -10,8 +10,8 @@ import (
 	// database driver for postgres
 	_ "github.com/lib/pq"
 
+	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )

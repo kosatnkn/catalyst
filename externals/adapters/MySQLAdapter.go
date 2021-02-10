@@ -10,8 +10,8 @@ import (
 	// database driver for mysql
 	_ "github.com/go-sql-driver/mysql"
 
+	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
 	"github.com/kosatnkn/catalyst/domain/globals"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
