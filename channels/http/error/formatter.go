@@ -23,7 +23,6 @@ func format(err error) mappers.Error {
 	case *baseErrs.ServerError,
 		*httpErrs.MiddlewareError,
 		*httpErrs.TransformerError,
-		*externalErrs.AdapterError,
 		*externalErrs.RepositoryError,
 		*externalErrs.ServiceError,
 		*domainErrs.DomainError:

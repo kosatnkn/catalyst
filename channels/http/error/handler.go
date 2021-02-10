@@ -27,8 +27,7 @@ func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface)
 		status = http.StatusInternalServerError
 		break
 
-	case *externalErrs.AdapterError,
-		*httpErrs.MiddlewareError,
+	case *httpErrs.MiddlewareError,
 		*externalErrs.RepositoryError,
 		*externalErrs.ServiceError,
 		*domainErrs.DomainError:
