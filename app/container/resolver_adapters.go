@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/externals/adapters"
 	"github.com/kosatnkn/db/mysql"
 	"github.com/kosatnkn/log"
+	"github.com/kosatnkn/validator"
 )
 
 var ra Adapters
@@ -53,7 +53,7 @@ func resolveLogAdapter(cfg log.Config) {
 // resolveValidatorAdapter resolves the validation adapter.
 func resolveValidatorAdapter() {
 
-	v, err := adapters.NewValidatorAdapter()
+	v, err := validator.NewAdapter()
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
