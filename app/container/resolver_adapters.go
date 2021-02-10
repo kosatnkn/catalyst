@@ -28,13 +28,13 @@ func resolveDBAdapter(cfg config.DBConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.DBAdapter = db
+	ra.DB = db
 }
 
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	ra.DBTxAdapter = adapters.NewMySQLTxAdapter(ra.DBAdapter)
+	ra.DBTx = adapters.NewMySQLTxAdapter(ra.DBAdapter)
 }
 
 // resolveLogAdapter resolves the logging adapter.
@@ -45,7 +45,7 @@ func resolveLogAdapter(cfg config.LogConfig) {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.LogAdapter = la
+	ra.Log = la
 }
 
 // resolveValidatorAdapter resolves the validation adapter.
@@ -56,5 +56,5 @@ func resolveValidatorAdapter() {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.ValidatorAdapter = v
+	ra.Validator = v
 }

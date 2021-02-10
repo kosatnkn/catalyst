@@ -10,8 +10,8 @@ func (ctr *Container) Destruct() {
 	fmt.Println("")
 
 	fmt.Println("Closing database connections...")
-	ctr.Adapters.DBAdapter.Destruct()
+	ctr.Adapters.DB.Destruct()
 
 	fmt.Println("Closing logger...")
-	ctr.Adapters.LogAdapter.Destruct()
+	ctr.Adapters.Log.Destruct()
 }
