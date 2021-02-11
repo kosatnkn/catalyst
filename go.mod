@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/iancoleman/strcase v0.1.2
 	github.com/kosatnkn/db v0.0.0-20210210053948-356124926aaf
-	github.com/kosatnkn/log v0.0.0-20210210103509-a1ccb63bd2c1
+	github.com/kosatnkn/log v0.0.0-00010101000000-000000000000
 	github.com/kosatnkn/validator v0.0.0-20210210111242-47c72fc354ef
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/prometheus/client_golang v1.8.0

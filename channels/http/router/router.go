@@ -30,8 +30,8 @@ func Init(ctr *container.Container) *mux.Router {
 	// add CORS middleware
 	r.Use(mux.CORSMethodMiddleware(r))
 
-	r.Use(requestCheckerMiddleware.Middleware)
 	r.Use(requestAlterMidleware.Middleware)
+	r.Use(requestCheckerMiddleware.Middleware)
 
 	// initialize controllers
 	apiController := controllers.NewAPIController(ctr)

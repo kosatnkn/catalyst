@@ -7,7 +7,6 @@ import (
 	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/channels/http/response"
-	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
 // Controller is the base struct that holds fields and functionality common to all controllers.
@@ -26,8 +25,8 @@ func NewController(container *container.Container) *Controller {
 }
 
 // withTrace adds an optional tracing string that will be displayed in error messages.
-func (ctl *Controller) withTrace(ctx context.Context, prefix string) context.Context {
-	return globals.AddTrace(ctx, prefix)
+func (ctl *Controller) withTrace(ctx context.Context, point string) context.Context {
+	return ctl.logger.AppendTracePoint(ctx, point)
 }
 
 // sendResponse is a convenience function wrapping the actual `response.Send` function
