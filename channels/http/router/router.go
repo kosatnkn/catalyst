@@ -18,7 +18,7 @@ func Init(ctr *container.Container) *mux.Router {
 
 	// initialize middleware
 	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
-	requestAlterMidleware := middleware.NewRequestAlterMiddleware()
+	requestAlterMidleware := middleware.NewRequestAlterMiddleware(ctr)
 	metricsMidleware := middleware.NewMetricsMiddleware()
 
 	// add middleware to router

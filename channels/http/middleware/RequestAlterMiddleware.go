@@ -6,15 +6,20 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/kosatnkn/catalyst/app/container"
 	"github.com/kosatnkn/catalyst/domain/globals"
 )
 
 // RequestAlterMiddleware alerts the request.
-type RequestAlterMiddleware struct{}
+type RequestAlterMiddleware struct {
+	container *container.Container
+}
 
 // NewRequestAlterMiddleware returns a new instance of RequestAlterMiddleware.
-func NewRequestAlterMiddleware() *RequestAlterMiddleware {
-	return &RequestAlterMiddleware{}
+func NewRequestAlterMiddleware(ctr *container.Container) *RequestAlterMiddleware {
+	return &RequestAlterMiddleware{
+		container: ctr,
+	}
 }
 
 // Middleware executes middleware rules of RequestAlterMiddleware.
