@@ -15,49 +15,61 @@ import (
 // Handle handles all errors globally.
 func Handle(ctx context.Context, err error, logger adapters.LogAdapterInterface) (mappers.Error, int) {
 
-	var errMessage mappers.Error
+	var e mappers.Error
 	var status int
 
 	switch err.(type) {
 
 	case *baseErrs.ServerError,
 		*httpErrs.TransformerError:
-		logger.Error(ctx, "Server Error", err)
-		errMessage = format(err)
+
+		e = format(err)
 		status = http.StatusInternalServerError
+
+		logger.Error(ctx, "Server Error", err)
+
 		break
 
 	case *httpErrs.MiddlewareError,
 		*externalErrs.RepositoryError,
 		*externalErrs.ServiceError,
 		*domainErrs.DomainError:
-		logger.Error(ctx, "Other Error", err)
-		errMessage = format(err)
+
+		e = format(err)
 		status = http.StatusBadRequest
+
+		logger.Error(ctx, "Other Error", err)
+
 		break
 
 	case *httpErrs.ValidationError:
-		logger.Error(ctx, "Unpacker Error", err)
-		errMessage = format(err)
+
+		e = format(err)
 		status = http.StatusUnprocessableEntity
+
+		logger.Error(ctx, "Unpacker Error", err)
+
 		break
 
 	default:
-		logger.Error(ctx, "Unknown Error", err)
-		errMessage = format(err)
+
+		e = format(err)
 		status = http.StatusInternalServerError
+
+		logger.Error(ctx, "Unknown Error", err)
+
 		break
 	}
 
-	return errMessage, status
+	return e, status
 }
 
 // HandleValidationErrors specifically handles validation errors thrown by the validator.
 func HandleValidationErrors(ctx context.Context, errs map[string]string, logger adapters.LogAdapterInterface) (mappers.Error, int) {
 
-	errMessage := formatValidationErrors(errs)
+	e := formatValidationErrors(errs)
 
-	logger.Error(ctx, "Validation Errors", errMessage)
+	logger.Error(ctx, "Validation Errors", errs)
 
-	return errMessage, http.StatusUnprocessableEntity
+	return e, http.StatusUnprocessableEntity
 }
