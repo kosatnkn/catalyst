@@ -34,15 +34,15 @@ func (ctl *Controller) withTrace(ctx context.Context, point string) context.Cont
 func (ctl *Controller) sendResponse(ctx context.Context, w http.ResponseWriter, code int, payload ...interface{}) {
 
 	if len(payload) == 0 {
-		response.Send(w, nil, code)
+		response.Send(w, code, nil)
 		return
 	}
 
-	response.Send(w, response.Map(payload), code)
+	response.Send(w, code, payload)
 }
 
 // sendError is a convenience function wrapping the actual `response.Error` function
 // to provide a cleaner usage interface.
 func (ctl *Controller) sendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
-	response.Error(ctx, w, response.MapErr(err), ctl.logger)
+	response.Error(ctx, w, ctl.logger, err)
 }

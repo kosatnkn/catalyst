@@ -14,7 +14,7 @@ type DomainError struct {
 func NewDomainError(message string, code int, details string) error {
 
 	return &DomainError{
-		errType: "ServiceError",
+		errType: "DomainError",
 		code:    code,
 		msg:     message,
 		details: details,
