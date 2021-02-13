@@ -14,7 +14,7 @@ import (
 )
 
 // Handle handles all errors globally.
-func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (mappers.Error, int) {
+func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (interface{}, int) {
 
 	var e mappers.Error
 	var status int
@@ -66,7 +66,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (m
 }
 
 // HandleValidationErrors specifically handles validation errors thrown by the validator.
-func HandleValidationErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (mappers.Error, int) {
+func HandleValidationErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (interface{}, int) {
 
 	e := formatValidationErrors(errs)
 

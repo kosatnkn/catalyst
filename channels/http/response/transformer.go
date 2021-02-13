@@ -28,3 +28,11 @@ func Map(data []interface{}) (m mappers.Payload) {
 
 	return m
 }
+
+// MapErr wraps error in a standard error response object.
+func MapErr(err interface{}) mappers.Error {
+
+	return mappers.Error{
+		Err: err,
+	}
+}

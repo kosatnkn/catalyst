@@ -44,5 +44,5 @@ func (ctl *Controller) sendResponse(ctx context.Context, w http.ResponseWriter, 
 // sendError is a convenience function wrapping the actual `response.Error` function
 // to provide a cleaner usage interface.
 func (ctl *Controller) sendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
-	response.Error(ctx, w, err, ctl.logger)
+	response.Error(ctx, w, response.MapErr(err), ctl.logger)
 }

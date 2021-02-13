@@ -24,7 +24,7 @@ func Send(w http.ResponseWriter, payload interface{}, code int) {
 }
 
 // Error formats and sends the error response.
-func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger adapters.LogAdapterInterface) {
+func Error(ctx context.Context, w http.ResponseWriter, err interface{}, log adapters.LogAdapterInterface) {
 
 	var msg interface{}
 	var code int = http.StatusInternalServerError
@@ -34,11 +34,11 @@ func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger a
 	errV, isV := err.(map[string]string)
 
 	if isG {
-		msg, code = errHandler.Handle(ctx, errG, logger)
+		msg, code = errHandler.Handle(ctx, errG, log)
 	}
 
 	if isV {
-		msg, code = errHandler.HandleValidationErrors(ctx, errV, logger)
+		msg, code = errHandler.HandleValidationErrors(ctx, errV, log)
 	}
 
 	Send(w, msg, code)

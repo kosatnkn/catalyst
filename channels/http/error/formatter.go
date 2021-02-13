@@ -67,27 +67,23 @@ func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 	}
 }
 
-// formatValidationErrors formats validation errors.
-//
-// These are errors thrown when field wise validations of the data structure fails.
-func formatValidationErrors(p map[string]string) mappers.Error {
-
-	payload := transformers.ValidationErrorTransformer{
-		Type: "Validation Errors",
-		Msg:  formatValidationPayload(p),
-	}
-
-	return mappers.Error{
-		Payload: payload,
-	}
-}
-
 // formatUnknownError formats errors of unknown error types.
 func formatUnknownError(err error) transformers.ErrorTransformer {
 
 	return transformers.ErrorTransformer{
 		Type: "Unknown Error",
 		Msg:  err.Error(),
+	}
+}
+
+// formatValidationErrors formats validation errors.
+//
+// These are errors thrown when field wise validations of the data structure fails.
+func formatValidationErrors(p map[string]string) transformers.ValidationErrorTransformer {
+
+	return transformers.ValidationErrorTransformer{
+		Type: "Validation Errors",
+		Msg:  formatValidationPayload(p),
 	}
 }
 
