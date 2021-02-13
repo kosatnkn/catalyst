@@ -8,9 +8,9 @@ import (
 // resolveServices resolves all services.
 func resolveServices(cfgs []config.ServiceConfig) Services {
 
-	rs := Services{}
+	svs := Services{}
 
-	rs.SampleService = services.NewSampleService(getServiceConfigByName(cfgs, "sample"))
+	svs.SampleService = services.NewSampleService(getServiceConfigByName(cfgs, "sample"))
 
-	return rs
+	return svs
 }

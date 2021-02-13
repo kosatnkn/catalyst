@@ -14,14 +14,14 @@ import (
 // resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
 
-	as := Adapters{}
+	ats := Adapters{}
 
-	as.DB = resolveDBAdapter(cfg.DB)
-	as.DBTx = resolveDBTransactionAdapter(as.DB)
-	as.Log = resolveLogAdapter(cfg.Log)
-	as.Validator = resolveValidatorAdapter()
+	ats.DB = resolveDBAdapter(cfg.DB)
+	ats.DBTx = resolveDBTransactionAdapter(ats.DB)
+	ats.Log = resolveLogAdapter(cfg.Log)
+	ats.Validator = resolveValidatorAdapter()
 
-	return as
+	return ats
 }
 
 // resolveDBAdapter resolves the database adapter.
