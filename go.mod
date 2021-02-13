@@ -6,7 +6,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0
 	github.com/iancoleman/strcase v0.1.2
-	github.com/kosatnkn/db v0.0.0-20210210053948-356124926aaf
+	github.com/kosatnkn/db v0.1.0
 	github.com/kosatnkn/log v0.1.0
 	github.com/kosatnkn/validator v0.1.0
 	github.com/kr/pretty v0.2.1 // indirect
@@ -17,5 +17,3 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 )
-
-replace github.com/kosatnkn/db => /home/kosala/Development/go/github.com/kosatnkn/db
