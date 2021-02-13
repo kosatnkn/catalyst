@@ -3,6 +3,7 @@ package container
 import (
 	"fmt"
 
+	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/app/config"
 	"github.com/kosatnkn/db"
 	"github.com/kosatnkn/db/mysql"
@@ -10,54 +11,54 @@ import (
 	"github.com/kosatnkn/validator"
 )
 
-var ra Adapters
-
 // resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
 
-	resolveDBAdapter(cfg.DB)
-	resolveDBTransactionAdapter()
-	resolveLogAdapter(cfg.Log)
-	resolveValidatorAdapter()
+	as := Adapters{}
 
-	return ra
+	as.DB = resolveDBAdapter(cfg.DB)
+	as.DBTx = resolveDBTransactionAdapter(as.DB)
+	as.Log = resolveLogAdapter(cfg.Log)
+	as.Validator = resolveValidatorAdapter()
+
+	return as
 }
 
 // resolveDBAdapter resolves the database adapter.
-func resolveDBAdapter(cfg mysql.Config) {
+func resolveDBAdapter(cfg mysql.Config) adapters.DBAdapterInterface {
 
 	db, err := mysql.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.DB = db
+	return db
 }
 
 // resolveDBTransactionAdapter resolves the database transaction adapter.
-func resolveDBTransactionAdapter() {
+func resolveDBTransactionAdapter(d adapters.DBAdapterInterface) adapters.DBTxAdapterInterface {
 
-	ra.DBTx = db.NewTxAdapter(ra.DB)
+	return db.NewTxAdapter(d)
 }
 
 // resolveLogAdapter resolves the logging adapter.
-func resolveLogAdapter(cfg log.Config) {
+func resolveLogAdapter(cfg log.Config) adapters.LogAdapterInterface {
 
 	la, err := log.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.Log = la
+	return la
 }
 
 // resolveValidatorAdapter resolves the validation adapter.
-func resolveValidatorAdapter() {
+func resolveValidatorAdapter() adapters.ValidatorAdapterInterface {
 
 	v, err := validator.NewAdapter()
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	ra.Validator = v
+	return v
 }

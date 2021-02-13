@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
+	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
+	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
 
 	baseErrs "github.com/kosatnkn/catalyst/app/errors"
 	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
-	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
-	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )

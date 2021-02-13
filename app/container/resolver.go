@@ -15,11 +15,13 @@ import (
 // 		- Services
 func Resolve(cfg *config.Config) *Container {
 
-	return &Container{
-		Adapters:     resolveAdapters(cfg),
-		Repositories: resolveRepositories(),
-		Services:     resolveServices(cfg.Services),
-	}
+	ctr := Container{}
+
+	ctr.Adapters = resolveAdapters(cfg)
+	ctr.Repositories = resolveRepositories(&ctr.Adapters)
+	ctr.Services = resolveServices(cfg.Services)
+
+	return &ctr
 }
 
 // getServiceConfigByName returns the service config by name of the service.

@@ -5,10 +5,10 @@ import (
 	"github.com/kosatnkn/catalyst/externals/services"
 )
 
-var rs Services
-
 // resolveServices resolves all services.
 func resolveServices(cfgs []config.ServiceConfig) Services {
+
+	rs := Services{}
 
 	rs.SampleService = services.NewSampleService(getServiceConfigByName(cfgs, "sample"))
 
