@@ -5,67 +5,8 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
 	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
-
-	baseErrs "github.com/kosatnkn/catalyst/app/errors"
-	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
-	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
-	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
-
-// format formats the error by error type.
-func format(err error) mappers.Error {
-
-	var payload interface{}
-
-	switch err.(type) {
-	case *baseErrs.ServerError,
-		*httpErrs.MiddlewareError,
-		*httpErrs.TransformerError,
-		*externalErrs.RepositoryError,
-		*externalErrs.ServiceError,
-		*domainErrs.DomainError:
-		payload = formatGenericError(err)
-		break
-	case *httpErrs.ValidationError:
-		payload = formatUnpackerError(err)
-		break
-	default:
-		payload = formatUnknownError(err)
-		break
-	}
-
-	return mappers.Error{
-		Payload: payload,
-	}
-}
-
-// formatGenericError formats all generic errors.
-func formatGenericError(err error) transformers.ErrorTransformer {
-
-	errorDetails := strings.Split(err.Error(), "|")
-	errCode, _ := strconv.Atoi(errorDetails[1])
-
-	return transformers.ErrorTransformer{
-		Type:  errorDetails[0],
-		Code:  errCode,
-		Msg:   errorDetails[2],
-		Trace: errorDetails[3],
-	}
-}
-
-// formatUnpackerError formats request payload unpacking errors.
-//
-// These occur when the format of the sent data structure does not match the expected format.
-// An UnpackerError is a type of ValidationError.
-func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
-
-	return transformers.ValidationErrorTransformer{
-		Type: "Validation Errors",
-		Msg:  err.Error(),
-	}
-}
 
 // formatUnknownError formats errors of unknown error types.
 func formatUnknownError(err error) transformers.ErrorTransformer {
@@ -76,10 +17,35 @@ func formatUnknownError(err error) transformers.ErrorTransformer {
 	}
 }
 
-// formatValidationErrors formats validation errors.
+// formatGenericError formats all generic errors.
+func formatGenericError(err error) transformers.ErrorTransformer {
+
+	errorDetails := strings.Split(err.Error(), "|")
+	errCode, _ := strconv.Atoi(errorDetails[1])
+
+	return transformers.ErrorTransformer{
+		Type: errorDetails[0],
+		Code: errCode,
+		Msg:  errorDetails[2],
+	}
+}
+
+// formatValidationError formats request payload unpacking errors.
+//
+// These occur when the format of the sent data structure does not match the expected format.
+// An UnpackerError is a type of ValidationError.
+func formatValidationError(err error) transformers.ValidationErrorTransformer {
+
+	return transformers.ValidationErrorTransformer{
+		Type: "Validation Errors",
+		Msg:  err.Error(),
+	}
+}
+
+// formatValidatorErrors formats validation errors.
 //
 // These are errors thrown when field wise validations of the data structure fails.
-func formatValidationErrors(p map[string]string) transformers.ValidationErrorTransformer {
+func formatValidatorErrors(p map[string]string) transformers.ValidationErrorTransformer {
 
 	return transformers.ValidationErrorTransformer{
 		Type: "Validation Errors",

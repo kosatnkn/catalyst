@@ -38,7 +38,7 @@ func Error(ctx context.Context, w http.ResponseWriter, err interface{}, log adap
 	}
 
 	if isV {
-		msg, code = errHandler.HandleValidationErrors(ctx, errV, log)
+		msg, code = errHandler.HandleValidatorErrors(ctx, errV, log)
 	}
 
 	Send(w, msg, code)
