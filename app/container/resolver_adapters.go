@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kosatnkn/catalyst/app/config"
+	"github.com/kosatnkn/db"
 	"github.com/kosatnkn/db/mysql"
 	"github.com/kosatnkn/log"
 	"github.com/kosatnkn/validator"
@@ -36,7 +37,7 @@ func resolveDBAdapter(cfg mysql.Config) {
 // resolveDBTransactionAdapter resolves the database transaction adapter.
 func resolveDBTransactionAdapter() {
 
-	ra.DBTx = mysql.NewTxAdapter(ra.DB)
+	ra.DBTx = db.NewTxAdapter(ra.DB)
 }
 
 // resolveLogAdapter resolves the logging adapter.
