@@ -8,7 +8,5 @@ import (
 
 func (r *Sample) errorNoSample(id int) error {
 
-	return err.NewDomainError("Sample not found",
-		1000,
-		fmt.Sprintf("No sample found for id %d", id))
+	return err.NewDomainError(1000, fmt.Sprintf("Sample not found for id %d", id))
 }

@@ -7,21 +7,19 @@ type RepositoryError struct {
 	errType string
 	code    int
 	msg     string
-	details string
 }
 
 // NewRepositoryError creates a new RepositoryError instance.
-func NewRepositoryError(message string, code int, details string) error {
+func NewRepositoryError(code int, msg string) error {
 
 	return &RepositoryError{
 		errType: "RepositoryError",
 		code:    code,
-		msg:     message,
-		details: details,
+		msg:     msg,
 	}
 }
 
 // Error returns the RepositoryError message.
 func (e *RepositoryError) Error() string {
-	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
+	return fmt.Sprintf("%s|%d|%s", e.errType, e.code, e.msg)
 }

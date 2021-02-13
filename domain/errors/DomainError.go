@@ -7,21 +7,19 @@ type DomainError struct {
 	errType string
 	code    int
 	msg     string
-	details string
 }
 
 // NewDomainError creates a new DomainError.
-func NewDomainError(message string, code int, details string) error {
+func NewDomainError(code int, msg string) error {
 
 	return &DomainError{
 		errType: "DomainError",
 		code:    code,
-		msg:     message,
-		details: details,
+		msg:     msg,
 	}
 }
 
 // Error returns the DomainError message.
 func (e *DomainError) Error() string {
-	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
+	return fmt.Sprintf("%s|%d|%s", e.errType, e.code, e.msg)
 }
