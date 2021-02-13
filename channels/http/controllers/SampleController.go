@@ -64,7 +64,6 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 
 	// add a trace string to the context
 	ctx = ctl.withTrace(ctx, "SampleController.GetByID")
-	ctx = ctl.withTrace(ctx, "SampleUseCase.GetByID")
 
 	// get id from request
 	vars := mux.Vars(r)

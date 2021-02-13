@@ -26,7 +26,7 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	// transform
 	tr := transformers.APITransformer{
 		Name:    "Catalyst",
-		Version: "v2.3.0",
+		Version: "v2.4.0",
 		Purpose: "REST API base written in Golang",
 	}
 

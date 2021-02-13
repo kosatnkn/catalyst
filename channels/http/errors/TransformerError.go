@@ -1,25 +1,17 @@
 package errors
 
-import "fmt"
-
 // TransformerError is the type of errors thrown by response transformers.
+import e "github.com/kosatnkn/catalyst/errors"
+
+// TransformerError is the type of errors thrown by middleware.
 type TransformerError struct {
-	errType string
-	code    int
-	msg     string
+	*e.BaseError
 }
 
 // NewTransformerError creates a new TransformerError instance.
 func NewTransformerError(code int, msg string) error {
 
 	return &TransformerError{
-		errType: "TransformerError",
-		code:    code,
-		msg:     msg,
+		BaseError: e.NewBaseError("TransformerError", code, msg),
 	}
-}
-
-// Error returns the TransformerError message.
-func (e *TransformerError) Error() string {
-	return fmt.Sprintf("%s|%d|%s", e.errType, e.code, e.msg)
 }

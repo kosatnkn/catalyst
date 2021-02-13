@@ -1,25 +1,16 @@
 package errors
 
-import "fmt"
+import e "github.com/kosatnkn/catalyst/errors"
 
 // DomainError is the type of errors thrown by business logic.
 type DomainError struct {
-	errType string
-	code    int
-	msg     string
+	*e.BaseError
 }
 
-// NewDomainError creates a new DomainError.
+// NewDomainError creates a new DomainError instance.
 func NewDomainError(code int, msg string) error {
 
 	return &DomainError{
-		errType: "DomainError",
-		code:    code,
-		msg:     msg,
+		BaseError: e.NewBaseError("DomainError", code, msg),
 	}
-}
-
-// Error returns the DomainError message.
-func (e *DomainError) Error() string {
-	return fmt.Sprintf("%s|%d|%s", e.errType, e.code, e.msg)
 }
