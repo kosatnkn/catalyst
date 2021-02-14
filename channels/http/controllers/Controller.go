@@ -16,11 +16,11 @@ type Controller struct {
 }
 
 // NewController creates a new instance of the controller.
-func NewController(container *container.Container) *Controller {
+func NewController(c *container.Container) *Controller {
 
 	return &Controller{
-		logger:    container.Adapters.Log,
-		validator: container.Adapters.Validator,
+		logger:    c.Adapters.Log,
+		validator: c.Adapters.Validator,
 	}
 }
 

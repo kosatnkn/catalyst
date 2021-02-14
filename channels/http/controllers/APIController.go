@@ -13,10 +13,10 @@ type APIController struct {
 }
 
 // NewAPIController creates a new instance of the controller.
-func NewAPIController(container *container.Container) *APIController {
+func NewAPIController(c *container.Container) *APIController {
 
 	return &APIController{
-		Controller: NewController(container),
+		Controller: NewController(c),
 	}
 }
 

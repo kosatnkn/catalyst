@@ -12,7 +12,7 @@ type BaseError struct {
 	msg     string
 }
 
-// NewBaseError creates a new BaseError.
+// NewBaseError creates a new BaseError instance.
 func NewBaseError(typ string, code int, msg string) *BaseError {
 
 	return &BaseError{

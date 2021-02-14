@@ -21,11 +21,11 @@ type SampleController struct {
 }
 
 // NewSampleController creates a new instance of the controller.
-func NewSampleController(container *container.Container) *SampleController {
+func NewSampleController(c *container.Container) *SampleController {
 
 	return &SampleController{
-		Controller:    NewController(container),
-		sampleUseCase: sample.NewSample(container),
+		Controller:    NewController(c),
+		sampleUseCase: sample.NewSample(c),
 	}
 }
 
