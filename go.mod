@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/iancoleman/strcase v0.1.2
 	github.com/kosatnkn/db v0.1.0
-	github.com/kosatnkn/log v0.1.0
+	github.com/kosatnkn/log v0.1.1
 	github.com/kosatnkn/validator v0.1.0
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
