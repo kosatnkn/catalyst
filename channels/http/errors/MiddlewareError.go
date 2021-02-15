@@ -8,9 +8,9 @@ type MiddlewareError struct {
 }
 
 // NewMiddlewareError creates a new MiddlewareError instance.
-func NewMiddlewareError(code int, msg string) error {
+func NewMiddlewareError(code int, msg string, errs ...error) error {
 
 	return &MiddlewareError{
-		BaseError: e.NewBaseError("MiddlewareError", code, msg),
+		BaseError: e.NewBaseError("MiddlewareError", code, msg, errs...),
 	}
 }

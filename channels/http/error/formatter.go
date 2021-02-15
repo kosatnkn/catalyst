@@ -81,3 +81,18 @@ func formatKey(k string) string {
 
 	return strings.Join(kParts, ".")
 }
+
+// formatLogTrace formats tracing information for logging.
+func formatLogTrace(trace []string) (t string) {
+
+	for _, msg := range trace {
+		t += " >> " + formatForLog(msg)
+	}
+
+	return t
+}
+
+// formatForLog formats the error message for logging.
+func formatForLog(msg string) string {
+	return strings.Join(strings.Split(msg, "|"), " ")
+}

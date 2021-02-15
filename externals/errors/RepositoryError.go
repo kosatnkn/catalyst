@@ -9,9 +9,9 @@ type RepositoryError struct {
 }
 
 // NewRepositoryError creates a new RepositoryError instance.
-func NewRepositoryError(code int, msg string) error {
+func NewRepositoryError(code int, msg string, cause ...error) error {
 
 	return &RepositoryError{
-		BaseError: e.NewBaseError("RepositoryError", code, msg),
+		BaseError: e.NewBaseError("RepositoryError", code, msg, cause...),
 	}
 }

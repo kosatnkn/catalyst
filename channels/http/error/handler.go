@@ -18,7 +18,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 
 	case *httpErrs.TransformerError:
 
-		log.Error(ctx, "Server Error", err)
+		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusInternalServerError
 
 	case *httpErrs.MiddlewareError,
@@ -26,17 +26,17 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 		*externalErrs.RepositoryError,
 		*externalErrs.ServiceError:
 
-		log.Error(ctx, "Other Error", err)
+		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusBadRequest
 
 	case *httpErrs.ValidationError:
 
-		log.Error(ctx, "Validation Error", err)
+		logError(ctx, log, err)
 		return formatValidationError(err), http.StatusUnprocessableEntity
 
 	default:
 
-		log.Error(ctx, "Unknown Error", err)
+		logError(ctx, log, err)
 		return formatUnknownError(err), http.StatusInternalServerError
 	}
 }
