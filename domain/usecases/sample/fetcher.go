@@ -12,7 +12,7 @@ func (s *Sample) Get(ctx context.Context) ([]entities.Sample, error) {
 	// get samples
 	samples, err := s.sampleRepository.Get(ctx)
 	if err != nil {
-		return nil, err
+		return nil, s.errorCannotGetData(err)
 	}
 
 	return samples, nil

@@ -1,27 +1,17 @@
 package errors
 
-import "fmt"
-
 // RepositoryError is the type of errors thrown by repositories.
+import e "github.com/kosatnkn/catalyst/errors"
+
+// RepositoryError is the type of errors thrown by middleware.
 type RepositoryError struct {
-	errType string
-	code    int
-	msg     string
-	details string
+	*e.BaseError
 }
 
 // NewRepositoryError creates a new RepositoryError instance.
-func NewRepositoryError(message string, code int, details string) error {
+func NewRepositoryError(code int, msg string, cause ...error) error {
 
 	return &RepositoryError{
-		errType: "RepositoryError",
-		code:    code,
-		msg:     message,
-		details: details,
+		BaseError: e.NewBaseError("RepositoryError", code, msg, cause...),
 	}
-}
-
-// Error returns the RepositoryError message.
-func (e *RepositoryError) Error() string {
-	return fmt.Sprintf("%s|%d|%s|%s", e.errType, e.code, e.msg, e.details)
 }

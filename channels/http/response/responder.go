@@ -11,20 +11,13 @@ import (
 )
 
 // Send sets all required fields and write the response.
-func Send(w http.ResponseWriter, payload interface{}, code int) {
+func Send(w http.ResponseWriter, code int, payload []interface{}) {
 
-	// set headers
-	w.Header().Set("Content-Type", "application/json")
-
-	// set response code
-	w.WriteHeader(code)
-
-	// set payload
-	w.Write(toJSON(payload))
+	write(w, code, mapData(payload))
 }
 
 // Error formats and sends the error response.
-func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger adapters.LogAdapterInterface) {
+func Error(ctx context.Context, w http.ResponseWriter, log adapters.LogAdapterInterface, err interface{}) {
 
 	var msg interface{}
 	var code int = http.StatusInternalServerError
@@ -34,14 +27,14 @@ func Error(ctx context.Context, w http.ResponseWriter, err interface{}, logger a
 	errV, isV := err.(map[string]string)
 
 	if isG {
-		msg, code = errHandler.Handle(ctx, errG, logger)
+		msg, code = errHandler.Handle(ctx, errG, log)
 	}
 
 	if isV {
-		msg, code = errHandler.HandleValidationErrors(ctx, errV, logger)
+		msg, code = errHandler.HandleValidatorErrors(ctx, errV, log)
 	}
 
-	Send(w, msg, code)
+	write(w, code, mapErr(msg))
 }
 
 // toJSON converts the payload to JSON
@@ -53,4 +46,17 @@ func toJSON(payload interface{}) []byte {
 	}
 
 	return msg
+}
+
+// write sets all required fields and write the response.
+func write(w http.ResponseWriter, code int, payload interface{}) {
+
+	// set headers
+	w.Header().Set("Content-Type", "application/json")
+
+	// set response code
+	w.WriteHeader(code)
+
+	// set payload
+	w.Write(toJSON(payload))
 }

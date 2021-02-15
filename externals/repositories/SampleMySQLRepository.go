@@ -6,6 +6,7 @@ import (
 	"github.com/kosatnkn/catalyst/app/adapters"
 	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/domain/entities"
+	extErrs "github.com/kosatnkn/catalyst/externals/errors"
 )
 
 // SampleMySQLRepository is an example repository that implements test database functionality.
@@ -23,13 +24,13 @@ func NewSampleMySQLRepository(dbAdapter adapters.DBAdapterInterface) repositorie
 func (repo *SampleMySQLRepository) Get(ctx context.Context) ([]entities.Sample, error) {
 
 	query := `SELECT id, name, password
-				FROM sample`
+				FROM sample_not_exist`
 
 	parameters := map[string]interface{}{}
 
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return nil, err
+		return nil, extErrs.NewRepositoryError(100, "Error running query", err)
 	}
 
 	return repo.mapResult(result)

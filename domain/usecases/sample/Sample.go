@@ -13,10 +13,10 @@ type Sample struct {
 }
 
 // NewSample creates a new instance of sample usecase.
-func NewSample(container *container.Container) *Sample {
+func NewSample(ctr *container.Container) *Sample {
 
 	return &Sample{
-		transaction:      container.Adapters.DBTx,
-		sampleRepository: container.Repositories.SampleRepository,
+		transaction:      ctr.Adapters.DBTx,
+		sampleRepository: ctr.Repositories.SampleRepository,
 	}
 }

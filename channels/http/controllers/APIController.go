@@ -13,10 +13,10 @@ type APIController struct {
 }
 
 // NewAPIController creates a new instance of the controller.
-func NewAPIController(container *container.Container) *APIController {
+func NewAPIController(c *container.Container) *APIController {
 
 	return &APIController{
-		Controller: NewController(container),
+		Controller: NewController(c),
 	}
 }
 
@@ -26,7 +26,7 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	// transform
 	tr := transformers.APITransformer{
 		Name:    "Catalyst",
-		Version: "v2.3.0",
+		Version: "v2.4.0",
 		Purpose: "REST API base written in Golang",
 	}
 

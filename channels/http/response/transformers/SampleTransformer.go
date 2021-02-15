@@ -63,5 +63,5 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 
 // dataMismatchError returns a data mismatch error of TransformerError type.
 func (t *SampleTransformer) dataMismatchError() error {
-	return errors.NewTransformerError("Cannot map given data to SampleTransformer", 100, "")
+	return errors.NewTransformerError(100, "Cannot map given data to SampleTransformer")
 }

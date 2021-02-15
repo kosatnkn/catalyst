@@ -4,12 +4,12 @@ import (
 	"github.com/kosatnkn/catalyst/externals/repositories"
 )
 
-var rr Repositories
-
 // resolveRepositories resolve all repositories.
-func resolveRepositories() Repositories {
+func resolveRepositories(ats *Adapters) Repositories {
 
-	rr.SampleRepository = repositories.NewSampleMySQLRepository(ra.DB)
+	rts := Repositories{}
 
-	return rr
+	rts.SampleRepository = repositories.NewSampleMySQLRepository(ats.DB)
+
+	return rts
 }

@@ -1,7 +1,6 @@
 package response
 
 import (
-	"github.com/kosatnkn/catalyst/channels/http/response/mappers"
 	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
 )
 
@@ -13,18 +12,4 @@ func Transform(data interface{}, t transformers.TransformerInterface, isCollecti
 	}
 
 	return t.TransformAsObject(data)
-}
-
-// Map wraps payload in a standard response payload object.
-func Map(data []interface{}) (m mappers.Payload) {
-
-	for _, v := range data {
-
-		switch v.(type) {
-		default:
-			m.Data = v
-		}
-	}
-
-	return m
 }
