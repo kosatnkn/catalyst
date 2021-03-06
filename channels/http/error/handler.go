@@ -8,7 +8,8 @@ import (
 
 	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
-	externalErrs "github.com/kosatnkn/catalyst/externals/errors"
+	repositoryErrs "github.com/kosatnkn/catalyst/externals/repositories/errors"
+	serviceErrs "github.com/kosatnkn/catalyst/externals/services/errors"
 )
 
 // Handle handles all errors globally.
@@ -23,8 +24,8 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 
 	case *httpErrs.MiddlewareError,
 		*domainErrs.DomainError,
-		*externalErrs.RepositoryError,
-		*externalErrs.ServiceError:
+		*repositoryErrs.RepositoryError,
+		*serviceErrs.ServiceError:
 
 		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusBadRequest

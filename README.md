@@ -103,16 +103,6 @@ The sample set will cover all basic CRUD operations that a REST API will normall
 
 There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
 
-### Database Adapters
-Catalyst comes with support for connection with couple of databases by the use of **Database Adapters**. 
-These are in `externals/adapters` directory and will provide a starting point to creating DB adapters that much suite
-your needs.
-
-There are adapters to connect to a database as well as to manage database transactions for following databases.
-- MySQL / MariaDB
-- PostgresSQL
-
-
 ## Request Response Cycle
 ```text
      + -------- +                + ------- +

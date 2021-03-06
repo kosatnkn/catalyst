@@ -1,5 +1,5 @@
 # Building
-FROM golang:1.15-alpine AS build
+FROM golang:1.15-alpine AS builder
 
 # define working directory
 WORKDIR /opt/app
@@ -22,8 +22,8 @@ FROM alpine:latest AS runner
 
 WORKDIR /opt/
 
-COPY --from=build /opt/app/main .
-COPY ./config/ ./config/
+COPY --from=builder /opt/app/main .
+COPY ./configs/ ./configs/
 
 # inform exposed ports 
 EXPOSE 3000 3001
