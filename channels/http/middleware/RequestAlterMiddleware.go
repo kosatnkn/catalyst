@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/kosatnkn/catalyst/app/container"
+	"github.com/kosatnkn/catalyst/v2/app/container"
 )
 
 // RequestAlterMiddleware alerts the request.

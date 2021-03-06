@@ -1,6 +1,6 @@
 package errors
 
-import e "github.com/kosatnkn/catalyst/errors"
+import e "github.com/kosatnkn/catalyst/v2/errors"
 
 // RepositoryError is the type of errors thrown by repositories.
 type RepositoryError struct {

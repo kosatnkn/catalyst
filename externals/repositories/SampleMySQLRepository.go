@@ -3,10 +3,10 @@ package repositories
 import (
 	"context"
 
-	"github.com/kosatnkn/catalyst/app/adapters"
-	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
-	"github.com/kosatnkn/catalyst/domain/entities"
-	"github.com/kosatnkn/catalyst/externals/repositories/errors"
+	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v2/domain/boundary/repositories"
+	"github.com/kosatnkn/catalyst/v2/domain/entities"
+	"github.com/kosatnkn/catalyst/v2/externals/repositories/errors"
 )
 
 // SampleMySQLRepository is an example repository that implements test database functionality.

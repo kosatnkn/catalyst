@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/externals/repositories"
+	"github.com/kosatnkn/catalyst/v2/externals/repositories"
 )
 
 // resolveRepositories resolve all repositories.

@@ -6,11 +6,11 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/splash"
-	httpServer "github.com/kosatnkn/catalyst/channels/http/server"
-	metricsServer "github.com/kosatnkn/catalyst/channels/metrics/server"
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/app/splash"
+	httpServer "github.com/kosatnkn/catalyst/v2/channels/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/v2/channels/metrics/server"
 )
 
 func main() {

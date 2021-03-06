@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
 )
 
 // Transform transforms data either as an object or as a collection depending on the `isCollection` boolean value.

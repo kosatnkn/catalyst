@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
 )
 
 // APIController contains controller logic for endpoints.

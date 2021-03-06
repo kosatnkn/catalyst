@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/domain/boundary/services"
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v2/domain/boundary/services"
 )
 
 // SampleService is an example service to call a third party web API

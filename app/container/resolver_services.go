@@ -1,8 +1,8 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/externals/services"
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v2/externals/services"
 )
 
 // resolveServices resolves all services.

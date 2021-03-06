@@ -1,4 +1,4 @@
-module github.com/kosatnkn/catalyst
+module github.com/kosatnkn/catalyst/v2
 
 go 1.15
 

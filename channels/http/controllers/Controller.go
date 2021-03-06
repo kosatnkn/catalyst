@@ -4,9 +4,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/app/adapters"
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/channels/http/response"
+	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response"
 )
 
 // Controller is the base struct that holds fields and functionality common to all controllers.

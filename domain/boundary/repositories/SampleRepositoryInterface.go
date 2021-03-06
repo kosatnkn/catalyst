@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 
-	"github.com/kosatnkn/catalyst/domain/entities"
+	"github.com/kosatnkn/catalyst/v2/domain/entities"
 )
 
 // SampleRepositoryInterface contract to manipulate `sample` database entity

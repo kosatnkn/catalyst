@@ -5,13 +5,13 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/channels/http/request"
-	"github.com/kosatnkn/catalyst/channels/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/channels/http/response"
-	"github.com/kosatnkn/catalyst/channels/http/response/transformers"
-	"github.com/kosatnkn/catalyst/domain/entities"
-	"github.com/kosatnkn/catalyst/domain/usecases/sample"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/request"
+	"github.com/kosatnkn/catalyst/v2/channels/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v2/domain/entities"
+	"github.com/kosatnkn/catalyst/v2/domain/usecases/sample"
 )
 
 // SampleController contains controller logic for endpoints.

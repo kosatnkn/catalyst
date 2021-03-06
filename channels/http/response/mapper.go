@@ -1,6 +1,6 @@
 package response
 
-import "github.com/kosatnkn/catalyst/channels/http/response/mappers"
+import "github.com/kosatnkn/catalyst/v2/channels/http/response/mappers"
 
 // mapData wraps payload in a standard response payload object.
 func mapData(data []interface{}) (m mappers.Payload) {

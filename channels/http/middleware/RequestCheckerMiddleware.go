@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/channels/http/middleware/errors"
-	"github.com/kosatnkn/catalyst/channels/http/response"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/middleware/errors"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response"
 )
 
 // RequestCheckerMiddleware validates the request header.
