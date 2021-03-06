@@ -30,11 +30,11 @@ func formatGenericError(err error) transformers.ErrorTransformer {
 	}
 }
 
-// formatValidationError formats request payload unpacking errors.
+// formatUnpackerError formats request payload unpacking errors.
 //
 // These occur when the format of the sent data structure does not match the expected format.
 // An UnpackerError is a type of ValidationError.
-func formatValidationError(err error) transformers.ValidationErrorTransformer {
+func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 
 	return transformers.ValidationErrorTransformer{
 		Type: "Validation Errors",
@@ -42,7 +42,7 @@ func formatValidationError(err error) transformers.ValidationErrorTransformer {
 	}
 }
 
-// formatValidatorErrors formats validation errors.
+// formatValidatorErrors formats errors thrown by the validator.
 //
 // These are errors thrown when field wise validations of the data structure fails.
 func formatValidatorErrors(p map[string]string) transformers.ValidationErrorTransformer {

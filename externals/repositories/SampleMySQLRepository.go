@@ -30,7 +30,7 @@ func (repo *SampleMySQLRepository) Get(ctx context.Context) ([]entities.Sample, 
 
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return nil, errors.NewRepositoryError(100, "Error running query", err)
+		return nil, errors.NewRepositoryError("100", "Error running query", err)
 	}
 
 	return repo.mapResult(result)

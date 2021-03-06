@@ -8,13 +8,13 @@ import "fmt"
 //		 derive error structs that can be properly read by the error handler.
 type BaseError struct {
 	errType string
-	code    int
+	code    string
 	msg     string
 	err     error
 }
 
 // NewBaseError creates a new BaseError instance.
-func NewBaseError(typ string, code int, msg string, cause ...error) *BaseError {
+func NewBaseError(typ string, code string, msg string, cause ...error) *BaseError {
 
 	e := &BaseError{
 		errType: typ,
@@ -31,7 +31,7 @@ func NewBaseError(typ string, code int, msg string, cause ...error) *BaseError {
 
 // Error returns the error message.
 func (e *BaseError) Error() string {
-	return fmt.Sprintf("%s|%d|%s", e.errType, e.code, e.msg)
+	return fmt.Sprintf("%s|%s|%s", e.errType, e.code, e.msg)
 }
 
 // Unwrap returns the wrapped error.

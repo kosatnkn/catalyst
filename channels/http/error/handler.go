@@ -33,7 +33,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 	case *httpErrs.ValidationError:
 
 		logError(ctx, log, err)
-		return formatValidationError(err), http.StatusUnprocessableEntity
+		return formatUnpackerError(err), http.StatusUnprocessableEntity
 
 	default:
 

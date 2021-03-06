@@ -9,7 +9,7 @@ type TransformerError struct {
 }
 
 // NewTransformerError creates a new TransformerError instance.
-func NewTransformerError(code int, msg string, cause ...error) error {
+func NewTransformerError(code string, msg string, cause ...error) error {
 
 	return &TransformerError{
 		BaseError: e.NewBaseError("TransformerError", code, msg, cause...),
