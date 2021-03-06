@@ -1,7 +1,7 @@
 package transformers
 
 import (
-	"github.com/kosatnkn/catalyst/channels/http/errors"
+	"github.com/kosatnkn/catalyst/channels/http/response/transformers/errors"
 	"github.com/kosatnkn/catalyst/domain/entities"
 )
 

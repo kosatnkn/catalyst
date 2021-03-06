@@ -1,9 +1,8 @@
 package errors
 
-// TransformerError is the type of errors thrown by response transformers.
 import e "github.com/kosatnkn/catalyst/errors"
 
-// TransformerError is the type of errors thrown by middleware.
+// TransformerError is the type of errors thrown by response transformers.
 type TransformerError struct {
 	*e.BaseError
 }

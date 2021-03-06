@@ -6,7 +6,9 @@ import (
 
 	"github.com/kosatnkn/catalyst/app/adapters"
 
-	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
+	middlewareErrs "github.com/kosatnkn/catalyst/channels/http/middleware/errors"
+	unpackerErrs "github.com/kosatnkn/catalyst/channels/http/request/unpackers/errors"
+	transformerErrs "github.com/kosatnkn/catalyst/channels/http/response/transformers/errors"
 	domainErrs "github.com/kosatnkn/catalyst/domain/errors"
 	repositoryErrs "github.com/kosatnkn/catalyst/externals/repositories/errors"
 	serviceErrs "github.com/kosatnkn/catalyst/externals/services/errors"
@@ -17,12 +19,12 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 
 	switch err.(type) {
 
-	case *httpErrs.TransformerError:
+	case *transformerErrs.TransformerError:
 
 		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusInternalServerError
 
-	case *httpErrs.MiddlewareError,
+	case *middlewareErrs.MiddlewareError,
 		*domainErrs.DomainError,
 		*repositoryErrs.RepositoryError,
 		*serviceErrs.ServiceError:
@@ -30,7 +32,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusBadRequest
 
-	case *httpErrs.ValidationError:
+	case *unpackerErrs.UnpackerError:
 
 		logError(ctx, log, err)
 		return formatUnpackerError(err), http.StatusUnprocessableEntity

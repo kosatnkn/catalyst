@@ -20,13 +20,13 @@ func formatUnknownError(err error) transformers.ErrorTransformer {
 // formatGenericError formats all generic errors.
 func formatGenericError(err error) transformers.ErrorTransformer {
 
-	errorDetails := strings.Split(err.Error(), "|")
-	errCode, _ := strconv.Atoi(errorDetails[1])
+	details := strings.Split(err.Error(), "|")
+	code, _ := strconv.Atoi(details[1])
 
 	return transformers.ErrorTransformer{
-		Type: errorDetails[0],
-		Code: errCode,
-		Msg:  errorDetails[2],
+		Type: details[0],
+		Code: code,
+		Msg:  details[2],
 	}
 }
 
@@ -36,9 +36,11 @@ func formatGenericError(err error) transformers.ErrorTransformer {
 // An UnpackerError is a type of ValidationError.
 func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 
+	details := strings.Split(err.Error(), "|")
+
 	return transformers.ValidationErrorTransformer{
 		Type: "Validation Errors",
-		Msg:  err.Error(),
+		Msg:  details[2],
 	}
 }
 

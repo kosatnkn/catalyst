@@ -10,9 +10,12 @@ import (
 // logError logs the error with trace.
 func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) {
 
-	trace := []string{err.Error()}
+	trace := []string{
+		err.Error(), // add the last error of the error chain
+	}
 
-	// limit unwraping depth
+	// unwrap error in a loop to get previous errors in the chain
+	// limit unwraping depth to 5
 	for i := 0; i < 5; i++ {
 
 		err = errors.Unwrap(err)
