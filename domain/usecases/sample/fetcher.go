@@ -12,7 +12,7 @@ func (s *Sample) Get(ctx context.Context) ([]entities.Sample, error) {
 	// get samples
 	samples, err := s.sampleRepository.Get(ctx)
 	if err != nil {
-		return nil, s.errorCannotGetData(err)
+		return nil, s.errCannotGetData(err)
 	}
 
 	return samples, nil
@@ -28,7 +28,7 @@ func (s *Sample) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 	}
 
 	if sample.ID == 0 {
-		return entities.Sample{}, s.errorNoSample(id)
+		return entities.Sample{}, s.errNoSample(id)
 	}
 
 	return sample, nil

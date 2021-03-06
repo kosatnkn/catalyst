@@ -1,9 +1,8 @@
 package errors
 
-// ServiceError is the type of errors thrown by services talking to third party APIs.
 import e "github.com/kosatnkn/catalyst/errors"
 
-// ServiceError is the type of errors thrown by middleware.
+// ServiceError is the type of errors thrown by services talking to third party APIs.
 type ServiceError struct {
 	*e.BaseError
 }

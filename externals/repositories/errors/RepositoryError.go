@@ -1,9 +1,8 @@
 package errors
 
-// RepositoryError is the type of errors thrown by repositories.
 import e "github.com/kosatnkn/catalyst/errors"
 
-// RepositoryError is the type of errors thrown by middleware.
+// RepositoryError is the type of errors thrown by repositories.
 type RepositoryError struct {
 	*e.BaseError
 }

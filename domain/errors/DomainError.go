@@ -2,7 +2,7 @@ package errors
 
 import e "github.com/kosatnkn/catalyst/errors"
 
-// DomainError is the type of errors thrown by business logic.
+// DomainError is the type of errors thrown by the domain layer.
 type DomainError struct {
 	*e.BaseError
 }
