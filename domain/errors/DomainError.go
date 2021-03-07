@@ -8,7 +8,7 @@ type DomainError struct {
 }
 
 // NewDomainError creates a new DomainError instance.
-func NewDomainError(code string, msg string, cause ...error) error {
+func NewDomainError(code, msg string, cause ...error) error {
 
 	return &DomainError{
 		BaseError: e.NewBaseError("DomainError", code, msg, cause...),

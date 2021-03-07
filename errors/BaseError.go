@@ -14,7 +14,7 @@ type BaseError struct {
 }
 
 // NewBaseError creates a new BaseError instance.
-func NewBaseError(typ string, code string, msg string, cause ...error) *BaseError {
+func NewBaseError(typ, code, msg string, cause ...error) *BaseError {
 
 	e := &BaseError{
 		errType: typ,

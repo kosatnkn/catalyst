@@ -8,7 +8,7 @@ type ServiceError struct {
 }
 
 // NewServiceError creates a new ServiceError instance.
-func NewServiceError(code string, msg string, cause ...error) error {
+func NewServiceError(code, msg string, cause ...error) error {
 
 	return &ServiceError{
 		BaseError: e.NewBaseError("ServiceError", code, msg, cause...),
