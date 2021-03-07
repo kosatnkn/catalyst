@@ -158,8 +158,8 @@ You can add other `communication channels` to leverage a project based on `Catal
 For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
 
 ## View GoDoc Locally
-```shell
-    godoc -http=:6060 -v
+```bash
+godoc -http=:6060 -v
 ```
 
 Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2)
