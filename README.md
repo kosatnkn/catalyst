@@ -153,7 +153,7 @@ Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape ap
 
 You can add other `communication channels` to leverage a project based on `Catalyst`.
 
-### Extending Capabilities
+### Extending Capabilities of the Microservice
 
 For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
 
