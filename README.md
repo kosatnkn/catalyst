@@ -147,9 +147,13 @@ What makes `Catalyst` a REST API is this `http` channel which handles the comple
                + ------- +    + ---------- +    + ------- +
 ```
 
+### Metrics : Expose Prometheus Metrics
+
 Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
 
 You can add other `communication channels` to leverage a project based on `Catalyst`.
+
+### Extending Capabilities
 
 For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
 
