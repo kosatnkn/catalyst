@@ -1,15 +1,15 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/externals/repositories"
+	"github.com/kosatnkn/catalyst/v2/externals/repositories"
 )
 
-var resolvedRepositories Repositories
-
 // resolveRepositories resolve all repositories.
-func resolveRepositories() Repositories {
+func resolveRepositories(ats *Adapters) Repositories {
 
-	resolvedRepositories.SampleRepository = repositories.NewSampleMySQLRepository(resolvedAdapters.DBAdapter)
+	rts := Repositories{}
 
-	return resolvedRepositories
+	rts.SampleRepository = repositories.NewSampleMySQLRepository(ats.DB)
+
+	return rts
 }

@@ -9,27 +9,17 @@
 [![GoDoc](https://godoc.org/github.com/kosatnkn/catalyst?status.svg)](https://godoc.org/github.com/kosatnkn/catalyst)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
-A REST API base implemented as a microservice written in **Go** using the **Clean Architecture** paradigm.
+`Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many essential parts that you would need for a microservice such as,
+- Configurability
+- A basic dependency injection mechanism
+- Request response cycle handling
+- Structure and field validations
+- Error handling
+- Logging
+- Database resource management
+- Application metrics
 
-## Features
-- A server to handle web requests
-- Configuration parser
-- Container for dependency injection
-- Router
-- Controllers
-- Error handler
-- Logger
-- Request mapper
-- Response mapper and a Transformer
-- Application Metrics
-
-
-## Application Initialization Process
-
-- Parse configurations
-- Resolve container
-- Initialize router
-- Run server
+Written in **Go** using the **Clean Architecture** paradigm it offers clean separation between business (domain) logic and facilitation logic.
 
 ## Creating a New Project Using Catalyst
 
@@ -37,30 +27,38 @@ A new project can be created in one of two ways.
 
 ### Use Cauldron
 
-The easiest way to create a project using `Catalyst` as the base is to use `Cauldron`. It is a small tool that enables you to set up a new project in no time.
+The easiest way to create a project using `Catalyst` as the base is to use `Cauldron`.
+
+`Cauldron` is a project generation tool that creates new projects using `Catalyst` as the base.
 
 More information about `Cauldron` can be found [here](https://github.com/kosatnkn/cauldron)
 
-Install `Cauldron`
+Begin by installing `Cauldron`.
 ```bash
-    go get github.com/kosatnkn/cauldron
+go get github.com/kosatnkn/cauldron/v2
 ```
 
-Create a new project
+**Command**
 ```bash
-    $ cauldron -n=ProjectOne -ns=github.com/example [-t=v1.0.0]
+cauldron -n Sample -s github.com/username [-t v1.0.0]
 ```
-> NOTE: 
-> - -n Project name (ex: ProjectOne)
-> - -ns Namespace for the project (ex: github.com/example)
-> - -t Release version of Catalyst to be used. The latest version will be used if -t is not provided
-> - -help or -h Show help message
- 
-Cauldron will do a git init on the newly created project but you will have to stage all the files in the project and do the first commit yourself.
-```shell
-    git add .
+```bash
+cauldron --name Sample --namespace github.com/username [--tag v1.0.0]
+```
 
-    git commit -m "first commit"
+**Input Parameters**
+- `-n --name` Project name (ex: ProjectOne). The name will be converted to lowercase to be used in module path.
+- `-s --namespace` Namespace for the project (ex: github.com/example)
+- `-t --tag` Release version of `Catalyst` to be used. The latest version will be used if `-t` is not provided
+- `-h --help` Show help message
+
+This will create a new project with **go.mod** module path of `github.com/username/sample`
+
+`Cauldron` will do a `git init` on the newly created project but you will have to stage all the files in the project and do the first commit yourself.
+```bash
+git add .
+
+git commit -m "first commit"
 ```
 
 ### Cloning
@@ -69,12 +67,12 @@ This is the work intensive approach.
 
 Clone `Catalyst`
 ```bash
-    git clone https://github.com/kosatnkn/catalyst.git <new_project_name>
+git clone https://github.com/kosatnkn/catalyst.git <new_project_name>
 ```
 
 Remove `.git`
 ```bash
-    cd <new_project_name>
+cd <new_project_name>
 
     rm -rf .git
 ```
@@ -87,14 +85,12 @@ Change import paths
 - Now run and see whether the project compiles and run properly
 - If so you can do a `git init` to the project
 
-## Special Notes
-
-### Configurations
+## Configurations
 Configuration files for a `Catalyst` project can be found in `configs` directory.
 
 Initially you will have a set of config files with the extension of `.yaml.example`. You can create `.yaml` configuration files using these **example** files as a template.
 
-### The Sample Set
+## The Sample Set
 We have included a sample set of endpoints and their corresponding controller and domain logic by default.
 
 This is to make it easier for you to follow through and understand how Catalyst handles the request response cycle for a given request.
@@ -103,61 +99,75 @@ The sample set will cover all basic CRUD operations that a REST API will normall
 
 There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
 
-### Database Adapters
-Catalyst comes with support for connection with couple of databases by the use of **Database Adapters**. 
-These are in `externals/adapters` directory and will provide a starting point to creating DB adapters that much suite
-your needs.
+## Channels
+In the context of `Catalyst` we use a concept called `Communication Channels` (simply channels) to define ways in which you can communicate with the microservice (do not confuse these with `channels` in `Go`, which is an entirely different thing).
 
-There are adapters to connect to a database as well as to manage database transactions for following databases.
-- MySQL / MariaDB
-- PostgresSQL
+A `channel` in `Catalyst` is a package inside the **channels** directory. This package consists of all the logic needed to handle communication with the outside world.
 
+Out of the box, `Catalyst` contain two such channels.
+- `http` (to handle REST web requests)
+- `metrics` (to expose application metrics)
 
-## Request Response Cycle
+What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
+### HTTP : Request Response Cycle Handled by the `http` Channel
 ```text
-     + -------- +                + ------- +
-     | RESPONSE |                | REQUEST |
-     + -------- +                + ------- +
-          /\                         ||
-          ||                         \/
-          ||                  + ------------ +  =>  + ---------- +
-          ||                  |    Router    |      | Middleware |
-          ||                  + ------------ +  <=  + ---------- +
-          ||                             ||
-          ||                             ||
-     + --------------------------- +     ||
-     | Transformer | Error Handler |     ||
-     + --------------------------- +     ||
-                                /\       ||
-                                ||       \/
-                            + -------------- +  =>  + -------------------- +
-                            |   Controller   |      | Unpacker | Validator |
-                            + -------------- +  <=  + -------------------- +
-                                /\       ||
-                                ||       \/
-                            + -------------- +
-                            |    Use Case    |
-                            + -------------- +
-                                /\       ||
-                                ||       \/
-              ______________________________________________
-               + ------- +    + ---------- +    + ------- +
-               | Adapter |    | Repository |    | Service |
-               + ------- +    + ---------- +    + ------- +
-                  /\  ||         /\    ||          /\  ||
-                  ||  \/         ||    \/          ||  \/
-               + ------- +    + ---------- +    + ------- +
-               | Library |    |  Database  |    |   APIs  |
-               + ------- +    + ---------- +    + ------- +
+                               + ------- +           + -------- +
+                               | REQUEST |           | RESPONSE |
+                               + ------- +           + -------- +
+                                   ||                     /\
+                                   \/                     ||
+                            + ------------ +              ||
+                            |  Middleware  |              ||
+                            + ------------ +              ||
+                                   ||                     ||
+                                   \/                     ||
+                            + ------------ +              ||  
+                            |    Router    |              ||    
+                            + ------------ +              ||  
+                                       ||                 ||
+                                       ||                 ||
+                                       ||   + --------------------------- +
+                                       ||   | Transformer | Error Handler |
+                                       ||   + --------------------------- +
+                                       ||    /\
+                                       \/    ||
+    + -------------------- +  =>  + -------------- +  
+    | Unpacker | Validator |      |   Controller   |      
+    + -------------------- +  <=  + -------------- +    
+                                      ||       /\
+                                      \/       ||
+                                  + -------------- +
+                                  |    Use Case    |
+                                  + -------------- +
+                                      ||       /\
+                                      \/       ||
+                          _____________________________________
+                              + ---------- +    + ------- +
+                              | Repository |    | Service |
+                              + ---------- +    + ------- +
+                                ||    /\          ||  /\
+                                \/    ||          \/  ||
+                              + ---------- +    + ------- +
+                              |  Database  |    |   APIs  |
+                              + ---------- +    + ------- +
 ```
 
+### Metrics : Expose Prometheus Metrics
+
+Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
+
+You can add other `communication channels` to leverage a project based on `Catalyst`.
+
+### Extending Capabilities of the Microservice
+
+For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
 
 ## View GoDoc Locally
-```shell
-    godoc -http=:6060 -v
+```bash
+godoc -http=:6060 -v
 ```
 
-Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/)
+Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2)
 
 
 ## Using Go mod
@@ -166,49 +176,49 @@ Go mod is used as the dependency management mechanism. Visit [here](https://gith
 
 Use go mod in projects that are within the `GOPATH`
 ```bash
-    export GO111MODULE=on
+export GO111MODULE=on
 ```
 
 Initialize go mod
 ```bash
-    go mod init github.com/my/repo
+go mod init github.com/my/repo
 ```
 
 View final versions that will be used in a build for all direct and indirect dependencies
 ```bash
-    go list -m all
+go list -m all
 ```
 View available minor and patch upgrades for all direct and indirect dependencies
 ```bash
-    go list -u -m all
+go list -u -m all
 ```
 Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
 ```bash
-    go get -u or go get -u=patch
+go get -u or go get -u=patch
 ```
 Build or test all packages in the module when run from the module root directory
 ```bash
-    go build ./... or go test ./...
+go build ./... or go test ./...
 ```
 Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
 ```bash
-    go mod tidy
+go mod tidy
 ```
 Optional step to create a vendor directory
 ```bash
-    go mod vendor
+go mod vendor
 ```
 
 ## Testing
 
 To run test and output coverage report
 ```bash
-    go test -covermode=count -coverprofile=cover.out ./...
+go test -covermode=count -coverprofile=cover.out ./...
 ```
 
 To get coverage as a percentage of overall codebase use `-coverpkg=./...`
 ```bash
-    go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
+go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
 ```
 
 ## Docker
@@ -216,24 +226,24 @@ To get coverage as a percentage of overall codebase use `-coverpkg=./...`
 Catalyst provides a basic multistage Dockerfile so you have a starting point for creating Docker images.
 
 ```bash
-    docker build -t <tag_name>:<tag_version> .
+docker build -t <tag_name>:<tag_version> .
 ```
 
 > NOTE: Do not forget the tailing `.` that indicates the current directory
 
 **Example**
 ```bash
-    docker build -t kosatnkn/catalyst:1.0.0 .
+docker build -t kosatnkn/catalyst:1.0.0 .
 ```
 
 You can use it as follows
 ```bash
-    docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
+docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
 ```
 
 Do both in one go
 ```bash
-    docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
+docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
 ```
 
 

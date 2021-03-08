@@ -1,9 +1,9 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
-	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
-	"github.com/kosatnkn/catalyst/domain/boundary/services"
+	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v2/domain/boundary/repositories"
+	"github.com/kosatnkn/catalyst/v2/domain/boundary/services"
 )
 
 // Container holds all resolved dependencies that needs to be injected at run time.
@@ -17,10 +17,10 @@ type Container struct {
 //
 // These are wrappers around third party libraries. All adapters will be of a corresponding adapter interface type.
 type Adapters struct {
-	DBAdapter        adapters.DBAdapterInterface
-	DBTxAdapter      adapters.DBTxAdapterInterface
-	LogAdapter       adapters.LogAdapterInterface
-	ValidatorAdapter adapters.ValidatorAdapterInterface
+	DB        adapters.DBAdapterInterface
+	DBTx      adapters.DBTxAdapterInterface
+	Log       adapters.LogAdapterInterface
+	Validator adapters.ValidatorAdapterInterface
 }
 
 // Repositories hold resolved repository instances.

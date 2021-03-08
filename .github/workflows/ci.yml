@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, release/** ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, release/** ]
 
 jobs:
 
@@ -37,7 +37,7 @@ jobs:
       run: go build -v .
 
     - name: Test
-      run: go test -v -covermode=count -coverprofile=cover.out ./...
+      run: go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
     
     - name: Coverage
       uses: shogo82148/actions-goveralls@v1

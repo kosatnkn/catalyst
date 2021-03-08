@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/log"
 	"gopkg.in/yaml.v2"
 )
 
@@ -15,10 +17,10 @@ func Parse(cfgDir string) *Config {
 	dir := getConfigDir(cfgDir)
 
 	return &Config{
-		AppConfig:      parseAppConfig(dir),
-		DBConfig:       parseDBConfig(dir),
-		LogConfig:      parseLogConfig(dir),
-		ServicesConfig: parseServicesConfig(dir),
+		App:      parseAppConfig(dir),
+		DB:       parseDBConfig(dir),
+		Log:      parseLogConfig(dir),
+		Services: parseServicesConfig(dir),
 	}
 }
 
@@ -33,9 +35,9 @@ func parseAppConfig(dir string) AppConfig {
 }
 
 // parseLogConfig parses logger configurations.
-func parseLogConfig(dir string) LogConfig {
+func parseLogConfig(dir string) log.Config {
 
-	cfg := LogConfig{}
+	cfg := log.Config{}
 
 	parseConfig(dir+"logger.yaml", &cfg)
 
@@ -43,9 +45,9 @@ func parseLogConfig(dir string) LogConfig {
 }
 
 // parseDBConfig parses database configurations.
-func parseDBConfig(dir string) DBConfig {
+func parseDBConfig(dir string) mysql.Config {
 
-	cfg := DBConfig{}
+	cfg := mysql.Config{}
 
 	parseConfig(dir+"database.yaml", &cfg)
 

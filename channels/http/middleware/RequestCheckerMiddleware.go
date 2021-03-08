@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/app/container"
-	httpErrs "github.com/kosatnkn/catalyst/channels/http/errors"
-	"github.com/kosatnkn/catalyst/channels/http/response"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/middleware/errors"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response"
 )
 
 // RequestCheckerMiddleware validates the request header.
@@ -46,9 +46,9 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 		// check content type
 		if contentType != "application/json" {
 
-			err := httpErrs.NewMiddlewareError(fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType), 100, "")
+			err := errors.NewMiddlewareError("100", fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType))
 
-			response.Error(r.Context(), w, err, m.container.Adapters.LogAdapter)
+			response.Error(r.Context(), w, m.container.Adapters.Log, err)
 
 			return
 		}

@@ -2,7 +2,7 @@ package metrics
 
 import "github.com/prometheus/client_golang/prometheus"
 
-// Instrument and register all used metrics in this package.
+// Instrument and register all used metrics in the http channel.
 // https://godoc.org/github.com/prometheus/client_golang/prometheus
 
 // HTTPReqDuration instruments metrics for http request durations.

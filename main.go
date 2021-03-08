@@ -6,11 +6,11 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/app/splash"
-	httpServer "github.com/kosatnkn/catalyst/channels/http/server"
-	metricsServer "github.com/kosatnkn/catalyst/channels/metrics/server"
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/app/splash"
+	httpServer "github.com/kosatnkn/catalyst/v2/channels/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/v2/channels/metrics/server"
 )
 
 func main() {
@@ -25,10 +25,10 @@ func main() {
 	ctr := container.Resolve(cfg)
 
 	// start the server to handle http requests
-	srv := httpServer.Run(cfg.AppConfig, ctr)
+	srv := httpServer.Run(cfg.App, ctr)
 
 	// start the server to expose application metrics
-	metricsServer.Run(cfg.AppConfig, ctr)
+	metricsServer.Run(cfg.App, ctr)
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)

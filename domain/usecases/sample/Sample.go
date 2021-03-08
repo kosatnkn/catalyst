@@ -1,9 +1,9 @@
 package sample
 
 import (
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/domain/boundary/adapters"
-	"github.com/kosatnkn/catalyst/domain/boundary/repositories"
+	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/domain/boundary/repositories"
 )
 
 // Sample contains all usecases for samples
@@ -13,10 +13,10 @@ type Sample struct {
 }
 
 // NewSample creates a new instance of sample usecase.
-func NewSample(container *container.Container) *Sample {
+func NewSample(ctr *container.Container) *Sample {
 
 	return &Sample{
-		transaction:      container.Adapters.DBTxAdapter,
-		sampleRepository: container.Repositories.SampleRepository,
+		transaction:      ctr.Adapters.DBTx,
+		sampleRepository: ctr.Repositories.SampleRepository,
 	}
 }

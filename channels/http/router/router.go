@@ -5,9 +5,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/kosatnkn/catalyst/app/container"
-	"github.com/kosatnkn/catalyst/channels/http/controllers"
-	"github.com/kosatnkn/catalyst/channels/http/middleware"
+	"github.com/kosatnkn/catalyst/v2/app/container"
+	"github.com/kosatnkn/catalyst/v2/channels/http/controllers"
+	"github.com/kosatnkn/catalyst/v2/channels/http/middleware"
 )
 
 // Init initializes the router.
@@ -18,7 +18,7 @@ func Init(ctr *container.Container) *mux.Router {
 
 	// initialize middleware
 	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
-	requestAlterMidleware := middleware.NewRequestAlterMiddleware()
+	requestAlterMidleware := middleware.NewRequestAlterMiddleware(ctr)
 	metricsMidleware := middleware.NewMetricsMiddleware()
 
 	// add middleware to router
@@ -30,8 +30,8 @@ func Init(ctr *container.Container) *mux.Router {
 	// add CORS middleware
 	r.Use(mux.CORSMethodMiddleware(r))
 
-	r.Use(requestCheckerMiddleware.Middleware)
 	r.Use(requestAlterMidleware.Middleware)
+	r.Use(requestCheckerMiddleware.Middleware)
 
 	// initialize controllers
 	apiController := controllers.NewAPIController(ctr)

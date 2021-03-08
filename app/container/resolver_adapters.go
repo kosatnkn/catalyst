@@ -3,60 +3,62 @@ package container
 import (
 	"fmt"
 
-	"github.com/kosatnkn/catalyst/app/config"
-	"github.com/kosatnkn/catalyst/externals/adapters"
+	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/db"
+	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/log"
+	"github.com/kosatnkn/validator"
 )
-
-var resolvedAdapters Adapters
 
 // resolveAdapters resolves all adapters.
 func resolveAdapters(cfg *config.Config) Adapters {
 
-	resolveDBAdapter(cfg.DBConfig)
-	resolveDBTransactionAdapter()
-	resolveLogAdapter(cfg.LogConfig)
-	resolveValidatorAdapter()
+	ats := Adapters{}
 
-	return resolvedAdapters
+	ats.DB = resolveDBAdapter(cfg.DB)
+	ats.DBTx = resolveDBTransactionAdapter(ats.DB)
+	ats.Log = resolveLogAdapter(cfg.Log)
+	ats.Validator = resolveValidatorAdapter()
+
+	return ats
 }
 
 // resolveDBAdapter resolves the database adapter.
-func resolveDBAdapter(cfg config.DBConfig) {
+func resolveDBAdapter(cfg mysql.Config) adapters.DBAdapterInterface {
 
-	db, err := adapters.NewMySQLAdapter(cfg)
+	db, err := mysql.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.DBAdapter = db
+	return db
 }
 
 // resolveDBTransactionAdapter resolves the database transaction adapter.
-func resolveDBTransactionAdapter() {
+func resolveDBTransactionAdapter(d adapters.DBAdapterInterface) adapters.DBTxAdapterInterface {
 
-	tx := adapters.NewMySQLTxAdapter(resolvedAdapters.DBAdapter)
-
-	resolvedAdapters.DBTxAdapter = tx
+	return db.NewTxAdapter(d)
 }
 
 // resolveLogAdapter resolves the logging adapter.
-func resolveLogAdapter(cfg config.LogConfig) {
+func resolveLogAdapter(cfg log.Config) adapters.LogAdapterInterface {
 
-	la, err := adapters.NewLogAdapter(cfg)
+	la, err := log.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.LogAdapter = la
+	return la
 }
 
 // resolveValidatorAdapter resolves the validation adapter.
-func resolveValidatorAdapter() {
+func resolveValidatorAdapter() adapters.ValidatorAdapterInterface {
 
-	v, err := adapters.NewValidatorAdapter()
+	v, err := validator.NewAdapter()
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
 
-	resolvedAdapters.ValidatorAdapter = v
+	return v
 }
