@@ -108,43 +108,48 @@ Out of the box `Catalyst` contain two such channels.
 - `http` (to handle REST web requests)
 - `metrics` (to publish application metrics)
 
-What makes `Catalyst` a REST API is this `http` channel which handles the complete lifecycle of REST web requests.
+What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
 ### HTTP : Request Response Cycle Handled by the `http` Channel
 ```text
-     + -------- +                + ------- +
-     | RESPONSE |                | REQUEST |
-     + -------- +                + ------- +
-          /\                         ||
-          ||                         \/
-          ||                  + ------------ +  =>  + ---------- +
-          ||                  |    Router    |      | Middleware |
-          ||                  + ------------ +  <=  + ---------- +
-          ||                             ||
-          ||                             ||
-     + --------------------------- +     ||
-     | Transformer | Error Handler |     ||
-     + --------------------------- +     ||
-                                /\       ||
-                                ||       \/
-                            + -------------- +  =>  + -------------------- +
-                            |   Controller   |      | Unpacker | Validator |
-                            + -------------- +  <=  + -------------------- +
-                                /\       ||
-                                ||       \/
-                            + -------------- +
-                            |    Use Case    |
-                            + -------------- +
-                                /\       ||
-                                ||       \/
-              ______________________________________________
-               + ------- +    + ---------- +    + ------- +
-               | Adapter |    | Repository |    | Service |
-               + ------- +    + ---------- +    + ------- +
-                  /\  ||         /\    ||          /\  ||
-                  ||  \/         ||    \/          ||  \/
-               + ------- +    + ---------- +    + ------- +
-               | Library |    |  Database  |    |   APIs  |
-               + ------- +    + ---------- +    + ------- +
+                                + ------- +           + -------- +
+                               | REQUEST |           | RESPONSE |
+                               + ------- +           + -------- +
+                                   ||                     /\
+                                   \/                     ||
+                            + ------------ +              ||
+                            |  Middleware  |              ||
+                            + ------------ +              ||
+                                   ||                     ||
+                                   \/                     ||
+                            + ------------ +              ||  
+                            |    Router    |              ||    
+                            + ------------ +              ||  
+                                       ||                 ||
+                                       ||                 ||
+                                       ||   + --------------------------- +
+                                       ||   | Transformer | Error Handler |
+                                       ||   + --------------------------- +
+                                       ||    /\
+                                       \/    ||
+    + -------------------- +  =>  + -------------- +  
+    | Unpacker | Validator |      |   Controller   |      
+    + -------------------- +  <=  + -------------- +    
+                                      ||       /\
+                                      \/       ||
+                                  + -------------- +
+                                  |    Use Case    |
+                                  + -------------- +
+                                      ||       /\
+                                      \/       ||
+                          _____________________________________
+                              + ---------- +    + ------- +
+                              | Repository |    | Service |
+                              + ---------- +    + ------- +
+                                ||    /\          ||  /\
+                                \/    ||          \/  ||
+                              + ---------- +    + ------- +
+                              |  Database  |    |   APIs  |
+                              + ---------- +    + ------- +
 ```
 
 ### Metrics : Expose Prometheus Metrics
