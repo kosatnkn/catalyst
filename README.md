@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/kosatnkn/catalyst/badge.svg?branch=master)](https://coveralls.io/github/kosatnkn/catalyst?branch=master)
 ![Open Issues](https://img.shields.io/github/issues/kosatnkn/catalyst)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kosatnkn/catalyst)
-[![GoDoc](https://godoc.org/github.com/kosatnkn/catalyst?status.svg)](https://godoc.org/github.com/kosatnkn/catalyst)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v2.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v2)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
 `Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many essential parts that you would need for a microservice such as,
