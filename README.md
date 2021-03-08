@@ -102,16 +102,16 @@ There is also an `openapi.yaml` file in `doc/api` directory that corresponds to 
 ## Channels
 In the context of `Catalyst` we use a concept called `Communication Channels` (simply channels) to define ways in which you can communicate with the microservice (do not confuse these with `channels` in `Go`, which is an entirely different thing).
 
-A `channel` in `Catalyst` is a package inside the **channels** directory. This package consists of all the logic needed to handle communication with the client side.
+A `channel` in `Catalyst` is a package inside the **channels** directory. This package consists of all the logic needed to handle communication with the outside world.
 
-Out of the box `Catalyst` contain two such channels.
+Out of the box, `Catalyst` contain two such channels.
 - `http` (to handle REST web requests)
-- `metrics` (to publish application metrics)
+- `metrics` (to expose application metrics)
 
 What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
 ### HTTP : Request Response Cycle Handled by the `http` Channel
 ```text
-                                + ------- +           + -------- +
+                               + ------- +           + -------- +
                                | REQUEST |           | RESPONSE |
                                + ------- +           + -------- +
                                    ||                     /\

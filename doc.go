@@ -13,15 +13,15 @@
 // business (domain) logic and facilitation logic.
 //
 // In the context of `Catalyst` we use a concept called `Communication Channels` (simply channels)
-// to define ways in which you can communicate with the microservice
-// (do not confuse these with `channels` in `Go`, which is an entirely different thing).
+// to define ways in which you can communicate with the microservice (do not confuse these
+// with `channels` in `Go`, which is an entirely different thing).
 //
 // A `channel` in Catalyst is a package inside the `channels` directory. This package consists of
-// all the logic needed to handle communication with the client side.
+// all the logic needed to handle communication with the outside world.
 //
-// Out of the box Catalyst contain two such channels.
+// Out of the box, Catalyst contain two such channels.
 // - http (to handle REST web requests)
-// - metrics (to publish application metrics)
+// - metrics (to expose application metrics)
 //
 // What makes Catalyst a REST API is this `http` package which handles the complete lifecycle of REST web requests.
 //
@@ -68,6 +68,7 @@
 // Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
 //
 // You can add other `communication channels` to leverage a project based on Catalyst.
+//
 // For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`.
 // Or an `mqtt` package can be added to communicate with `IoT` devices.
 package main
