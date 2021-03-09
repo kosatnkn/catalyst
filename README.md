@@ -9,10 +9,10 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v2.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v2)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
-`Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many essential parts that you would need for a microservice such as,
+`Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many features that are essential, such as.
 - Configurability
 - A basic dependency injection mechanism
-- Request response cycle handling
+- HTTP request, response cycle handling
 - Structure and field validations
 - Error handling
 - Logging
@@ -35,7 +35,7 @@ More information about `Cauldron` can be found [here](https://github.com/kosatnk
 
 Begin by installing `Cauldron`.
 ```bash
-go get github.com/kosatnkn/cauldron/v2
+go get github.com/kosatnkn/cauldron
 ```
 
 **Command**
@@ -47,14 +47,14 @@ cauldron --name Sample --namespace github.com/username [--tag v1.0.0]
 ```
 
 **Input Parameters**
-- `-n --name` Project name (ex: ProjectOne). The name will be converted to lowercase to be used in module path.
-- `-s --namespace` Namespace for the project (ex: github.com/example)
+- `-n --name` Project name (ex: Sample). The name will be converted to lowercase to be used in module path.
+- `-s --namespace` Namespace for the project (ex: github.com/username)
 - `-t --tag` Release version of `Catalyst` to be used. The latest version will be used if `-t` is not provided
 - `-h --help` Show help message
 
 This will create a new project with **go.mod** module path of `github.com/username/sample`
 
-`Cauldron` will do a `git init` on the newly created project but you will have to stage all the files in the project and do the first commit yourself.
+`Cauldron` will do a `git init` on the newly created project but you will have to stage all the files and do the first commit yourself.
 ```bash
 git add .
 
@@ -74,7 +74,7 @@ Remove `.git`
 ```bash
 cd <new_project_name>
 
-    rm -rf .git
+rm -rf .git
 ```
 
 Change import paths
@@ -174,6 +174,8 @@ Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2](http://l
 
 Go mod is used as the dependency management mechanism. Visit [here](https://github.com/golang/go/wiki/Modules) for more details.
 
+Some commonly used go mod commands for quick reference.
+
 Use go mod in projects that are within the `GOPATH`
 ```bash
 export GO111MODULE=on
@@ -208,7 +210,7 @@ Optional step to create a vendor directory
 ```bash
 go mod vendor
 ```
-
+ProjectOne
 ## Testing
 
 To run test and output coverage report
@@ -246,7 +248,8 @@ Do both in one go
 docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
 ```
 
-
 ## Wiki
 
 Wiki pages on technical aspects of the project can be found [here](https://github.com/kosatnkn/catalyst/wiki)
+
+> NOTE: Wiki is currently being updated.
