@@ -109,7 +109,11 @@ Out of the box, `Catalyst` contain two such channels.
 - `metrics` (to expose application metrics)
 
 What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
-### HTTP : Request Response Cycle Handled by the `http` Channel
+### `http` Channel
+
+REST API is implemented in this channel.
+
+Following is the request, response cycle executed when a request comes to a REST endpoint.
 ```text
                                + ------- +           + -------- +
                                | REQUEST |           | RESPONSE |
@@ -152,15 +156,15 @@ What makes `Catalyst` a REST API is this `http` package which handles the comple
                               + ---------- +    + ------- +
 ```
 
-### Metrics : Expose Prometheus Metrics
+### `metrics` Channel
 
 Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
 
+### Extending the Microservice
+
 You can add other `communication channels` to leverage a project based on `Catalyst`.
 
-### Extending Capabilities of the Microservice
-
-For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
+For an example a `stream` package can be added to `channels` to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
 
 ## View GoDoc Locally
 ```bash
