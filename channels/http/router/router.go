@@ -22,7 +22,7 @@ func Init(ctr *container.Container) *mux.Router {
 	metricsMidleware := middleware.NewMetricsMiddleware()
 
 	// add middleware to router
-	// NOTE: middleware will execute in the order they are added to the router
+	// middleware will execute in the order they are added to the router
 
 	// add metrics middleware first
 	r.Use(metricsMidleware.Middleware)

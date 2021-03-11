@@ -36,7 +36,6 @@ func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, er
 // TransformAsCollection map data to a collection of transformer objects.
 func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
 
-	// NOTE:
 	// Make sure that you declare the transformer slice in this manner.
 	// Otherwise the marshaller will return `null` instead of `[]` when
 	// marshalling empty slices
