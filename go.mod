@@ -7,7 +7,7 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/mux v1.8.0
 	github.com/iancoleman/strcase v0.1.3
-	github.com/kosatnkn/db v0.2.0
+	github.com/kosatnkn/db v0.2.1
 	github.com/kosatnkn/log v0.1.2
 	github.com/kosatnkn/validator v0.1.0
 	github.com/kr/text v0.2.0 // indirect

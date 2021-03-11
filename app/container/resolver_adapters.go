@@ -5,7 +5,6 @@ import (
 
 	"github.com/kosatnkn/catalyst/v2/app/adapters"
 	"github.com/kosatnkn/catalyst/v2/app/config"
-	"github.com/kosatnkn/db"
 	"github.com/kosatnkn/db/mysql"
 	"github.com/kosatnkn/log"
 	"github.com/kosatnkn/validator"
@@ -17,7 +16,6 @@ func resolveAdapters(cfg *config.Config) Adapters {
 	ats := Adapters{}
 
 	ats.DB = resolveDBAdapter(cfg.DB)
-	ats.DBTx = resolveDBTransactionAdapter(ats.DB)
 	ats.Log = resolveLogAdapter(cfg.Log)
 	ats.Validator = resolveValidatorAdapter()
 
@@ -33,12 +31,6 @@ func resolveDBAdapter(cfg mysql.Config) adapters.DBAdapterInterface {
 	}
 
 	return db
-}
-
-// resolveDBTransactionAdapter resolves the database transaction adapter.
-func resolveDBTransactionAdapter(d adapters.DBAdapterInterface) adapters.DBTxAdapterInterface {
-
-	return db.NewTxAdapter(d)
 }
 
 // resolveLogAdapter resolves the logging adapter.

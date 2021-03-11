@@ -165,10 +165,8 @@ github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvW
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.3/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
-github.com/kosatnkn/db v0.2.0 h1:NHkDGi+NLuDaJXUVrP1vrT8S4yhPo0vUrEWWwK7+3J0=
-github.com/kosatnkn/db v0.2.0/go.mod h1:4EfG4H0bqWa2HauNWojnaubv6N4H/x8lJVBYKFd74so=
-github.com/kosatnkn/log v0.1.1 h1:drLSdd27idKOyB1z/z3NGusgeUchU5Brhw7Iw3DtBvQ=
-github.com/kosatnkn/log v0.1.1/go.mod h1:2OYjY05iWyvL5b/e/+1khzZ7r04YF9GhKrdsT4ZfMXQ=
+github.com/kosatnkn/db v0.2.1 h1:R7TI6QUpppTFyuEGSz5t1ZCJOW2yNrvcYepCv/pDnkc=
+github.com/kosatnkn/db v0.2.1/go.mod h1:4EfG4H0bqWa2HauNWojnaubv6N4H/x8lJVBYKFd74so=
 github.com/kosatnkn/log v0.1.2 h1:9kkbaMxhTi/Q1Pl0QRg8gGlQIs5Z/4l+wRCDyRnaQvs=
 github.com/kosatnkn/log v0.1.2/go.mod h1:RphWS3PzPxrl4mh6FEu982Y9lBetGfSPN8OveZrSI+0=
 github.com/kosatnkn/validator v0.1.0 h1:YMoL2vCFNXYYis/SsZrxo0VEOuE3jYDK6Fc4mGO52zg=

@@ -8,7 +8,7 @@ import (
 
 // Sample contains all usecases for samples
 type Sample struct {
-	transaction      adapters.DBTxAdapterInterface
+	db               adapters.DBAdapterInterface
 	sampleRepository repositories.SampleRepositoryInterface
 }
 
@@ -16,7 +16,7 @@ type Sample struct {
 func NewSample(ctr *container.Container) *Sample {
 
 	return &Sample{
-		transaction:      ctr.Adapters.DBTx,
+		db:               ctr.Adapters.DB,
 		sampleRepository: ctr.Repositories.SampleRepository,
 	}
 }
