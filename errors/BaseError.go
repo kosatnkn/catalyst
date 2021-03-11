@@ -4,8 +4,9 @@ import "fmt"
 
 // BaseError is the base error struct that can be used to create different types of errors.
 //
-// NOTE: Using the BaseError type is not a must. It is given as a convenience type to
-//		 derive error structs that can be properly read by the error handler.
+// NOTE:
+// Using the BaseError type is not a must. It is given as a convenience type to
+// derive error structs that can be properly read by the error handler.
 type BaseError struct {
 	errType string
 	code    string

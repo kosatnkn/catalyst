@@ -38,9 +38,10 @@ func (repo *SamplePostgresRepository) Get(ctx context.Context) ([]entities.Sampl
 // GetByID retrieves a single Sample.
 func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (entities.Sample, error) {
 
-	// NOTE: DBAdapters in Catalyst supports named parameters and you don't have to
-	// 		 worry about the order in which those parameters are declared in the
-	//		 query and in the parameters map. The DBAdapter will take care of that.
+	// NOTE:
+	// DBAdapters in Catalyst supports named parameters and you don't have to
+	// worry about the order in which those parameters are declared in the
+	// query and in the parameters map. The DBAdapter will take care of that.
 	query := `SELECT "id", "name", "password"
 				FROM test.sample
 				WHERE "id"=?id`
