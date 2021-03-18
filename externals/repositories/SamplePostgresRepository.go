@@ -76,12 +76,12 @@ func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (enti
 
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return entities.Sample{}, err
+		return entities.Sample{}, errors.ErrQuery(err)
 	}
 
 	mapped, err := repo.mapResult(result)
 	if err != nil {
-		return entities.Sample{}, err
+		return entities.Sample{}, errors.ErrQuery(err)
 	}
 
 	if len(mapped) == 0 {
@@ -106,7 +106,7 @@ func (repo *SamplePostgresRepository) Add(ctx context.Context, sample entities.S
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return err
+		return errors.ErrQuery(err)
 	}
 
 	return nil
@@ -128,7 +128,7 @@ func (repo *SamplePostgresRepository) Edit(ctx context.Context, sample entities.
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return err
+		return errors.ErrQuery(err)
 	}
 
 	return nil
@@ -147,7 +147,7 @@ func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error 
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return err
+		return errors.ErrQuery(err)
 	}
 
 	return nil
@@ -161,7 +161,7 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
 	defer func() {
 		if r := recover(); r != nil {
-			err = r.(error)
+			err = errors.ErrQuery(r.(error))
 		}
 	}()
 
