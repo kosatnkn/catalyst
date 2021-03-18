@@ -6,9 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/channels/http/request"
 	"github.com/kosatnkn/catalyst/v2/channels/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v2/channels/http/response"
 	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
 	"github.com/kosatnkn/catalyst/v2/domain/entities"
 	"github.com/kosatnkn/catalyst/v2/domain/usecases/sample"
@@ -38,22 +36,43 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	// add a trace string to the context
 	ctx = ctl.withTrace(ctx, "SampleController.Get")
 
-	// get data
-	samples, err := ctl.sampleUseCase.Get(ctx)
+	// get filters from query params
+	filters, err := ctl.getFilters(r, unpackers.NewSampleFiltersUnpacker())
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
 	}
 
-	// transform
-	tr, err := response.Transform(samples, transformers.NewSampleTransformer(), true)
+	// get paginator from query paramaters
+	paginator, err := ctl.getPaginator(r)
+	if err != nil {
+		ctl.sendError(ctx, w, err)
+		return
+	}
+
+	// get data
+	samples, err := ctl.sampleUseCase.Get(ctx, filters, paginator)
+	if err != nil {
+		ctl.sendError(ctx, w, err)
+		return
+	}
+
+	// transform school data
+	trS, err := ctl.transform(samples, transformers.NewSampleTransformer(), true)
+	if err != nil {
+		ctl.sendError(ctx, w, err)
+		return
+	}
+
+	// transform paginator
+	trP, err := ctl.transform(paginator, transformers.NewPaginatorTransformer(), false)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
 	}
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusOK, tr)
+	ctl.sendResponse(ctx, w, http.StatusOK, trS, trP)
 }
 
 // GetByID handles retreiving a single sample.
@@ -84,7 +103,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// transform
-	tr, err := response.Transform(sample, transformers.NewSampleTransformer(), false)
+	tr, err := ctl.transform(sample, transformers.NewSampleTransformer(), false)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
@@ -104,24 +123,17 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	ctx = ctl.withTrace(ctx, "SampleController.Add")
 
 	// unpack request
-	sampleUnpacker := unpackers.NewSampleUnpacker()
-	err := request.Unpack(r, sampleUnpacker)
+	su := unpackers.NewSampleUnpacker()
+	err := ctl.unpackBody(r, su)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
 	}
 
-	// validate unpacked data
-	errs := ctl.validator.Validate(sampleUnpacker)
-	if errs != nil {
-		ctl.sendError(ctx, w, errs)
-		return
-	}
-
 	// bind unpacked data to entities
 	sample := entities.Sample{
-		Name:     sampleUnpacker.Name,
-		Password: sampleUnpacker.Password,
+		Name:     su.Name,
+		Password: su.Password,
 	}
 
 	// add
@@ -132,7 +144,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// transform
-	// tr := response.Transform(sample, transformers.NewSampleTransformer(), false)
+	// tr := ctl.transform(sample, transformers.NewSampleTransformer(), false)
 
 	// send response
 	ctl.sendResponse(ctx, w, http.StatusCreated)
@@ -147,17 +159,8 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	// add a trace string to the context
 	ctx = ctl.withTrace(ctx, "SampleController.Edit")
 
-	// unpack request
-	sampleUnpacker := unpackers.NewSampleUnpacker()
-	err := request.Unpack(r, sampleUnpacker)
-	if err != nil {
-		ctl.sendError(ctx, w, err)
-		return
-	}
-
 	// get id from request
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := strconv.ParseUint(ctl.getRouteVariable(r, "id"), 10, 64)
 
 	// validate request parameters
 	errs := ctl.validator.ValidateField(id, "required,gt=0")
@@ -166,18 +169,19 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// validate unpacked data
-	errs = ctl.validator.Validate(sampleUnpacker)
-	if errs != nil {
-		ctl.sendError(ctx, w, errs)
+	// unpack request body
+	su := unpackers.NewSampleUnpacker()
+	err := ctl.unpackBody(r, su)
+	if err != nil {
+		ctl.sendError(ctx, w, err)
 		return
 	}
 
 	// bind unpacked data to entities
 	sample := entities.Sample{
-		ID:       id,
-		Name:     sampleUnpacker.Name,
-		Password: sampleUnpacker.Password,
+		ID:       int(id),
+		Name:     su.Name,
+		Password: su.Password,
 	}
 
 	// edit

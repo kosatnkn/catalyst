@@ -1,6 +1,9 @@
 package response
 
-import "github.com/kosatnkn/catalyst/v2/channels/http/response/mappers"
+import (
+	"github.com/kosatnkn/catalyst/v2/channels/http/response/mappers"
+	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
+)
 
 // mapData wraps payload in a standard response payload object.
 func mapData(data []interface{}) (m mappers.Payload) {
@@ -8,6 +11,8 @@ func mapData(data []interface{}) (m mappers.Payload) {
 	for _, v := range data {
 
 		switch v.(type) {
+		case transformers.PaginatorTransformer:
+			m.Paginator = v
 		default:
 			m.Data = v
 		}

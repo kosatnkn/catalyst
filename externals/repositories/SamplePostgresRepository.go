@@ -2,34 +2,59 @@ package repositories
 
 import (
 	"context"
+	"reflect"
 
 	"github.com/kosatnkn/catalyst/v2/app/adapters"
 	"github.com/kosatnkn/catalyst/v2/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/v2/domain/entities"
+	"github.com/kosatnkn/catalyst/v2/externals/repositories/errors"
+	"github.com/kosatnkn/req"
+	"github.com/kosatnkn/req/filter"
+	"github.com/kosatnkn/req/paginator"
 )
 
 // SamplePostgresRepository is an example repository that implements test database functionality.
 type SamplePostgresRepository struct {
 	db adapters.DBAdapterInterface
+	*filter.FilterRepositoryFacilitator
+	*paginator.PaginatorRepositoryFacilitator
 }
 
 // NewSamplePostgresRepository creates a new instance of the repository.
 func NewSamplePostgresRepository(dbAdapter adapters.DBAdapterInterface) repositories.SampleRepositoryInterface {
 
-	return &SamplePostgresRepository{db: dbAdapter}
+	// Filter mappings are used to establish the connection between the filter and the underlying
+	// table field. In addition to that an operator can be optionally assigned for the filter.
+	// When an operator is not specified the mapping defaults to `equal` operator.
+	filterMap := map[string][]string{
+		"NameContain": {"S.name", req.SelectLike},
+	}
+
+	return &SamplePostgresRepository{
+		db:                             dbAdapter,
+		FilterRepositoryFacilitator:    filter.NewFilterRepositoryFacilitator(req.DBPostgres, filterMap),
+		PaginatorRepositoryFacilitator: paginator.NewPaginatorRepositoryFacilitator(req.DBPostgres),
+	}
 }
 
 // Get retrieves a collection of Samples.
-func (repo *SamplePostgresRepository) Get(ctx context.Context) ([]entities.Sample, error) {
+func (repo *SamplePostgresRepository) Get(ctx context.Context, fts []filter.Filter, pgn paginator.Paginator) ([]entities.Sample, error) {
 
 	query := `SELECT "id", "name", "password"
 				FROM test.sample`
 
-	parameters := map[string]interface{}{}
-
-	result, err := repo.db.Query(ctx, query, parameters)
+	// add filters to query
+	query, params, err := repo.WithFilters(query, fts)
 	if err != nil {
-		return nil, err
+		return nil, errors.ErrQuery(err)
+	}
+
+	// add pagination
+	query = repo.WithPagination(query, pgn)
+
+	result, err := repo.db.Query(ctx, query, params)
+	if err != nil {
+		return nil, errors.ErrQuery(err)
 	}
 
 	return repo.mapResult(result)
@@ -149,4 +174,44 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 	}
 
 	return samples, nil
+}
+
+// fallbackToNil returns nil if the value provided is the zero value of that type.
+//
+// Using 'nil' instead of zero values of types ensures that a 'NULL' is inserted to the db field.
+// This is helpful when a field of a table is set to have a 'NULL' value when a value is not assigned to it.
+func (repo *SamplePostgresRepository) fallbackToNil(val interface{}) interface{} {
+
+	v := reflect.ValueOf(val)
+
+	if v.IsZero() {
+		return nil
+	}
+
+	return val
+}
+
+// convertToBool convert integer values to boolean.
+func (repo *SamplePostgresRepository) convertToBool(v int64) bool {
+	return v != 0
+}
+
+// getInsertID returns the id for the inserted record.
+func (repo *SamplePostgresRepository) getInsertID(d []map[string]interface{}) int64 {
+
+	if len(d) == 0 {
+		return 0
+	}
+
+	return d[0]["last_insert_id"].(int64)
+}
+
+// getInsertID returns the id for the inserted record.
+func (repo *SamplePostgresRepository) getAffectedRows(d []map[string]interface{}) int64 {
+
+	if len(d) == 0 {
+		return 0
+	}
+
+	return d[0]["affected_rows"].(int64)
 }

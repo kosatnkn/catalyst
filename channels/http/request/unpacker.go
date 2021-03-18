@@ -2,7 +2,6 @@ package request
 
 import (
 	"encoding/json"
-	"net/http"
 	"regexp"
 
 	"fmt"
@@ -12,9 +11,9 @@ import (
 )
 
 // Unpack the request in to the given unpacker struct.
-func Unpack(r *http.Request, unpacker unpackers.UnpackerInterface) error {
+func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
 
-	err := json.NewDecoder(r.Body).Decode(unpacker)
+	err := json.Unmarshal(data, unpacker)
 
 	if err != nil {
 		return errors.NewUnpackerError("", formatUnpackerMessage(unpacker.RequiredFormat()))
