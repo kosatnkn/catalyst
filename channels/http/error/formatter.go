@@ -1,7 +1,6 @@
 package error
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -21,11 +20,10 @@ func formatUnknownError(err error) transformers.ErrorTransformer {
 func formatGenericError(err error) transformers.ErrorTransformer {
 
 	details := strings.Split(err.Error(), "|")
-	code, _ := strconv.Atoi(details[1])
 
 	return transformers.ErrorTransformer{
 		Type: details[0],
-		Code: code,
+		Code: details[1],
 		Msg:  details[2],
 	}
 }

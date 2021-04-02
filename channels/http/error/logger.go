@@ -10,14 +10,19 @@ import (
 // logError logs the error with trace.
 func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) {
 
+	log.Error(ctx, formatForLog(err.Error()))
+	logTrace(ctx, log, err)
+}
+
+// logTrace logs the error race.
+func logTrace(ctx context.Context, log adapters.LogAdapterInterface, err error) {
+
 	trace := []string{
-		err.Error(), // add the last error of the error chain
+		err.Error(), // add the top most error of the error chain
 	}
 
 	// unwrap error in a loop to get previous errors in the chain
-	// limit unwraping depth to 5
-	for i := 0; i < 5; i++ {
-
+	for {
 		err = errors.Unwrap(err)
 		if err == nil {
 			break
@@ -31,5 +36,5 @@ func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) 
 		return
 	}
 
-	log.Error(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
+	log.Debug(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
 }
