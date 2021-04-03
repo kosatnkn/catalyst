@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"time"
@@ -24,11 +25,15 @@ func main() {
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
+	fmt.Println("Service starting...")
+
 	// start the server to handle http requests
 	srv := httpServer.Run(cfg.App, ctr)
 
 	// start the server to expose application metrics
 	metricsServer.Run(cfg.App, ctr)
+
+	fmt.Println("Ready")
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
@@ -40,6 +45,9 @@ func main() {
 	// block until a registered signal is received
 	<-c
 
+	// Shutdown in the reverse order of initialization.
+	fmt.Println("\nService stopping...")
+
 	// create a deadline to wait for
 	var wait time.Duration
 
@@ -48,11 +56,13 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 
+	// gracefully stop the http server
+	httpServer.Stop(ctx, srv)
+
 	// release resources
 	ctr.Destruct()
 
-	// gracefully stop the http server
-	httpServer.Stop(ctx, srv)
+	fmt.Println("Done")
 
 	os.Exit(0)
 }

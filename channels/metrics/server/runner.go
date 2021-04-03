@@ -33,9 +33,9 @@ func Run(cfg config.AppConfig, ctr *container.Container) {
 		err := http.ListenAndServe(address, nil)
 		if err != nil {
 			log.Println(err)
-			panic("Metric server error...")
+			panic("Metrics server shutting down unexpectedly...")
 		}
 	}()
 
-	fmt.Println(fmt.Sprintf("Exposing metrics on %s%s ...", address, cfg.Metrics.Route))
+	fmt.Printf("Metrics server exposing metrics on %s%s ...\n", address, cfg.Metrics.Route)
 }

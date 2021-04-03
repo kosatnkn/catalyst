@@ -37,12 +37,11 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 		err := srv.ListenAndServe()
 		if err != nil {
 			log.Println(err)
-			panic("Service shutting down unexpectedly...")
+			panic("HTTP server shutting down unexpectedly...")
 		}
 	}()
 
-	fmt.Println("Service started...")
-	fmt.Println(fmt.Sprintf("Listening on %v ...", srv.Addr))
+	fmt.Printf("HTTP server listening on %v ...\n", srv.Addr)
 
 	return srv
 }
@@ -50,7 +49,7 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 // Stop stops the server.
 func Stop(ctx context.Context, srv *http.Server) {
 
-	fmt.Println("Service shutting down...")
+	fmt.Println("HTTP server shutting down...")
 
 	srv.Shutdown(ctx)
 }
