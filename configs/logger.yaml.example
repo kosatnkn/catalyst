@@ -1,12 +1,13 @@
 # Logger Configurations
 
 # log level
-# available options
-#  - ERROR (default)
-#  - DEBUG
-#  - INFO
-#  - WARN
-level: "ERROR"
+#
+# Available log levels and their granularity are as follows.
+#  ERROR: log messages with log level 'ERROR' (default)
+#  WARN:  log messages with log level 'ERROR' and 'WARN'
+#  DEBUG: log messages with log level 'ERROR', 'WARN' and 'DEBUG'
+#  INFO:  log messages with log level 'ERROR', 'WARN', 'DEBUG' and 'INFO'
+level: "INFO"
 
 # enable logging colors
 colors: true
