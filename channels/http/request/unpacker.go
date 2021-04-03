@@ -16,7 +16,7 @@ func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
 	err := json.Unmarshal(data, unpacker)
 
 	if err != nil {
-		return errors.NewUnpackerError("", formatUnpackerMessage(unpacker.RequiredFormat()))
+		return errors.NewUnpackerError("", formatUnpackerMessage(unpacker.RequiredFormat()), nil)
 	}
 
 	return nil

@@ -35,10 +35,10 @@ func (t *PaginatorTransformer) TransformAsObject(data interface{}) (_ interface{
 // TransformAsCollection map data to a collection of transformer objects.
 func (t *PaginatorTransformer) TransformAsCollection(data interface{}) (_ interface{}, err error) {
 
-	return nil, errors.NewTransformerError("", "Cannot transform paginator as a collection")
+	return nil, errors.NewTransformerError("", "Cannot transform paginator as a collection", nil)
 }
 
 // dataMismatchError returns a data mismatch error of TransformerError type.
 func (t *PaginatorTransformer) dataMismatchError() error {
-	return errors.NewTransformerError("", "Cannot map given data to PaginatorTransformer")
+	return errors.NewTransformerError("", "Cannot map given data to PaginatorTransformer", nil)
 }
