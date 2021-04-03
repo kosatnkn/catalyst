@@ -85,8 +85,14 @@ func formatKey(k string) string {
 // formatLogTrace formats tracing information for logging.
 func formatLogTrace(trace []string) (t string) {
 
-	for _, msg := range trace {
-		t += " >> " + formatForLog(msg)
+	for i, msg := range trace {
+
+		if i == 0 {
+			t = formatForLog(msg)
+			continue
+		}
+
+		t += ", " + formatForLog(msg)
 	}
 
 	return t
