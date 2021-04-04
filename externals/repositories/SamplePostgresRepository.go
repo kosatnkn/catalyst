@@ -96,8 +96,7 @@ func (repo *SamplePostgresRepository) Add(ctx context.Context, sample entities.S
 
 	query := `INSERT INTO test.sample
 				("name", "password")
-				VALUES(?name, ?password)
-				`
+				VALUES(?name, ?password)`
 
 	parameters := map[string]interface{}{
 		"name":     sample.Name,
@@ -117,8 +116,7 @@ func (repo *SamplePostgresRepository) Edit(ctx context.Context, sample entities.
 
 	query := `UPDATE test.sample
 				SET "name"=?name, "password"=?password
-				WHERE "id"=?id
-				`
+				WHERE "id"=?id`
 
 	parameters := map[string]interface{}{
 		"id":       sample.ID,
@@ -138,8 +136,7 @@ func (repo *SamplePostgresRepository) Edit(ctx context.Context, sample entities.
 func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error {
 
 	query := `DELETE FROM test.sample
-				WHERE "id"=?id
-				`
+				WHERE "id"=?id`
 
 	parameters := map[string]interface{}{
 		"id": id,
@@ -192,26 +189,26 @@ func (repo *SamplePostgresRepository) fallbackToNil(val interface{}) interface{}
 }
 
 // convertToBool convert integer values to boolean.
-func (repo *SamplePostgresRepository) convertToBool(v int64) bool {
-	return v != 0
+func (repo *SamplePostgresRepository) convertToBool(val int64) bool {
+	return val != 0
 }
 
 // getInsertID returns the id for the inserted record.
-func (repo *SamplePostgresRepository) getInsertID(d []map[string]interface{}) int64 {
+func (repo *SamplePostgresRepository) getInsertID(data []map[string]interface{}) int64 {
 
-	if len(d) == 0 {
+	if len(data) == 0 {
 		return 0
 	}
 
-	return d[0]["last_insert_id"].(int64)
+	return data[0]["last_insert_id"].(int64)
 }
 
 // getInsertID returns the id for the inserted record.
-func (repo *SamplePostgresRepository) getAffectedRows(d []map[string]interface{}) int64 {
+func (repo *SamplePostgresRepository) getAffectedRows(data []map[string]interface{}) int64 {
 
-	if len(d) == 0 {
+	if len(data) == 0 {
 		return 0
 	}
 
-	return d[0]["affected_rows"].(int64)
+	return data[0]["affected_rows"].(int64)
 }
