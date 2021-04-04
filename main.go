@@ -28,10 +28,10 @@ func main() {
 	fmt.Println("Service starting...")
 
 	// start the server to handle http requests
-	srv := httpServer.Run(cfg.App, ctr)
+	hsrv := httpServer.Run(cfg.App, ctr)
 
 	// start the server to expose application metrics
-	metricsServer.Run(cfg.App, ctr)
+	msrv := metricsServer.Run(cfg.App, ctr)
 
 	fmt.Println("Ready")
 
@@ -57,7 +57,10 @@ func main() {
 	defer cancel()
 
 	// gracefully stop the http server
-	httpServer.Stop(ctx, srv)
+	httpServer.Stop(ctx, hsrv)
+
+	// gracefully stop metrics server
+	metricsServer.Stop(ctx, msrv)
 
 	// release resources
 	ctr.Destruct()

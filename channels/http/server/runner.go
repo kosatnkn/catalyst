@@ -27,13 +27,12 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
 
-		// pass our instance of gorilla/mux in
+		// pass the instance of gorilla/mux in
 		Handler: r,
 	}
 
-	// run our server in a goroutine so that it doesn't block
+	// run the server in a goroutine so that it doesn't block
 	go func() {
-
 		err := srv.ListenAndServe()
 		if err != nil {
 			log.Println(err)
