@@ -14,7 +14,6 @@ type Sample struct {
 
 // NewSample creates a new instance of sample usecase.
 func NewSample(ctr *container.Container) *Sample {
-
 	return &Sample{
 		db:               ctr.Adapters.DB,
 		sampleRepository: ctr.Repositories.SampleRepository,

@@ -15,18 +15,12 @@ type BaseError struct {
 
 // NewBaseError creates a new BaseError instance.
 func NewBaseError(typ, code, msg string, cause error) *BaseError {
-
-	e := &BaseError{
+	return &BaseError{
 		typ:  typ,
 		code: code,
 		msg:  msg,
+		err:  cause,
 	}
-
-	if cause != nil {
-		e.err = cause
-	}
-
-	return e
 }
 
 // Error returns the error message.

@@ -30,7 +30,6 @@ func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, er
 	}
 
 	return tr, nil
-
 }
 
 // TransformAsCollection map data to a collection of transformer objects.

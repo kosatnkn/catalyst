@@ -12,7 +12,6 @@ import (
 
 // Send sets all required fields and write the response.
 func Send(w http.ResponseWriter, code int, payload []interface{}) {
-
 	write(w, code, mapData(payload))
 }
 

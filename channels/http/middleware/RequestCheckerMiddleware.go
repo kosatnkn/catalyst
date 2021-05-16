@@ -17,7 +17,6 @@ type RequestCheckerMiddleware struct {
 
 // NewRequestCheckerMiddleware returns a new instance of RequestCheckerMiddleware.
 func NewRequestCheckerMiddleware(ctr *container.Container) *RequestCheckerMiddleware {
-
 	return &RequestCheckerMiddleware{
 		container: ctr,
 		omittedRoutes: []string{
@@ -36,7 +35,6 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 
 		// skip omitted routes
 		for _, v := range m.omittedRoutes {
-
 			if v == requestURI {
 				next.ServeHTTP(w, r)
 				return
@@ -45,8 +43,10 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 
 		// check content type
 		if contentType != "application/json" {
-
-			err := errors.NewMiddlewareError("100", fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType), nil)
+			err := errors.NewMiddlewareError("100",
+				fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType),
+				nil,
+			)
 
 			response.Error(r.Context(), w, m.container.Adapters.Log, err)
 

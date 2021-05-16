@@ -9,7 +9,6 @@ import (
 
 // formatUnknownError formats errors of unknown error types.
 func formatUnknownError(err error) transformers.ErrorTransformer {
-
 	return transformers.ErrorTransformer{
 		Type: "Unknown Error",
 		Msg:  err.Error(),
@@ -46,7 +45,6 @@ func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
 //
 // These are errors thrown when field wise validations of the data structure fails.
 func formatValidatorErrors(p map[string]string) transformers.ValidationErrorTransformer {
-
 	return transformers.ValidationErrorTransformer{
 		Type: "Validation Errors",
 		Msg:  formatValidationPayload(p),
@@ -59,7 +57,6 @@ func formatValidationPayload(p map[string]string) map[string]string {
 	ep := make(map[string]string)
 
 	for k, v := range p {
-
 		ek := formatKey(k)
 		ep[ek] = v
 	}
@@ -86,7 +83,6 @@ func formatKey(k string) string {
 func formatLogTrace(trace []string) (t string) {
 
 	for i, msg := range trace {
-
 		if i == 0 {
 			t = formatForLog(msg)
 			continue

@@ -9,7 +9,6 @@ type UnpackerError struct {
 
 // NewUnpackerError creates a new UnpackerError instance.
 func NewUnpackerError(code, msg string, cause error) error {
-
 	return &UnpackerError{
 		BaseError: e.NewBaseError("UnpackerError", code, msg, cause),
 	}

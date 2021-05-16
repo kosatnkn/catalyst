@@ -15,7 +15,6 @@ func NewPaginatorUnpacker() *PaginatorUnpacker {
 
 // RequiredFormat returns the applicable JSON format for the address data structure.
 func (u *PaginatorUnpacker) RequiredFormat() string {
-
 	return `{
 		"page": "<integer, required, min=1>",
 		"size": "<integer, required, min=1, max=100>"

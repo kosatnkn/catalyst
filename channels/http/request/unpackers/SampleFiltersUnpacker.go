@@ -14,7 +14,6 @@ func NewSampleFiltersUnpacker() *SampleFiltersUnpacker {
 
 // RequiredFormat returns the applicable JSON format for the school data structure.
 func (u *SampleFiltersUnpacker) RequiredFormat() string {
-
 	return `{
 		"name_contain": "<string, optional>"
 	}`

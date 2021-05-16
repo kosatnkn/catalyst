@@ -49,7 +49,6 @@ func (m *MetricsMiddleware) generalizePath(path string) string {
 	routeParts := strings.Split(path, "/")
 
 	for i, routePart := range routeParts {
-
 		_, errInt := strconv.ParseInt(routePart, 10, 64)
 		if errInt == nil {
 			routeParts[i] = "id"

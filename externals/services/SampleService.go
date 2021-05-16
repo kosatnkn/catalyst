@@ -12,7 +12,6 @@ type SampleService struct {
 
 // NewSampleService creates a new instance of the service
 func NewSampleService(cfg config.ServiceConfig) services.SampleServiceInterface {
-
 	return &SampleService{cfg: cfg}
 }
 

@@ -26,7 +26,6 @@ type Controller struct {
 
 // NewController creates a new instance of the controller.
 func NewController(c *container.Container) *Controller {
-
 	return &Controller{
 		logger:                         c.Adapters.Log,
 		validator:                      c.Adapters.Validator,
@@ -37,13 +36,11 @@ func NewController(c *container.Container) *Controller {
 
 // withTrace adds an optional tracing string that will be displayed in error messages.
 func (ctl *Controller) withTrace(ctx context.Context, point string) context.Context {
-
 	return ctl.logger.AppendTracePoint(ctx, point)
 }
 
 // getRouteVariable returns the value of the route variable denoted by the name.
 func (ctl *Controller) getRouteVariable(r *http.Request, name string) string {
-
 	return mux.Vars(r)[name]
 }
 
@@ -134,7 +131,6 @@ func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface
 // transform is a convenience function wrapping the actual `response.Transform` function
 // to provide a cleaner usage interface.
 func (ctl *Controller) transform(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
-
 	return response.Transform(data, t, isCollection)
 }
 
@@ -153,6 +149,5 @@ func (ctl *Controller) sendResponse(ctx context.Context, w http.ResponseWriter, 
 // sendError is a convenience function wrapping the actual `response.Error` function
 // to provide a cleaner usage interface.
 func (ctl *Controller) sendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
-
 	response.Error(ctx, w, ctl.logger, err)
 }

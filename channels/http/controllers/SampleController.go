@@ -20,7 +20,6 @@ type SampleController struct {
 
 // NewSampleController creates a new instance of the controller.
 func NewSampleController(c *container.Container) *SampleController {
-
 	return &SampleController{
 		Controller:    NewController(c),
 		sampleUseCase: sample.NewSample(c),
