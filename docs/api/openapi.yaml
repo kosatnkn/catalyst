@@ -3,8 +3,8 @@ openapi: 3.0.0
 info:
   title: Catalyst
   description: >
-    Go clean architecture RESTful API
-  version: v2.4.0
+    A REST API base written in Golang
+  version: v2.5.1
 
 servers:
   - url: http://localhost:3000/api
