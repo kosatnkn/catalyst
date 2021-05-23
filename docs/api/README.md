@@ -1,29 +1,16 @@
-## Mock
+# Mock
 
-### Using APISprout
-[https://github.com/danielgtaylor/apisprout](https://github.com/danielgtaylor/apisprout)
+## Using Stoplight Prism
+- [Documentation](https://meta.stoplight.io/docs/prism/README.md)
+- [Installation](https://meta.stoplight.io/docs/prism/docs/getting-started/01-installation.md)
+- [GitHub Repo](https://github.com/stoplightio/prism)
 
 **Linux**
 ```bash
-docker run --name catalyst_mock -it --rm -p 3000:8000 -e "SPROUT_VALIDATE_REQUEST=1" -v $PWD/docs/api/openapi.yaml:/api.yaml danielgtaylor/apisprout /api.yaml
+docker run --init --name catalyst_mock -it --rm -v $PWD/docs/api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
 ```
 
 **Windows**
 ```bash
-docker run --name catalyst_mock -it --rm -p 3000:8000 -e "SPROUT_VALIDATE_REQUEST=1" -v %cd%\\docs\\api\\openapi.yaml:/api.yaml danielgtaylor/apisprout /api.yaml
-```
-
-### Using OpenAPI-Mock
-[https://github.com/muonsoft/openapi-mock](https://github.com/muonsoft/openapi-mock)
-
->**NOTE:** This is not working as expected at the moment.
-
-**Linux**
-```bash
-docker run --name catalyst_mock -it --rm -p 3000:8080 -v $PWD/docs/api/openapi.yaml:/openapi/openapi.yaml -e "OPENAPI_MOCK_SPECIFICATION_URL=/openapi/openapi.yaml" muonsoft/openapi-mock
-```
-
-**Windows**
-```bash
-docker run --name catalyst_mock -it --rm -p 3000:8080 -v %cd%\\docs\\api\\openapi.yaml:/openapi/openapi.yaml -e "OPENAPI_MOCK_SPECIFICATION_URL=/openapi/openapi.yaml" muonsoft/openapi-mock
+docker run --init --name catalyst_mock -it --rm -v %cd%\\docs\\api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
 ```
