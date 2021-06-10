@@ -26,6 +26,9 @@ func NewSamplePostgresRepository(dbAdapter adapters.DBAdapterInterface) reposito
 	// Filter mappings are used to establish the connection between the filter and the underlying
 	// table field. In addition to that an operator can be optionally assigned for the filter.
 	// When an operator is not specified the mapping defaults to `equal` operator.
+	//
+	// In order for a filter to be assigned the value of `filter.Filter.Name` should match with
+	// one of the keys in the `filterMap`.
 	filterMap := map[string][]string{
 		"NameContain": {"S.name", req.SelectLike},
 	}
