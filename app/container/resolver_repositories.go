@@ -8,7 +8,6 @@ import (
 func resolveRepositories(ats *Adapters) Repositories {
 
 	rts := Repositories{}
-
 	rts.SampleRepository = repositories.NewSampleMySQLRepository(ats.DB)
 
 	return rts

@@ -28,7 +28,6 @@ func Parse(cfgDir string) *Config {
 func parseAppConfig(dir string) AppConfig {
 
 	cfg := AppConfig{}
-
 	parseConfig(dir+"app.yaml", &cfg)
 
 	return cfg
@@ -38,7 +37,6 @@ func parseAppConfig(dir string) AppConfig {
 func parseLogConfig(dir string) log.Config {
 
 	cfg := log.Config{}
-
 	parseConfig(dir+"logger.yaml", &cfg)
 
 	return cfg
@@ -48,7 +46,6 @@ func parseLogConfig(dir string) log.Config {
 func parseDBConfig(dir string) mysql.Config {
 
 	cfg := mysql.Config{}
-
 	parseConfig(dir+"database.yaml", &cfg)
 
 	return cfg
@@ -58,7 +55,6 @@ func parseDBConfig(dir string) mysql.Config {
 func parseServicesConfig(dir string) []ServiceConfig {
 
 	cfgs := []ServiceConfig{}
-
 	parseConfig(dir+"services.yaml", &cfgs)
 
 	return cfgs
@@ -81,9 +77,7 @@ func getConfigDir(dir string) string {
 
 	// get last char of dir path
 	c := dir[len(dir)-1]
-
 	if os.IsPathSeparator(c) {
-
 		return dir
 	}
 

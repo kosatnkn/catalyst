@@ -11,7 +11,6 @@ import (
 func resolveServices(cfgs []config.ServiceConfig) Services {
 
 	svs := Services{}
-
 	svs.SampleService = services.NewSampleService(getServiceConfig(cfgs, "sample"))
 
 	return svs

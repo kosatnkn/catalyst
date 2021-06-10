@@ -14,7 +14,6 @@ import (
 func resolveAdapters(cfg *config.Config) Adapters {
 
 	ats := Adapters{}
-
 	ats.DB = resolveDBAdapter(cfg.DB)
 	ats.Log = resolveLogAdapter(cfg.Log)
 	ats.Validator = resolveValidatorAdapter()

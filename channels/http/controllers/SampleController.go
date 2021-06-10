@@ -29,21 +29,18 @@ func NewSampleController(c *container.Container) *SampleController {
 // Get handles retreiving a list of samples.
 func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 
-	// get the context
-	ctx := r.Context()
-
-	// add a trace string to the context
-	ctx = ctl.withTrace(ctx, "SampleController.Get")
+	// add a trace string to the request context
+	ctx := ctl.withTrace(r.Context(), "SampleController.Get")
 
 	// get filters from query params
-	filters, err := ctl.getFilters(r, unpackers.NewSampleFiltersUnpacker())
+	filters, err := ctl.filters(r, unpackers.NewSampleFiltersUnpacker())
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
 	}
 
 	// get paginator from query paramaters
-	paginator, err := ctl.getPaginator(r)
+	paginator, err := ctl.paginator(r)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
 		return
@@ -77,15 +74,11 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 // GetByID handles retreiving a single sample.
 func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 
-	// get the context
-	ctx := r.Context()
-
-	// add a trace string to the context
-	ctx = ctl.withTrace(ctx, "SampleController.GetByID")
+	// add a trace string to the request context
+	ctx := ctl.withTrace(r.Context(), "SampleController.GetByID")
 
 	// get id from request
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	id, _ := strconv.Atoi(ctl.routeVar(r, "id"))
 
 	// validate
 	errs := ctl.validator.ValidateField(id, "required,gt=0")
@@ -115,11 +108,8 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 // Add adds a new sample entry.
 func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 
-	// get the context
-	ctx := r.Context()
-
-	// add a trace string to the context
-	ctx = ctl.withTrace(ctx, "SampleController.Add")
+	// add a trace string to the request context
+	ctx := ctl.withTrace(r.Context(), "SampleController.Add")
 
 	// unpack request
 	su := unpackers.NewSampleUnpacker()
@@ -152,14 +142,11 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 // Edit updates an existing sample entry.
 func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 
-	// get the context
-	ctx := r.Context()
-
-	// add a trace string to the context
-	ctx = ctl.withTrace(ctx, "SampleController.Edit")
+	// add a trace string to the request context
+	ctx := ctl.withTrace(r.Context(), "SampleController.Edit")
 
 	// get id from request
-	id, _ := strconv.ParseUint(ctl.getRouteVariable(r, "id"), 10, 64)
+	id, _ := strconv.ParseUint(ctl.routeVar(r, "id"), 10, 64)
 
 	// validate request parameters
 	errs := ctl.validator.ValidateField(id, "required,gt=0")
@@ -197,11 +184,8 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 // Delete deletes an existing sample entry.
 func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 
-	// get the context
-	ctx := r.Context()
-
-	// add a trace string to the context
-	ctx = ctl.withTrace(ctx, "SampleController.Delete")
+	// add a trace string to the request context
+	ctx := ctl.withTrace(r.Context(), "SampleController.Delete")
 
 	// get id from request
 	vars := mux.Vars(r)

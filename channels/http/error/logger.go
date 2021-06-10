@@ -10,13 +10,6 @@ import (
 // logError logs the error with trace.
 func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) {
 
-	log.Error(ctx, formatForLog(err.Error()))
-	logTrace(ctx, log, err)
-}
-
-// logTrace logs the error race.
-func logTrace(ctx context.Context, log adapters.LogAdapterInterface, err error) {
-
 	trace := []string{
 		err.Error(), // add the top most error of the error chain
 	}
@@ -36,5 +29,8 @@ func logTrace(ctx context.Context, log adapters.LogAdapterInterface, err error) 
 		return
 	}
 
+	// when error has an embedded error chain log the error chan as a trace
+	// debug mode is used to log the error trace so that the trace will be printed only when
+	// the application is running in the debug mode.
 	log.Debug(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
 }

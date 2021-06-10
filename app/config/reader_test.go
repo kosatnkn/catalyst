@@ -16,7 +16,6 @@ func TestRead(t *testing.T) {
 	// check
 	need := "[]uint8"
 	got := reflect.TypeOf(c).String()
-
 	if got != need {
 		t.Errorf("Required %v, got %v", need, got)
 	}

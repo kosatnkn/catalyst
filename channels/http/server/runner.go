@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -35,7 +34,7 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 	go func() {
 		err := srv.ListenAndServe()
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			panic("HTTP server shutting down unexpectedly...")
 		}
 	}()

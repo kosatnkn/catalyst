@@ -14,7 +14,6 @@ import (
 func Resolve(cfg *config.Config) *Container {
 
 	ctr := Container{}
-
 	ctr.Adapters = resolveAdapters(cfg)
 	ctr.Repositories = resolveRepositories(&ctr.Adapters)
 	ctr.Services = resolveServices(cfg.Services)

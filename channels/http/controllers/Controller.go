@@ -39,20 +39,19 @@ func (ctl *Controller) withTrace(ctx context.Context, point string) context.Cont
 	return ctl.logger.AppendTracePoint(ctx, point)
 }
 
-// getRouteVariable returns the value of the route variable denoted by the name.
-func (ctl *Controller) getRouteVariable(r *http.Request, name string) string {
+// routeVar returns the value of the route variable denoted by the name.
+func (ctl *Controller) routeVar(r *http.Request, name string) string {
 	return mux.Vars(r)[name]
 }
 
-// getFilters extracts filters from query parameters.
-func (ctl *Controller) getFilters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
-
-	// get paginator from query params
-	fts := r.URL.Query()["filters"]
+// filters extracts filters from query parameters.
+func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
 
 	// create empty filters slice
 	filters := make([]filter.Filter, 0)
 
+	// get paginator from query params
+	fts := r.URL.Query()["filters"]
 	if len(fts) == 0 {
 		return filters, nil
 	}
@@ -72,15 +71,14 @@ func (ctl *Controller) getFilters(r *http.Request, fu unpackers.UnpackerInterfac
 	return ctl.GetFilters(fu)
 }
 
-// getPaginator extracts pagination data from query parameters
-func (ctl *Controller) getPaginator(r *http.Request) (paginator.Paginator, interface{}) {
-
-	// get paginator from query params
-	pgn := r.URL.Query()["paginator"]
+// paginator extracts pagination data from query parameters
+func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interface{}) {
 
 	// create default paginator
 	paginator := ctl.GetPaginator(1, 10)
 
+	// get paginator from query params
+	pgn := r.URL.Query()["paginator"]
 	if len(pgn) == 0 {
 		return paginator, nil
 	}

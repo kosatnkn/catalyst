@@ -49,7 +49,6 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 			)
 
 			response.Error(r.Context(), w, m.container.Adapters.Log, err)
-
 			return
 		}
 

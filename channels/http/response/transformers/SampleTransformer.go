@@ -47,7 +47,6 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 	}
 
 	for _, sample := range samples {
-
 		tr, err := t.TransformAsObject(sample)
 		if err != nil {
 			return nil, err

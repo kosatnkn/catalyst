@@ -18,7 +18,6 @@ func TestParse(t *testing.T) {
 	// check
 	need := reflect.TypeOf(&Config{})
 	got := reflect.TypeOf(c)
-
 	if got != need {
 		t.Errorf("Required %v, got %v", need, got)
 	}
@@ -51,7 +50,6 @@ func TestGetConfigDirTailing(t *testing.T) {
 
 	// check
 	need := pathTailing
-
 	if need != got {
 		t.Errorf("Required %v, got %v", need, got)
 	}
@@ -69,7 +67,6 @@ func TestGetConfigDirNoTailing(t *testing.T) {
 
 	// check
 	need := pathTailing
-
 	if need != got {
 		t.Errorf("Required %v, got %v", need, got)
 	}

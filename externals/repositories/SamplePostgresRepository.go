@@ -83,7 +83,6 @@ func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (enti
 	if err != nil {
 		return entities.Sample{}, errors.ErrQuery(err)
 	}
-
 	if len(mapped) == 0 {
 		return entities.Sample{}, nil
 	}
@@ -163,7 +162,6 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 	}()
 
 	for _, row := range result {
-
 		samples = append(samples, entities.Sample{
 			ID:   int(row["id"].(int64)),
 			Name: string(row["name"].([]byte)),
@@ -180,7 +178,6 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 func (repo *SamplePostgresRepository) fallbackToNil(val interface{}) interface{} {
 
 	v := reflect.ValueOf(val)
-
 	if v.IsZero() {
 		return nil
 	}
