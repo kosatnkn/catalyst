@@ -22,15 +22,11 @@ func Error(ctx context.Context, w http.ResponseWriter, log adapters.LogAdapterIn
 	var code int = http.StatusInternalServerError
 
 	// check whether err is a general error or a validation error
-	errG, isG := err.(error)
-	errV, isV := err.(map[string]string)
-
-	if isG {
-		msg, code = errHandler.Handle(ctx, errG, log)
-	}
-
-	if isV {
-		msg, code = errHandler.HandleValidatorErrors(ctx, errV, log)
+	switch e := err.(type) {
+	case error:
+		msg, code = errHandler.Handle(ctx, e, log)
+	case map[string]string:
+		msg, code = errHandler.HandleValidatorErrors(ctx, e, log)
 	}
 
 	write(w, code, mapErr(msg))
