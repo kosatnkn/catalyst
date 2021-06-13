@@ -24,13 +24,12 @@ func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) 
 		trace = append(trace, err.Error())
 	}
 
-	if len(trace) == 1 {
-		log.Error(ctx, formatForLog(trace[0]))
-		return
-	}
+	log.Error(ctx, formatForLog(trace[0]))
 
 	// when error has an embedded error chain log the error chan as a trace
 	// debug mode is used to log the error trace so that the trace will be printed only when
 	// the application is running in the debug mode.
-	log.Debug(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
+	if len(trace) > 1 {
+		log.Debug(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
+	}
 }
