@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kosatnkn/catalyst/v2/channels/http/metrics"
+	"github.com/kosatnkn/catalyst/v2/transport/http/metrics"
 )
 
 // MetricsMiddleware attaches metrics to the request.

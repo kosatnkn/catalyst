@@ -12,14 +12,13 @@
 // Written using the Clean Architecture paradigm it offers clean separation between
 // business (domain) logic and facilitation logic.
 //
-// In the context of `Catalyst` we use a concept called `Communication Channels` (simply channels)
-// to define ways in which you can communicate with the microservice (do not confuse these
-// with `channels` in `Go`, which is an entirely different thing).
+// In the context of `Catalyst` we use a concept called `Transport mediums` to define ways in which you can communicate
+// with the microservice.
 //
-// A `channel` in Catalyst is a package inside the `channels` directory. This package consists of
-// all the logic needed to handle communication with the outside world.
+// A package inside the `transport` directory consists of all the logic needed to handle communication with the
+// outside world using one type of transport medium.
 //
-// Out of the box, Catalyst contain two such channels.
+// Out of the box, Catalyst contain two such transport mediums.
 // - http (to handle REST web requests)
 // - metrics (to expose application metrics)
 //
@@ -65,9 +64,9 @@
 //                               |  Database  |    |   APIs  |
 //                               + ---------- +    + ------- +
 //
-// Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
+// Likewise the `metrics` transport medium exposes an endpoint to let `Prometheus` scrape application metrics.
 //
-// You can add other `communication channels` to leverage a project based on Catalyst.
+// You can add other transport mediums to leverage a project based on Catalyst.
 //
 // For an example a `stream` package can be added to communicate with a streaming platform like `Kafka`.
 // Or an `mqtt` package can be added to communicate with `IoT` devices.

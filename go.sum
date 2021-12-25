@@ -164,6 +164,7 @@ github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvW
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.3/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
+github.com/kosatnkn/catalyst v1.5.0 h1:j/1OkdYJpQyw4zQpsvvNTrsemSCByV+cmn3A4+7rfLg=
 github.com/kosatnkn/db v0.2.1 h1:R7TI6QUpppTFyuEGSz5t1ZCJOW2yNrvcYepCv/pDnkc=
 github.com/kosatnkn/db v0.2.1/go.mod h1:4EfG4H0bqWa2HauNWojnaubv6N4H/x8lJVBYKFd74so=
 github.com/kosatnkn/log v0.1.2 h1:9kkbaMxhTi/Q1Pl0QRg8gGlQIs5Z/4l+wRCDyRnaQvs=

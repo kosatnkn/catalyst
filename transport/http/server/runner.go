@@ -9,7 +9,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/v2/app/config"
 	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/channels/http/router"
+	"github.com/kosatnkn/catalyst/v2/transport/http/router"
 )
 
 // Run runs the http server.

@@ -10,8 +10,8 @@ import (
 	"github.com/kosatnkn/catalyst/v2/app/config"
 	"github.com/kosatnkn/catalyst/v2/app/container"
 	"github.com/kosatnkn/catalyst/v2/app/splash"
-	httpServer "github.com/kosatnkn/catalyst/v2/channels/http/server"
-	metricsServer "github.com/kosatnkn/catalyst/v2/channels/metrics/server"
+	httpServer "github.com/kosatnkn/catalyst/v2/transport/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/v2/transport/metrics/server"
 )
 
 func main() {

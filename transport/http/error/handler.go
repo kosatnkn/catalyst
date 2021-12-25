@@ -6,12 +6,12 @@ import (
 
 	"github.com/kosatnkn/catalyst/v2/app/adapters"
 
-	middlewareErrs "github.com/kosatnkn/catalyst/v2/channels/http/middleware/errors"
-	unpackerErrs "github.com/kosatnkn/catalyst/v2/channels/http/request/unpackers/errors"
-	transformerErrs "github.com/kosatnkn/catalyst/v2/channels/http/response/transformers/errors"
 	domainErrs "github.com/kosatnkn/catalyst/v2/domain/errors"
 	repositoryErrs "github.com/kosatnkn/catalyst/v2/externals/repositories/errors"
 	serviceErrs "github.com/kosatnkn/catalyst/v2/externals/services/errors"
+	middlewareErrs "github.com/kosatnkn/catalyst/v2/transport/http/middleware/errors"
+	unpackerErrs "github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers/errors"
+	transformerErrs "github.com/kosatnkn/catalyst/v2/transport/http/response/transformers/errors"
 )
 
 // Handle handles all errors globally.

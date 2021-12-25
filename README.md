@@ -100,19 +100,21 @@ The sample set will cover all basic CRUD operations that a REST API will normall
 
 There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
 
-## Channels
-In the context of `Catalyst` we use a concept called `Communication Channels` (simply channels) to define ways in which you can communicate with the microservice (do not confuse these with `channels` in `Go`, which is an entirely different thing).
+## 
+In the context of `Catalyst` we use a concept called `Transport mediums` to define ways in which you can communicate
+with the microservice.
 
-A `channel` in `Catalyst` is a package inside the **channels** directory. This package consists of all the logic needed to handle communication with the outside world.
+A package inside the `transport` directory consists of all the logic needed to handle communication with the
+outside world using one type of transport medium.
 
-Out of the box, `Catalyst` contain two such channels.
+Out of the box, Catalyst contain two such transport mediums.
 - `http` (to handle REST web requests)
 - `metrics` (to expose application metrics)
 
 What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
-### `http` Channel
+### `http` Transport Medium
 
-REST API is implemented in this channel.
+REST API is implemented in this package.
 
 Following is the request, response cycle executed when a request comes to a REST endpoint.
 ```text
@@ -157,15 +159,16 @@ Following is the request, response cycle executed when a request comes to a REST
                               + ---------- +    + ------- +
 ```
 
-### `metrics` Channel
+### `metrics` Transport Medium
 
-Likewise the `metrics` channel exposes an endpoint to let `Prometheus` scrape application metrics.
+Likewise the `metrics` transport medium exposes an endpoint to let `Prometheus` scrape application metrics.
 
 ### Extending the Microservice
 
-You can add other `communication channels` to leverage a project based on `Catalyst`.
+You can add other `transport mediums` to leverage a project based on `Catalyst`.
 
-For an example a `stream` package can be added to `channels` to communicate with a streaming platform like `Kafka`. Or an `mqtt` package can be added to communicate with `IoT` devices.
+For an example a `stream` package can be added to `transport` to communicate with a streaming platform like `Kafka`,
+or an `mqtt` package can be added to communicate with `IoT` devices.
 
 ## View GoDoc Locally
 ```bash
