@@ -6,10 +6,10 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/channels/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v2/channels/http/response/transformers"
 	"github.com/kosatnkn/catalyst/v2/domain/entities"
 	"github.com/kosatnkn/catalyst/v2/domain/usecases/sample"
+	"github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
 )
 
 // SampleController contains controller logic for endpoints.
