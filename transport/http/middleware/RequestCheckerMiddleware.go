@@ -27,9 +27,7 @@ func NewRequestCheckerMiddleware(ctr *container.Container) *RequestCheckerMiddle
 
 // Middleware executes middleware rules of RequestCheckerMiddleware.
 func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
-
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		requestURI := r.RequestURI
 		contentType := r.Header.Get("Content-Type")
 
@@ -49,6 +47,7 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 			)
 
 			response.Error(r.Context(), w, m.container.Adapters.Log, err)
+
 			return
 		}
 

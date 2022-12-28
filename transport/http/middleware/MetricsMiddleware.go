@@ -19,7 +19,6 @@ func NewMetricsMiddleware() *MetricsMiddleware {
 
 // Middleware executes middleware rules of MetricsMiddleware.
 func (m *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
-
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		startTime := time.Now()
@@ -45,7 +44,6 @@ func (m *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
 // '/resource/79.5' and '/resource/-5.5' will be converted to '/resource/val'
 // '/resource/123/lon/79.5/lat/5.5' will be converted to '/resource/id/lon/val/lat/val'
 func (m *MetricsMiddleware) generalizePath(path string) string {
-
 	routeParts := strings.Split(path, "/")
 
 	for i, routePart := range routeParts {

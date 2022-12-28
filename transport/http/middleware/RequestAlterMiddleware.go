@@ -22,9 +22,7 @@ func NewRequestAlterMiddleware(ctr *container.Container) *RequestAlterMiddleware
 
 // Middleware executes middleware rules of RequestAlterMiddleware.
 func (m *RequestAlterMiddleware) Middleware(next http.Handler) http.Handler {
-
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		// create and attach a uuid to the request context
 		uuid := uuid.New().String()
 

@@ -16,22 +16,17 @@ func Init(ctr *container.Container) *mux.Router {
 	// create new router
 	r := mux.NewRouter()
 
-	// initialize middleware
-	requestCheckerMiddleware := middleware.NewRequestCheckerMiddleware(ctr)
-	requestAlterMidleware := middleware.NewRequestAlterMiddleware(ctr)
-	metricsMidleware := middleware.NewMetricsMiddleware()
-
-	// add middleware to router
-	// middleware will execute in the order they are added to the router
-
+	// add middleware to the router
+	//
+	// NOTE: middleware will execute in the order they are added to the router
 	// add metrics middleware first
-	r.Use(metricsMidleware.Middleware)
-
-	// add CORS middleware
+	r.Use(middleware.NewMetricsMiddleware().Middleware)
+	// enable CORS
 	r.Use(mux.CORSMethodMiddleware(r))
-
-	r.Use(requestAlterMidleware.Middleware)
-	r.Use(requestCheckerMiddleware.Middleware)
+	r.Use(middleware.NewCORSMiddleware().Middleware)
+	// other middleware
+	r.Use(middleware.NewRequestAlterMiddleware(ctr).Middleware)
+	r.Use(middleware.NewRequestCheckerMiddleware(ctr).Middleware)
 
 	// initialize controllers
 	apiController := controllers.NewAPIController(ctr)
