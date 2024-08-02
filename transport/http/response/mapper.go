@@ -7,7 +7,6 @@ import (
 
 // mapData wraps payload in a standard response payload object.
 func mapData(data []interface{}) (m mappers.Payload) {
-
 	// map to fields using data types
 	for _, v := range data {
 		switch v.(type) {
