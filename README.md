@@ -218,7 +218,7 @@ Optional step to create a vendor directory
 ```bash
 go mod vendor
 ```
-ProjectOne
+
 ## Testing
 
 To run test and output coverage report

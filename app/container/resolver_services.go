@@ -18,7 +18,7 @@ func resolveServices(cfgs []config.ServiceConfig) Services {
 
 // getServiceConfig returns the service config by the name of the service.
 //
-// Will panic if there is no service config found for a given dervice name.
+// Will panic if there is no service config found for a given service name.
 func getServiceConfig(cfgs []config.ServiceConfig, name string) config.ServiceConfig {
 
 	for i := range cfgs {

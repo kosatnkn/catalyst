@@ -72,7 +72,7 @@ func parseConfig(file string, unpacker interface{}) {
 	}
 }
 
-// getConfigDir returns config directory path after analysing and correcting.
+// getConfigDir returns config directory path after analyzing and correcting.
 func getConfigDir(dir string) string {
 
 	// get last char of dir path
