@@ -16,7 +16,6 @@ import (
 
 // Run runs a server to exposes metrics as a separate Prometheus metric server.
 func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
-
 	if !cfg.Metrics.Enabled {
 		return nil
 	}
@@ -54,12 +53,10 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 
 // Stop stops the server.
 func Stop(ctx context.Context, srv *http.Server) {
-
 	if srv == nil {
 		return
 	}
 
 	fmt.Println("Metrics server shutting down...")
-
 	srv.Shutdown(ctx)
 }

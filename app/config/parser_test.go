@@ -8,7 +8,6 @@ import (
 )
 
 func TestParse(t *testing.T) {
-
 	// input
 	dir := "../../configs/"
 
@@ -24,7 +23,6 @@ func TestParse(t *testing.T) {
 }
 
 func TestParseInvalidDir(t *testing.T) {
-
 	// check panic
 	defer func() {
 		if r := recover(); r == nil {
@@ -40,7 +38,6 @@ func TestParseInvalidDir(t *testing.T) {
 }
 
 func TestGetConfigDirTailing(t *testing.T) {
-
 	// input
 	s := string(os.PathSeparator)
 	pathTailing := fmt.Sprintf(".%sconfig%s", s, s)
@@ -56,7 +53,6 @@ func TestGetConfigDirTailing(t *testing.T) {
 }
 
 func TestGetConfigDirNoTailing(t *testing.T) {
-
 	// input
 	s := string(os.PathSeparator)
 	pathTailing := fmt.Sprintf(".%sconfig%s", s, s)
@@ -73,7 +69,6 @@ func TestGetConfigDirNoTailing(t *testing.T) {
 }
 
 func TestParseConfigUnmatchedUnpacker(t *testing.T) {
-
 	// check panic
 	defer func() {
 		if r := recover(); r == nil {

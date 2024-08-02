@@ -10,7 +10,6 @@ import (
 
 // SampleRepositoryInterface contract to manipulate `sample` database entity
 type SampleRepositoryInterface interface {
-
 	// Get retrieves a collection of samples.
 	Get(ctx context.Context, fts []filter.Filter, pgn paginator.Paginator) ([]entities.Sample, error)
 

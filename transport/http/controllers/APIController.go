@@ -21,7 +21,6 @@ func NewAPIController(c *container.Container) *APIController {
 
 // GetInfo return basic details of the API.
 func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
-
 	// transform
 	tr := transformers.APITransformer{
 		Name:    "Catalyst",

@@ -14,7 +14,6 @@ import (
 
 // Run runs the http server.
 func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
-
 	// initialize the router
 	r := router.Init(ctr)
 
@@ -46,8 +45,6 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 
 // Stop stops the server.
 func Stop(ctx context.Context, srv *http.Server) {
-
 	fmt.Println("HTTP server shutting down...")
-
 	srv.Shutdown(ctx)
 }

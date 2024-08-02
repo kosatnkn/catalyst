@@ -12,7 +12,6 @@ import (
 
 // Unpack the request in to the given unpacker struct.
 func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
-
 	err := json.Unmarshal(data, unpacker)
 	if err != nil {
 		return errors.NewUnpackerError("", formatUnpackerMessage(unpacker.RequiredFormat()), nil)
@@ -21,10 +20,9 @@ func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
 	return nil
 }
 
-// formatUnpackerMessage removes any special chatacters from the message string.
+// formatUnpackerMessage removes any special characters from the message string.
 func formatUnpackerMessage(p string) string {
-
-	// catch carrage returns and new lines
+	// catch carriage returns and new lines
 	reNewLine := regexp.MustCompile(`[\r\n]+`)
 
 	// catch other special characters

@@ -4,7 +4,6 @@ import "context"
 
 // DBAdapterInterface is implemented by all database adapters.
 type DBAdapterInterface interface {
-
 	// Ping checks wether the database is accessible.
 	Ping() error
 

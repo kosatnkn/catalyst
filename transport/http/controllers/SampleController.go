@@ -28,7 +28,6 @@ func NewSampleController(c *container.Container) *SampleController {
 
 // Get handles retreiving a list of samples.
 func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
-
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.Get")
 
@@ -73,7 +72,6 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 
 // GetByID handles retreiving a single sample.
 func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
-
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.GetByID")
 
@@ -107,7 +105,6 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 
 // Add adds a new sample entry.
 func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
-
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.Add")
 
@@ -141,7 +138,6 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 
 // Edit updates an existing sample entry.
 func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
-
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.Edit")
 
@@ -183,7 +179,6 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 
 // Delete deletes an existing sample entry.
 func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
-
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.Delete")
 

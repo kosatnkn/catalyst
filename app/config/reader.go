@@ -2,13 +2,12 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 // Read a file from disk.
 func read(file string) []byte {
-
-	content, err := ioutil.ReadFile(file)
+	content, err := os.ReadFile(file)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}

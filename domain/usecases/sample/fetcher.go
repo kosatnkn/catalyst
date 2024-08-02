@@ -10,7 +10,6 @@ import (
 
 // Get returns a list of samples.
 func (s *Sample) Get(ctx context.Context, fts []filter.Filter, pgn paginator.Paginator) ([]entities.Sample, error) {
-
 	// get samples
 	samples, err := s.sampleRepository.Get(ctx, fts, pgn)
 	if err != nil {
@@ -22,7 +21,6 @@ func (s *Sample) Get(ctx context.Context, fts []filter.Filter, pgn paginator.Pag
 
 // GetByID returns a single sample object by id.
 func (s *Sample) GetByID(ctx context.Context, id int) (entities.Sample, error) {
-
 	// get sample
 	sample, err := s.sampleRepository.GetByID(ctx, id)
 	if err != nil {

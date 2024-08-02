@@ -18,7 +18,6 @@ func NewPaginatorTransformer() TransformerInterface {
 
 // TransformAsObject map data to a transformer object.
 func (t *PaginatorTransformer) TransformAsObject(data interface{}) (interface{}, error) {
-
 	p, ok := data.(paginator.Paginator)
 	if !ok {
 		return nil, t.dataMismatchError()

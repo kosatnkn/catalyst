@@ -17,7 +17,6 @@ func Send(w http.ResponseWriter, code int, payload []interface{}) {
 
 // Error formats and sends the error response.
 func Error(ctx context.Context, w http.ResponseWriter, log adapters.LogAdapterInterface, err interface{}) {
-
 	var msg interface{}
 	var code int = http.StatusInternalServerError
 
@@ -34,7 +33,6 @@ func Error(ctx context.Context, w http.ResponseWriter, log adapters.LogAdapterIn
 
 // toJSON converts the payload to JSON
 func toJSON(payload interface{}) []byte {
-
 	msg, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Printf("JSON Marshalling Error: %v", err)
@@ -45,7 +43,6 @@ func toJSON(payload interface{}) []byte {
 
 // write sets all required fields and write the response.
 func write(w http.ResponseWriter, code int, payload interface{}) {
-
 	// set headers
 	w.Header().Set("Content-Type", "application/json")
 

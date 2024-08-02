@@ -6,7 +6,6 @@ import (
 )
 
 func TestRead(t *testing.T) {
-
 	// input
 	file := "../../configs/app.yaml"
 
@@ -22,7 +21,6 @@ func TestRead(t *testing.T) {
 }
 
 func TestReadInvalidFile(t *testing.T) {
-
 	// check panic
 	defer func() {
 		if r := recover(); r == nil {

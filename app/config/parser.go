@@ -12,7 +12,6 @@ import (
 // Parse parses all configuration to a single Config object.
 // `cfgDir` is the path of the configuration directory.
 func Parse(cfgDir string) *Config {
-
 	// set config directory
 	dir := getConfigDir(cfgDir)
 
@@ -26,7 +25,6 @@ func Parse(cfgDir string) *Config {
 
 // parseAppConfig parses application configurations.
 func parseAppConfig(dir string) AppConfig {
-
 	cfg := AppConfig{}
 	parseConfig(dir+"app.yaml", &cfg)
 
@@ -35,7 +33,6 @@ func parseAppConfig(dir string) AppConfig {
 
 // parseLogConfig parses logger configurations.
 func parseLogConfig(dir string) log.Config {
-
 	cfg := log.Config{}
 	parseConfig(dir+"logger.yaml", &cfg)
 
@@ -44,7 +41,6 @@ func parseLogConfig(dir string) log.Config {
 
 // parseDBConfig parses database configurations.
 func parseDBConfig(dir string) mysql.Config {
-
 	cfg := mysql.Config{}
 	parseConfig(dir+"database.yaml", &cfg)
 
@@ -53,7 +49,6 @@ func parseDBConfig(dir string) mysql.Config {
 
 // parseServicesConfig parses configurations of all services
 func parseServicesConfig(dir string) []ServiceConfig {
-
 	cfgs := []ServiceConfig{}
 	parseConfig(dir+"services.yaml", &cfgs)
 
@@ -63,7 +58,6 @@ func parseServicesConfig(dir string) []ServiceConfig {
 // parseConfig reads configuration values from the given file and
 // populates the given config struct.
 func parseConfig(file string, unpacker interface{}) {
-
 	content := read(file)
 
 	err := yaml.Unmarshal(content, unpacker)
@@ -74,7 +68,6 @@ func parseConfig(file string, unpacker interface{}) {
 
 // getConfigDir returns config directory path after analyzing and correcting.
 func getConfigDir(dir string) string {
-
 	// get last char of dir path
 	c := dir[len(dir)-1]
 	if os.IsPathSeparator(c) {

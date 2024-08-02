@@ -9,7 +9,6 @@ import (
 
 // logError logs the error with trace.
 func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) {
-
 	trace := []string{
 		err.Error(), // add the top most error of the error chain
 	}

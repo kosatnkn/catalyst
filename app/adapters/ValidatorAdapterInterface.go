@@ -2,7 +2,6 @@ package adapters
 
 // ValidatorAdapterInterface is implemented by all validator adapters.
 type ValidatorAdapterInterface interface {
-
 	// Validate validates fields of a struct.
 	Validate(data interface{}) map[string]string
 

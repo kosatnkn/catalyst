@@ -46,7 +46,6 @@ func (ctl *Controller) routeVar(r *http.Request, name string) string {
 
 // filters extracts filters from query parameters.
 func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
-
 	// create empty filters slice
 	filters := make([]filter.Filter, 0)
 
@@ -73,7 +72,6 @@ func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) 
 
 // paginator extracts pagination data from query parameters
 func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interface{}) {
-
 	// create default paginator
 	paginator := ctl.GetPaginator(1, 10)
 
@@ -106,7 +104,6 @@ func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interfac
 
 // unpackBody unpacks and validates the request body.
 func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface) interface{} {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -135,7 +132,6 @@ func (ctl *Controller) transform(data interface{}, t transformers.TransformerInt
 // sendResponse is a convenience function wrapping the actual `response.Send` function
 // to provide a cleaner usage interface.
 func (ctl *Controller) sendResponse(ctx context.Context, w http.ResponseWriter, code int, payload ...interface{}) {
-
 	if len(payload) == 0 {
 		response.Send(w, code, nil)
 		return

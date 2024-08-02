@@ -15,13 +15,10 @@ import (
 )
 
 func main() {
-
 	// show splash screen when starting
 	splash.Show(splash.StyleDefault)
-
 	// parse all configurations
 	cfg := config.Parse("./configs")
-
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
@@ -29,7 +26,6 @@ func main() {
 
 	// start the server to handle http requests
 	hsrv := httpServer.Run(cfg.App, ctr)
-
 	// start the server to expose application metrics
 	msrv := metricsServer.Run(cfg.App, ctr)
 
@@ -37,7 +33,6 @@ func main() {
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
-
 	// accept graceful shutdowns when quit via SIGINT (Ctrl+C)
 	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught
 	signal.Notify(c, os.Interrupt)
@@ -58,10 +53,8 @@ func main() {
 
 	// gracefully stop the http server
 	httpServer.Stop(ctx, hsrv)
-
 	// gracefully stop metrics server
 	metricsServer.Stop(ctx, msrv)
-
 	// release resources
 	ctr.Destruct()
 

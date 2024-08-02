@@ -9,10 +9,9 @@ import (
 // Add creates a new sample entry.
 func (s *Sample) Add(ctx context.Context, sample entities.Sample) error {
 
-	// business logic here
+	// TODO: your business logic here
 
 	_, err := s.db.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
-
 		err := s.sampleRepository.Add(ctx, sample)
 		if err != nil {
 			return nil, err

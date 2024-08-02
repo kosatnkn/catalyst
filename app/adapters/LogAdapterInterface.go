@@ -4,7 +4,6 @@ import "context"
 
 // LogAdapterInterface is implemented by all logging adapters.
 type LogAdapterInterface interface {
-
 	// AddTraceID attaches a trace id to context that can be later read by the logger.
 	AddTraceID(ctx context.Context, id string) context.Context
 

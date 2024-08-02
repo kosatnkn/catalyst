@@ -9,7 +9,6 @@ import (
 
 // resolveServices resolves all services.
 func resolveServices(cfgs []config.ServiceConfig) Services {
-
 	svs := Services{}
 	svs.SampleService = services.NewSampleService(getServiceConfig(cfgs, "sample"))
 
@@ -20,7 +19,6 @@ func resolveServices(cfgs []config.ServiceConfig) Services {
 //
 // Will panic if there is no service config found for a given service name.
 func getServiceConfig(cfgs []config.ServiceConfig, name string) config.ServiceConfig {
-
 	for i := range cfgs {
 		if cfgs[i].Name == name {
 			return cfgs[i]

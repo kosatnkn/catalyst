@@ -16,7 +16,6 @@ import (
 
 // Handle handles all errors globally.
 func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (interface{}, int) {
-
 	switch err.(type) {
 	case *transformerErrs.TransformerError:
 		logError(ctx, log, err)
@@ -38,7 +37,6 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 
 // HandleValidatorErrors specifically handles validation errors thrown by the validator.
 func HandleValidatorErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (interface{}, int) {
-
 	log.Error(ctx, "Validation Errors", errs)
 	return formatValidatorErrors(errs), http.StatusUnprocessableEntity
 }

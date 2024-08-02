@@ -17,7 +17,6 @@ func formatUnknownError(err error) transformers.ErrorTransformer {
 
 // formatGenericError formats all generic errors.
 func formatGenericError(err error) transformers.ErrorTransformer {
-
 	details := strings.Split(err.Error(), "|")
 
 	return transformers.ErrorTransformer{
@@ -32,7 +31,6 @@ func formatGenericError(err error) transformers.ErrorTransformer {
 // These occur when the format of the sent data structure does not match the expected format.
 // An UnpackerError is a type of ValidationError.
 func formatUnpackerError(err error) transformers.ValidationErrorTransformer {
-
 	details := strings.Split(err.Error(), "|")
 
 	return transformers.ValidationErrorTransformer{
@@ -53,7 +51,6 @@ func formatValidatorErrors(p map[string]string) transformers.ValidationErrorTran
 
 // formatValidationPayload does a final round of formatting to validation errors.
 func formatValidationPayload(p map[string]string) map[string]string {
-
 	ep := make(map[string]string)
 
 	for k, v := range p {
@@ -66,7 +63,6 @@ func formatValidationPayload(p map[string]string) map[string]string {
 
 // formatKey formats the key as a snake case string consisting only of lowecase characters.
 func formatKey(k string) string {
-
 	kParts := strings.Split(k, ".")
 
 	// remove unpacker name
@@ -81,7 +77,6 @@ func formatKey(k string) string {
 
 // formatLogTrace formats tracing information for logging.
 func formatLogTrace(trace []string) (t string) {
-
 	for i, msg := range trace {
 		if i == 0 {
 			t = formatForLog(msg)

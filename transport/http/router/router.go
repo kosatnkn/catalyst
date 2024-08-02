@@ -12,7 +12,6 @@ import (
 
 // Init initializes the router.
 func Init(ctr *container.Container) *mux.Router {
-
 	// create new router
 	r := mux.NewRouter()
 
@@ -33,10 +32,8 @@ func Init(ctr *container.Container) *mux.Router {
 	sampleController := controllers.NewSampleController(ctr)
 
 	// bind controller functions to routes
-
 	// api info
 	r.HandleFunc("/", apiController.GetInfo).Methods(http.MethodGet)
-
 	// sample
 	r.HandleFunc("/samples", sampleController.Get).Methods(http.MethodGet)
 	r.HandleFunc("/samples/{id:[0-9]+}", sampleController.GetByID).Methods(http.MethodGet)
