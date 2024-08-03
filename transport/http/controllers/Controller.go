@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -104,7 +104,7 @@ func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interfac
 
 // unpackBody unpacks and validates the request body.
 func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface) interface{} {
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
 	}
