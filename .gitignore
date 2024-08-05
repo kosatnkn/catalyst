@@ -18,6 +18,3 @@ catalyst
 # Dependancies
 /vendor
 glide.lock
-
-# Metadata
-/metadata/*.txt
