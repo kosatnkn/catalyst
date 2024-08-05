@@ -34,7 +34,6 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 		err := srv.ListenAndServe()
 		if err != nil {
 			fmt.Println(err)
-			panic("HTTP server shutting down unexpectedly...")
 		}
 	}()
 
@@ -44,7 +43,7 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 }
 
 // Stop stops the server.
-func Stop(ctx context.Context, srv *http.Server) {
+func Stop(srv *http.Server) {
 	fmt.Println("HTTP server shutting down...")
-	srv.Shutdown(ctx)
+	srv.Shutdown(context.Background())
 }

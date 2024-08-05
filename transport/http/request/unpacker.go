@@ -24,7 +24,6 @@ func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
 func formatUnpackerMessage(p string) string {
 	// catch carriage returns and new lines
 	reNewLine := regexp.MustCompile(`[\r\n]+`)
-
 	// catch other special characters
 	reSpecialChar := regexp.MustCompile(`[\t\"\']*`)
 

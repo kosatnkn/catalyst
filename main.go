@@ -1,11 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"os/signal"
-	"time"
 
 	"github.com/kosatnkn/catalyst/v2/app/config"
 	"github.com/kosatnkn/catalyst/v2/app/container"
@@ -15,15 +13,16 @@ import (
 )
 
 func main() {
-	// show splash screen when starting
-	splash.Show(splash.StyleDefault)
 	// parse all configurations
 	cfg := config.Parse("./configs")
+
+	// show splash screen when starting
+	splash.Show(splash.StyleDefault, cfg)
+
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
 	fmt.Println("Service starting...")
-
 	// start the server to handle http requests
 	hsrv := httpServer.Run(cfg.App, ctr)
 	// start the server to expose application metrics
@@ -42,19 +41,9 @@ func main() {
 
 	// Shutdown in the reverse order of initialization.
 	fmt.Println("\nService stopping...")
+	httpServer.Stop(hsrv)
+	metricsServer.Stop(msrv)
 
-	// create a deadline to wait for
-	var wait time.Duration
-
-	// Doesn't block if no connections, but will otherwise wait
-	// until the timeout deadline.
-	ctx, cancel := context.WithTimeout(context.Background(), wait)
-	defer cancel()
-
-	// gracefully stop the http server
-	httpServer.Stop(ctx, hsrv)
-	// gracefully stop metrics server
-	metricsServer.Stop(ctx, msrv)
 	// release resources
 	ctr.Destruct()
 

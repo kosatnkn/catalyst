@@ -1,15 +1,17 @@
 package splash
 
-import "fmt"
+import (
+	"fmt"
 
-// A brief description of the service.
-const serviceDetails string = `
-Go Clean Architecture Base Project for REST Services
-
-`
+	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v2/metadata"
+)
 
 // Show a splash screen in one of several types.
-func Show(style string) {
+func Show(style string, cfg *config.Config) {
 	fmt.Print(style)
-	fmt.Print(serviceDetails)
+	fmt.Println("---")
+	fmt.Print(metadata.BaseInfo())
+	fmt.Print(metadata.BuildInfo())
+	fmt.Println("---")
 }

@@ -1,0 +1,1 @@
+Go Clean Architecture Base Project for REST Services
