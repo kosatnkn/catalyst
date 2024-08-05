@@ -7,7 +7,7 @@ import (
 
 // SampleTransformer is used to transform sample
 type SampleTransformer struct {
-	ID   int    `json:"id"`
+	ID   uint64 `json:"id"`
 	Name string `json:"name"`
 }
 

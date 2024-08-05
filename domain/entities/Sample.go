@@ -2,7 +2,7 @@ package entities
 
 // Sample entity
 type Sample struct {
-	ID       int
+	ID       uint64
 	Name     string
 	Password string
 }

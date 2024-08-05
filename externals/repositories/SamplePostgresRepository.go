@@ -159,7 +159,7 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 
 	for _, row := range result {
 		samples = append(samples, entities.Sample{
-			ID:   int(row["id"].(int64)),
+			ID:   uint64(row["id"].(int64)),
 			Name: string(row["name"].([]byte)),
 		})
 	}

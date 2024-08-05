@@ -161,7 +161,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 
 	// bind unpacked data to entities
 	sample := entities.Sample{
-		ID:       int(id),
+		ID:       id,
 		Name:     su.Name,
 		Password: su.Password,
 	}
