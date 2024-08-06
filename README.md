@@ -100,7 +100,7 @@ The sample set will cover all basic CRUD operations that a REST API will normall
 
 There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
 
-## 
+## Transport Mediums
 In the context of `Catalyst` we use a concept called `Transport mediums` to define ways in which you can communicate
 with the microservice.
 
@@ -128,9 +128,9 @@ Following is the request, response cycle executed when a request comes to a REST
                             + ------------ +              ||
                                    ||                     ||
                                    \/                     ||
-                            + ------------ +              ||  
-                            |    Router    |              ||    
-                            + ------------ +              ||  
+                            + ------------ +              ||
+                            |    Router    |              ||
+                            + ------------ +              ||
                                        ||                 ||
                                        ||                 ||
                                        ||   + --------------------------- +
@@ -138,9 +138,9 @@ Following is the request, response cycle executed when a request comes to a REST
                                        ||   + --------------------------- +
                                        ||    /\
                                        \/    ||
-    + -------------------- +  =>  + -------------- +  
-    | Unpacker | Validator |      |   Controller   |      
-    + -------------------- +  <=  + -------------- +    
+    + -------------------- +  =>  + -------------- +
+    | Unpacker | Validator |      |   Controller   |
+    + -------------------- +  <=  + -------------- +
                                       ||       /\
                                       \/       ||
                                   + -------------- +
