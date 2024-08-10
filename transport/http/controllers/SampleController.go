@@ -26,7 +26,7 @@ func NewSampleController(c *container.Container) *SampleController {
 	}
 }
 
-// Get handles retreiving a list of samples.
+// Get handles retrieving a list of samples.
 func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.Get")
@@ -38,7 +38,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// get paginator from query paramaters
+	// get paginator from query parameters
 	paginator, err := ctl.paginator(r)
 	if err != nil {
 		ctl.sendError(ctx, w, err)
@@ -70,7 +70,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	ctl.sendResponse(ctx, w, http.StatusOK, trS, trP)
 }
 
-// GetByID handles retreiving a single sample.
+// GetByID handles retrieving a single sample.
 func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	// add a trace string to the request context
 	ctx := ctl.withTrace(r.Context(), "SampleController.GetByID")
