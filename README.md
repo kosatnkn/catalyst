@@ -10,6 +10,9 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v3.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v3)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
+> ### Version 3
+> Version 3 of Catalyst is in progress. We are planning to simplify a lot of things. :)
+
 `Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many features that are essential, such as.
 - Configurability
 - A basic dependency injection mechanism
