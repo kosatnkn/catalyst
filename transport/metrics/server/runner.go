@@ -9,9 +9,9 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/kosatnkn/catalyst/v2/app/config"
-	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/app/metrics"
+	"github.com/kosatnkn/catalyst/v3/app/config"
+	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/app/metrics"
 )
 
 // Run runs a server to exposes metrics as a separate Prometheus metric server.

@@ -1,6 +1,6 @@
 package errors
 
-import e "github.com/kosatnkn/catalyst/v2/errors"
+import e "github.com/kosatnkn/catalyst/v3/errors"
 
 // MiddlewareError is the type of errors thrown by middleware.
 type MiddlewareError struct {

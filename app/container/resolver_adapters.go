@@ -3,8 +3,8 @@ package container
 import (
 	"fmt"
 
-	"github.com/kosatnkn/catalyst/v2/app/adapters"
-	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/app/config"
 	"github.com/kosatnkn/db/mysql"
 	"github.com/kosatnkn/log"
 	"github.com/kosatnkn/validator"

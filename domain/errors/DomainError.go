@@ -1,6 +1,6 @@
 package errors
 
-import e "github.com/kosatnkn/catalyst/v2/errors"
+import e "github.com/kosatnkn/catalyst/v3/errors"
 
 // DomainError is the type of errors thrown by the domain layer.
 type DomainError struct {

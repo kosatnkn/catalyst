@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // formatUnknownError formats errors of unknown error types.

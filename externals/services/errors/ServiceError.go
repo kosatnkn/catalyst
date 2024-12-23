@@ -1,6 +1,6 @@
 package errors
 
-import e "github.com/kosatnkn/catalyst/v2/errors"
+import e "github.com/kosatnkn/catalyst/v3/errors"
 
 // ServiceError is the type of errors thrown by services talking to third party APIs.
 type ServiceError struct {

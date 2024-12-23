@@ -7,7 +7,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/kosatnkn/catalyst/badge.svg?branch=master)](https://coveralls.io/github/kosatnkn/catalyst?branch=master)
 ![Open Issues](https://img.shields.io/github/issues/kosatnkn/catalyst)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kosatnkn/catalyst)
-[![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v2.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v2)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v3.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v3)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
 `Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many features that are essential, such as.
@@ -175,7 +175,7 @@ or an `mqtt` package can be added to communicate with `IoT` devices.
 godoc -http=:6060 -v
 ```
 
-Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v2)
+Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v3](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v3)
 
 
 ## Using Go mod

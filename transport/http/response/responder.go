@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/v2/app/adapters"
-	errHandler "github.com/kosatnkn/catalyst/v2/transport/http/error"
+	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	errHandler "github.com/kosatnkn/catalyst/v3/transport/http/error"
 )
 
 // Send sets all required fields and write the response.

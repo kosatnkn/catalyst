@@ -5,11 +5,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/kosatnkn/catalyst/v2/app/config"
-	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/app/splash"
-	httpServer "github.com/kosatnkn/catalyst/v2/transport/http/server"
-	metricsServer "github.com/kosatnkn/catalyst/v2/transport/metrics/server"
+	"github.com/kosatnkn/catalyst/v3/app/config"
+	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/app/splash"
+	httpServer "github.com/kosatnkn/catalyst/v3/transport/http/server"
+	metricsServer "github.com/kosatnkn/catalyst/v3/transport/metrics/server"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
 
-	fmt.Println("Service starting...")
+	fmt.Println("Starting...")
 	// start the server to handle http requests
 	hsrv := httpServer.Run(cfg.App, ctr)
 	// start the server to expose application metrics
@@ -40,7 +40,7 @@ func main() {
 	<-c
 
 	// Shutdown in the reverse order of initialization.
-	fmt.Println("\nService stopping...")
+	fmt.Println("\nStopping...")
 	httpServer.Stop(hsrv)
 	metricsServer.Stop(msrv)
 

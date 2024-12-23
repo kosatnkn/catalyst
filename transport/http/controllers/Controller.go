@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/kosatnkn/catalyst/v2/app/adapters"
-	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/transport/http/request"
-	"github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 	"github.com/kosatnkn/req/filter"
 	"github.com/kosatnkn/req/paginator"
 )
@@ -131,7 +131,7 @@ func (ctl *Controller) transform(data interface{}, t transformers.TransformerInt
 
 // sendResponse is a convenience function wrapping the actual `response.Send` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) sendResponse(ctx context.Context, w http.ResponseWriter, code int, payload ...interface{}) {
+func (ctl *Controller) sendResponse(w http.ResponseWriter, code int, payload ...interface{}) {
 	if len(payload) == 0 {
 		response.Send(w, code, nil)
 		return

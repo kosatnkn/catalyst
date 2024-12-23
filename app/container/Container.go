@@ -1,9 +1,9 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/v2/app/adapters"
-	"github.com/kosatnkn/catalyst/v2/domain/boundary/repositories"
-	"github.com/kosatnkn/catalyst/v2/domain/boundary/services"
+	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
+	"github.com/kosatnkn/catalyst/v3/domain/boundary/services"
 )
 
 // Container holds all resolved dependencies that needs to be injected at run time.

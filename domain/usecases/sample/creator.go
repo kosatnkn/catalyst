@@ -3,7 +3,7 @@ package sample
 import (
 	"context"
 
-	"github.com/kosatnkn/catalyst/v2/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/domain/entities"
 )
 
 // Add creates a new sample entry.

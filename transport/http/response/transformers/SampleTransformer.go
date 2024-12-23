@@ -1,8 +1,8 @@
 package transformers
 
 import (
-	"github.com/kosatnkn/catalyst/v2/domain/entities"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers/errors"
+	"github.com/kosatnkn/catalyst/v3/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
 )
 
 // SampleTransformer is used to transform sample

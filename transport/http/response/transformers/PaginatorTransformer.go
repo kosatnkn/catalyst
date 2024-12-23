@@ -1,7 +1,7 @@
 package transformers
 
 import (
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers/errors"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
 	"github.com/kosatnkn/req/paginator"
 )
 

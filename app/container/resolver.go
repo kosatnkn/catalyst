@@ -1,7 +1,7 @@
 package container
 
 import (
-	"github.com/kosatnkn/catalyst/v2/app/config"
+	"github.com/kosatnkn/catalyst/v3/app/config"
 )
 
 // Resolve resolves the entire container.

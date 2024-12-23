@@ -6,8 +6,8 @@ import (
 
 	"fmt"
 
-	"github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers/errors"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers/errors"
 )
 
 // Unpack the request in to the given unpacker struct.

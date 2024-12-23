@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/domain/entities"
-	"github.com/kosatnkn/catalyst/v2/domain/usecases/sample"
-	"github.com/kosatnkn/catalyst/v2/transport/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/domain/usecases/sample"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // SampleController contains controller logic for endpoints.
@@ -67,7 +67,7 @@ func (ctl *SampleController) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusOK, trS, trP)
+	ctl.sendResponse(w, http.StatusOK, trS, trP)
 }
 
 // GetByID handles retrieving a single sample.
@@ -79,7 +79,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(ctl.routeVar(r, "id"))
 
 	// validate
-	errs := ctl.validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField("id", id, "required,gt=0")
 	if errs != nil {
 		ctl.sendError(ctx, w, errs)
 		return
@@ -100,7 +100,7 @@ func (ctl *SampleController) GetByID(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusOK, tr)
+	ctl.sendResponse(w, http.StatusOK, tr)
 }
 
 // Add adds a new sample entry.
@@ -133,7 +133,7 @@ func (ctl *SampleController) Add(w http.ResponseWriter, r *http.Request) {
 	// tr := ctl.transform(sample, transformers.NewSampleTransformer(), false)
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusCreated)
+	ctl.sendResponse(w, http.StatusCreated)
 }
 
 // Edit updates an existing sample entry.
@@ -145,7 +145,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.ParseUint(ctl.routeVar(r, "id"), 10, 64)
 
 	// validate request parameters
-	errs := ctl.validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField("id", id, "required,gt=0")
 	if errs != nil {
 		ctl.sendError(ctx, w, errs)
 		return
@@ -174,7 +174,7 @@ func (ctl *SampleController) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusNoContent)
+	ctl.sendResponse(w, http.StatusNoContent)
 }
 
 // Delete deletes an existing sample entry.
@@ -187,7 +187,7 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
-	errs := ctl.validator.ValidateField(id, "required,gt=0")
+	errs := ctl.validator.ValidateField("id", id, "required,gt=0")
 	if errs != nil {
 		ctl.sendError(ctx, w, errs)
 		return
@@ -201,5 +201,5 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(ctx, w, http.StatusNoContent)
+	ctl.sendResponse(w, http.StatusNoContent)
 }

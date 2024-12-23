@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/kosatnkn/catalyst/v2/app/container"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // APIController contains controller logic for endpoints.
@@ -29,5 +29,5 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(r.Context(), w, http.StatusOK, tr)
+	ctl.sendResponse(w, http.StatusOK, tr)
 }

@@ -1,8 +1,8 @@
 package response
 
 import (
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/mappers"
-	"github.com/kosatnkn/catalyst/v2/transport/http/response/transformers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/mappers"
+	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // mapData wraps payload in a standard response payload object.

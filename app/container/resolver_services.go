@@ -3,8 +3,8 @@ package container
 import (
 	"fmt"
 
-	"github.com/kosatnkn/catalyst/v2/app/config"
-	"github.com/kosatnkn/catalyst/v2/externals/services"
+	"github.com/kosatnkn/catalyst/v3/app/config"
+	"github.com/kosatnkn/catalyst/v3/externals/services"
 )
 
 // resolveServices resolves all services.

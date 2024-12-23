@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/kosatnkn/catalyst/v2/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/app/adapters"
 )
 
 // logError logs the error with trace.
