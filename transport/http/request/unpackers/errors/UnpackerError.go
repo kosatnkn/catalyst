@@ -1,6 +1,6 @@
 package errors
 
-import e "github.com/kosatnkn/catalyst/v3/errors"
+import e "github.com/kosatnkn/catalyst/v3/internal/errors"
 
 // UnpackerError is the type of errors thrown by response transformers.
 type UnpackerError struct {
