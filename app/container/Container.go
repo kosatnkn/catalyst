@@ -3,14 +3,12 @@ package container
 import (
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
-	"github.com/kosatnkn/catalyst/v3/domain/boundary/services"
 )
 
 // Container holds all resolved dependencies that needs to be injected at run time.
 type Container struct {
 	Adapters     Adapters
 	Repositories Repositories
-	Services     Services
 }
 
 // Adapters hold resolved adapter instances.
@@ -30,11 +28,4 @@ type Adapters struct {
 // that can be performed on that table.
 type Repositories struct {
 	SampleRepository repositories.SampleRepositoryInterface
-}
-
-// Services hold resolved service instances.
-//
-// These are abstractions to third party APIs. All services will be of a corresponding service interface type.
-type Services struct {
-	SampleService services.SampleServiceInterface
 }

@@ -9,7 +9,6 @@ import (
 )
 
 func newLogger(t *testing.T, level string) adapters.LogAdapterInterface {
-
 	cfg := log.Config{
 		Level:  level,
 		Colors: true,
@@ -24,7 +23,6 @@ func newLogger(t *testing.T, level string) adapters.LogAdapterInterface {
 }
 
 func TestInvalidConfig(t *testing.T) {
-
 	// invalid levels
 	tcs := []struct {
 		name  string
@@ -51,7 +49,6 @@ func TestInvalidConfig(t *testing.T) {
 }
 
 func TestMessage(t *testing.T) {
-
 	l := newLogger(t, "INFO")
 
 	l.Error(context.Background(), "Hello")
@@ -68,7 +65,6 @@ func TestMessage(t *testing.T) {
 }
 
 func TestLogLevels(t *testing.T) {
-
 	tcs := []struct {
 		name  string
 		level string

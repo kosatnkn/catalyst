@@ -34,7 +34,6 @@ func (a *Adapter) AddTraceID(ctx context.Context, id string) context.Context {
 
 // AppendTracePoint appends the given trace point to a trace path in context that can be later read by the logger.
 func (a *Adapter) AppendTracePoint(ctx context.Context, point string) context.Context {
-
 	path := ctx.Value(TraceKey)
 	if path == nil {
 		return context.WithValue(ctx, TraceKey, point)
@@ -65,7 +64,7 @@ func (a *Adapter) Warn(ctx context.Context, message string, options ...interface
 
 // Destruct will close the logger gracefully releasing all resources.
 func (a *Adapter) Destruct() {
-
+	// NOTE: nothing to implement
 }
 
 // log logs a message using the following format.
