@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kosatnkn/db/mysql"
+	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
 	"github.com/kosatnkn/log"
 	"gopkg.in/yaml.v2"
 )
@@ -40,8 +40,8 @@ func parseLogConfig(dir string) log.Config {
 }
 
 // parseDBConfig parses database configurations.
-func parseDBConfig(dir string) mysql.Config {
-	cfg := mysql.Config{}
+func parseDBConfig(dir string) postgres.Config {
+	cfg := postgres.Config{}
 	parseConfig(dir+"database.yaml", &cfg)
 
 	return cfg

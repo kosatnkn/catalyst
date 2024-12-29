@@ -9,18 +9,16 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/iancoleman/strcase v0.3.0
-	github.com/kosatnkn/db v0.2.4
 	github.com/kosatnkn/log v0.1.4
+	github.com/lib/pq v1.10.9
 	github.com/prometheus/client_golang v1.20.5
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.7 // indirect
-	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/kr/text v0.2.0 // indirect
