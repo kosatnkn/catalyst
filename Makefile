@@ -1,7 +1,6 @@
 # Running and Testing
 run:
-	# update metadata
-	./metadata.sh
+	./scripts/set_metadata.sh
 	go run main.go
 
 test:

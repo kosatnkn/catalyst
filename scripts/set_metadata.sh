@@ -6,7 +6,7 @@ echo "Generating metadata..."
 cat metadata.txt > metadata/base.txt
 
 # add build info
-tag=$(git describe --exact-match --tags HEAD)
+tag=$(git describe --exact-match --tags HEAD 2>/dev/null)
 if [ $? -eq 0 ]; then
   release=", release [${tag}]"
 fi
