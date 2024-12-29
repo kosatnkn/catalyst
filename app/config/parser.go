@@ -16,10 +16,9 @@ func Parse(cfgDir string) *Config {
 	dir := getConfigDir(cfgDir)
 
 	return &Config{
-		App:      parseAppConfig(dir),
-		DB:       parseDBConfig(dir),
-		Log:      parseLogConfig(dir),
-		Services: parseServicesConfig(dir),
+		App: parseAppConfig(dir),
+		DB:  parseDBConfig(dir),
+		Log: parseLogConfig(dir),
 	}
 }
 
@@ -45,14 +44,6 @@ func parseDBConfig(dir string) postgres.Config {
 	parseConfig(dir+"database.yaml", &cfg)
 
 	return cfg
-}
-
-// parseServicesConfig parses configurations of all services
-func parseServicesConfig(dir string) []ServiceConfig {
-	cfgs := []ServiceConfig{}
-	parseConfig(dir+"services.yaml", &cfgs)
-
-	return cfgs
 }
 
 // parseConfig reads configuration values from the given file and

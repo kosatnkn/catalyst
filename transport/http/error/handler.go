@@ -8,7 +8,6 @@ import (
 
 	domainErrs "github.com/kosatnkn/catalyst/v3/domain/errors"
 	repositoryErrs "github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
-	serviceErrs "github.com/kosatnkn/catalyst/v3/externals/services/errors"
 	middlewareErrs "github.com/kosatnkn/catalyst/v3/transport/http/middleware/errors"
 	unpackerErrs "github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers/errors"
 	transformerErrs "github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
@@ -22,8 +21,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 		return formatGenericError(err), http.StatusInternalServerError
 	case *middlewareErrs.MiddlewareError,
 		*domainErrs.DomainError,
-		*repositoryErrs.RepositoryError,
-		*serviceErrs.ServiceError:
+		*repositoryErrs.RepositoryError:
 		logError(ctx, log, err)
 		return formatGenericError(err), http.StatusBadRequest
 	case *unpackerErrs.UnpackerError:
