@@ -1,5 +1,5 @@
 # Building
-FROM golang:1.15-alpine AS builder
+FROM golang:1.22-alpine AS builder
 
 # define working directory
 WORKDIR /opt/app
@@ -11,7 +11,7 @@ COPY . .
 RUN go build -o main .
 
 # Running
-FROM alpine:latest AS runner
+FROM alpine:3.21.0 AS runner
 
 WORKDIR /opt/
 
