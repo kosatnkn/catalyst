@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
-	"github.com/kosatnkn/req/filter"
-	"github.com/kosatnkn/req/paginator"
+	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
+	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 )
 
 // SampleRepositoryInterface contract to manipulate `sample` database entity

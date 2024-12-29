@@ -8,7 +8,6 @@ require (
 	github.com/iancoleman/strcase v0.3.0
 	github.com/kosatnkn/db v0.2.4
 	github.com/kosatnkn/log v0.1.4
-	github.com/kosatnkn/req v0.1.7
 	github.com/kosatnkn/validator v0.1.2
 	github.com/prometheus/client_golang v1.20.5
 	gopkg.in/yaml.v2 v2.4.0

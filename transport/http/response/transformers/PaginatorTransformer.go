@@ -1,11 +1,11 @@
 package transformers
 
 import (
+	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
-	"github.com/kosatnkn/req/paginator"
 )
 
-// PaginatorTransformer is used to transform school
+// PaginatorTransformer is used to transform a paginator object.
 type PaginatorTransformer struct {
 	Page uint32 `json:"page"`
 	Size uint8  `json:"size"`

@@ -8,12 +8,12 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
+	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 	"github.com/kosatnkn/catalyst/v3/transport/http/request"
 	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
-	"github.com/kosatnkn/req/filter"
-	"github.com/kosatnkn/req/paginator"
 )
 
 // Controller is the base struct that holds fields and functionality common to all controllers.

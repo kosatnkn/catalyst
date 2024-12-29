@@ -8,9 +8,9 @@ import (
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
 	"github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
-	"github.com/kosatnkn/req"
-	"github.com/kosatnkn/req/filter"
-	"github.com/kosatnkn/req/paginator"
+	"github.com/kosatnkn/catalyst/v3/internal/req"
+	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
+	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 )
 
 // SampleMySQLRepository is an example repository that implements test database functionality.
