@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
-	"github.com/kosatnkn/log"
+	"github.com/kosatnkn/catalyst/v3/internal/log"
 )
 
 // Config is the master config struct that holds all other config structs.

@@ -6,8 +6,8 @@ import (
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/app/config"
 	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
+	"github.com/kosatnkn/catalyst/v3/internal/log"
 	"github.com/kosatnkn/catalyst/v3/internal/validator"
-	"github.com/kosatnkn/log"
 )
 
 // resolveAdapters resolves all adapters.

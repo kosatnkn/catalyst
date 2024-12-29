@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
-	"github.com/kosatnkn/log"
+	"github.com/kosatnkn/catalyst/v3/internal/log"
 	"gopkg.in/yaml.v2"
 )
 

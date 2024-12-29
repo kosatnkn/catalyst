@@ -11,13 +11,3 @@ level: "INFO"
 
 # enable logging colors
 colors: true
-
-# enable console logging
-console: true
-
-# enable file logging
-file: false
-
-# directory to be used for logging
-# will use "logs" directory in the project's root directory as the default
-directory: "logs"
