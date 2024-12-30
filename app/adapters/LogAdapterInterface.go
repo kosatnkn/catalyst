@@ -21,7 +21,4 @@ type LogAdapterInterface interface {
 
 	// Warn logs a message as of warning type.
 	Warn(ctx context.Context, message string, options ...interface{})
-
-	// Destruct will close the logger gracefully releasing all resources.
-	Destruct()
 }

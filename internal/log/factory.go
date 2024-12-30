@@ -13,9 +13,9 @@ func NewAdapter(cfg Config) (adapters.LogAdapterInterface, error) {
 
 	switch cfg.Flavor {
 	case flavourText:
-		return newTextAdapter(cfg)
+		return newTextLogger(cfg)
 	case flavourJSON:
-		return newJSONAdapter(cfg)
+		return newJSONLogger(cfg)
 	default:
 		return nil, fmt.Errorf("logger: unknown log flavour '%s'", cfg.Flavor)
 	}
