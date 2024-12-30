@@ -13,4 +13,7 @@ type Config struct {
 
 	// Colors determine whether logs are printed in colours or not.
 	Colors bool `yaml:"colors"`
+
+	// Flavor determines whether to output logs in plain text format or JSON. [`text`, `json`]
+	Flavor string `yaml:"flavour"`
 }

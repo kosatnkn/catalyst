@@ -5,6 +5,9 @@ const (
 	levelWarn  string = "WARN"
 	levelDebug string = "DEBUG"
 	levelInfo  string = "INFO"
+
+	flavourText string = "text"
+	flavourJSON string = "json"
 )
 
 var granularity map[string]int = map[string]int{

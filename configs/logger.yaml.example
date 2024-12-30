@@ -11,3 +11,6 @@ level: "INFO"
 
 # enable logging colors
 colors: true
+
+# define flavour of logs ("text", "json")
+flavour: "text"
