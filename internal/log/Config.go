@@ -10,10 +10,4 @@ type Config struct {
 	//  DEBUG: log messages with log level 'ERROR', 'WARN' and 'DEBUG'
 	//  INFO: log messages with log level 'ERROR', 'WARN', 'DEBUG' and 'INFO'
 	Level string `yaml:"level"`
-
-	// Colors determine whether logs are printed in colours or not.
-	Colors bool `yaml:"colors"`
-
-	// Flavor determines whether to output logs in plain text format or JSON. [`text`, `json`]
-	Flavor string `yaml:"flavour"`
 }

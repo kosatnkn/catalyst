@@ -2,6 +2,7 @@ package error
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
@@ -35,6 +36,6 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 
 // HandleValidatorErrors specifically handles validation errors thrown by the validator.
 func HandleValidatorErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (interface{}, int) {
-	log.Error(ctx, "Validation Errors", errs)
+	log.Error(ctx, fmt.Sprintf("Validation Errors: %v", errs))
 	return formatValidatorErrors(errs), http.StatusUnprocessableEntity
 }

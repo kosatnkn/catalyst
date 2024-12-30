@@ -1,18 +1,17 @@
 package log
 
+import "github.com/rs/zerolog"
+
 const (
 	levelError string = "ERROR"
 	levelWarn  string = "WARN"
 	levelDebug string = "DEBUG"
 	levelInfo  string = "INFO"
-
-	flavourText string = "text"
-	flavourJSON string = "json"
 )
 
-var granularity map[string]int = map[string]int{
-	levelInfo:  1,
-	levelDebug: 2,
-	levelWarn:  3,
-	levelError: 4,
+var granularity map[string]zerolog.Level = map[string]zerolog.Level{
+	levelInfo:  zerolog.InfoLevel,
+	levelDebug: zerolog.DebugLevel,
+	levelWarn:  zerolog.WarnLevel,
+	levelError: zerolog.ErrorLevel,
 }

@@ -8,9 +8,3 @@
 #  DEBUG: log messages with log level 'ERROR', 'WARN' and 'DEBUG'
 #  INFO:  log messages with log level 'ERROR', 'WARN', 'DEBUG' and 'INFO'
 level: "INFO"
-
-# enable logging colors
-colors: true
-
-# define flavour of logs ("text", "json")
-flavour: "text"

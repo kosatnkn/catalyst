@@ -11,14 +11,14 @@ type LogAdapterInterface interface {
 	AppendTracePoint(ctx context.Context, point string) context.Context
 
 	// Error logs a message as of error type.
-	Error(ctx context.Context, message string, options ...interface{})
+	Error(ctx context.Context, message string)
 
 	// Debug logs a message as of debug type.
-	Debug(ctx context.Context, message string, options ...interface{})
+	Debug(ctx context.Context, message string)
 
 	// Info logs a message as of information type.
-	Info(ctx context.Context, message string, options ...interface{})
+	Info(ctx context.Context, message string)
 
 	// Warn logs a message as of warning type.
-	Warn(ctx context.Context, message string, options ...interface{})
+	Warn(ctx context.Context, message string)
 }

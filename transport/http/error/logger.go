@@ -3,6 +3,7 @@ package error
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 )
@@ -25,10 +26,10 @@ func logError(ctx context.Context, log adapters.LogAdapterInterface, err error) 
 
 	log.Error(ctx, formatForLog(trace[0]))
 
-	// when error has an embedded error chain log the error chan as a trace
+	// when error has an embedded error chain log the error chain as a trace
 	// debug mode is used to log the error trace so that the trace will be printed only when
 	// the application is running in the debug mode.
 	if len(trace) > 1 {
-		log.Debug(ctx, formatForLog(trace[0]), formatLogTrace(trace[1:]))
+		log.Debug(ctx, fmt.Sprintf("%s %s", formatForLog(trace[0]), formatLogTrace(trace[1:])))
 	}
 }

@@ -2,21 +2,23 @@ package log
 
 import (
 	"context"
-	"fmt"
-	"time"
+	"os"
 
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/rs/zerolog"
 )
 
 // JSONLogger is used to provide structured log messages.
 type JSONLogger struct {
 	cfg Config
+	l   zerolog.Logger
 }
 
 // newJSONLogger creates a new Log adapter instance.
 func newJSONLogger(cfg Config) (adapters.LogAdapterInterface, error) {
 	a := &JSONLogger{
 		cfg: cfg,
+		l:   zerolog.New(os.Stdout).With().Timestamp().Logger().Level(granularity[cfg.Level]),
 	}
 
 	return a, nil
@@ -34,78 +36,38 @@ func (a *JSONLogger) AppendTracePoint(ctx context.Context, point string) context
 		return context.WithValue(ctx, TraceKey, point)
 	}
 
-	return context.WithValue(ctx, TraceKey, path.(string)+">"+point)
+	return context.WithValue(ctx, TraceKey, path.(string)+" - "+point)
 }
 
 // Error logs a message as of error type.
-func (a *JSONLogger) Error(ctx context.Context, message string, options ...interface{}) {
-	a.log(ctx, levelError, message, options...)
+func (a *JSONLogger) Error(ctx context.Context, message string) {
+	a.withCtxVals(ctx, a.l.Error()).Msg(message)
 }
 
 // Debug logs a message as of debug type.
-func (a *JSONLogger) Debug(ctx context.Context, message string, options ...interface{}) {
-	a.log(ctx, levelDebug, message, options...)
+func (a *JSONLogger) Debug(ctx context.Context, message string) {
+	a.withCtxVals(ctx, a.l.Debug()).Msg(message)
 }
 
 // Info logs a message as of information type.
-func (a *JSONLogger) Info(ctx context.Context, message string, options ...interface{}) {
-	a.log(ctx, levelInfo, message, options...)
+func (a *JSONLogger) Info(ctx context.Context, message string) {
+	a.withCtxVals(ctx, a.l.Info()).Msg(message)
 }
 
 // Warn logs a message as of warning type.
-func (a *JSONLogger) Warn(ctx context.Context, message string, options ...interface{}) {
-	a.log(ctx, levelWarn, message, options...)
+func (a *JSONLogger) Warn(ctx context.Context, message string) {
+	a.withCtxVals(ctx, a.l.Warn()).Msg(message)
 }
 
-// log logs a message using the following format.
-// <date> <time_in_24h_foramt_plus_milliseconds> [<log_level>] [<uuid>] [<trace_points>] [<message>] : [<additional_information>]
-// ex:
-//
-//	2019/01/14 12:13:29.435517 [ERROR] [b2e1bfc7-11ed-40e5-ab08-abeadef079e6] [usecases.TestUsecase.TestFunc] [error message] : [key1: value1, ...]
-func (a *JSONLogger) log(ctx context.Context, logLevel string, message string, options ...interface{}) {
-	// check whether the message should be logged
-	if !a.isLoggable(logLevel) {
-		return
+// withCtxVals add special values set in the context by the logger to the log event.
+func (a *JSONLogger) withCtxVals(ctx context.Context, zlEvent *zerolog.Event) *zerolog.Event {
+	if id, ok := ctx.Value(ID).(string); ok {
+		zlEvent = zlEvent.Str("id", id)
 	}
 
-	a.toConsole(a.formatMessage(ctx, logLevel, message, options...))
-}
-
-// formatMessage formats the log message.
-func (a *JSONLogger) formatMessage(ctx context.Context, logLevel string, message string, options ...interface{}) string {
-	var now = time.Now().Format("2006/01/02 15:04:05.000000")
-	var level = a.setTag(logLevel)
-	var uuid = "NONE"
-	var trace = "NONE"
-
-	id, ok := ctx.Value(ID).(string)
-	if ok {
-		uuid = id
+	if trace, ok := ctx.Value(TraceKey).(string); ok {
+		zlEvent = zlEvent.Str("trace", trace)
 	}
 
-	points, ok := ctx.Value(TraceKey).(string)
-	if ok {
-		trace = points
-	}
-
-	if len(options) == 0 {
-		return fmt.Sprintf("%s %s [%s] [%s] [%s]", now, level, uuid, trace, message)
-	}
-
-	return fmt.Sprintf("%s %s [%s] [%s] [%s] : %v", now, level, uuid, trace, message, options)
-}
-
-// isLoggable checks whether the message should be logged depending on the granularity of the log level.
-func (a *JSONLogger) isLoggable(level string) bool {
-	return granularity[level] >= granularity[a.cfg.Level]
-}
-
-// setTag generates tags based on color configuration settings.
-func (a *JSONLogger) setTag(level string) interface{} {
-	return "[" + level + "]"
-}
-
-// toConsole logs a message to the console.
-func (a *JSONLogger) toConsole(message string) {
-	fmt.Println(message)
+	return zlEvent
 }
