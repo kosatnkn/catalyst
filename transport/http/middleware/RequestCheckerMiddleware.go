@@ -41,8 +41,8 @@ func (m *RequestCheckerMiddleware) Middleware(next http.Handler) http.Handler {
 
 		// check content type
 		if contentType != "application/json" {
-			err := errors.NewMiddlewareError("100",
-				fmt.Sprintf("API only accepts JSON as Content-Type, '%s' is given", contentType),
+			err := errors.NewMiddlewareError("middleware-req-check-notype",
+				fmt.Sprintf("middleware-req-checker: API only accepts JSON as Content-Type, '%s' is given", contentType),
 				nil,
 			)
 

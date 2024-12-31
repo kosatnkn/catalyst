@@ -16,14 +16,12 @@ type extendedFilter struct {
 
 // FilterRepositoryFacilitator is the facilitator that will add filter handling capabilities to the repository.
 type FilterRepositoryFacilitator struct {
-	dbType    string
 	filterMap map[string][]string
 }
 
 // NewFilterRepositoryFacilitator creates a new instance of the facilitator.
-func NewFilterRepositoryFacilitator(dbType string, filterMap map[string][]string) *FilterRepositoryFacilitator {
+func NewFilterRepositoryFacilitator(filterMap map[string][]string) *FilterRepositoryFacilitator {
 	return &FilterRepositoryFacilitator{
-		dbType:    dbType,
 		filterMap: filterMap,
 	}
 }

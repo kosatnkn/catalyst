@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/metadata"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
@@ -24,7 +26,7 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	// transform
 	tr := transformers.APITransformer{
 		Name:    "Catalyst",
-		Version: "v2.5.1",
+		Version: strings.ReplaceAll(metadata.BuildInfo(), "\n", " "),
 		Purpose: "A REST API base written in Golang",
 	}
 

@@ -7,9 +7,9 @@ import (
 )
 
 func (s *Sample) errNoSample(id int) error {
-	return err.NewDomainError("1000", fmt.Sprintf("Sample not found for id %d", id), nil)
+	return err.NewDomainError("sample-usecase-noid", fmt.Sprintf("sample-usecase: sample not found for id %d", id), nil)
 }
 
 func (s *Sample) errCannotGetData(cause error) error {
-	return err.NewDomainError("100", "Cannot get data from repository", cause)
+	return err.NewDomainError("sample-usecase-nodata", "sample-usecase: cannot get data from repository", cause)
 }

@@ -34,8 +34,8 @@ func NewSamplePostgresRepository(dbAdapter adapters.DBAdapterInterface) reposito
 
 	return &SamplePostgresRepository{
 		db:                             dbAdapter,
-		FilterRepositoryFacilitator:    filter.NewFilterRepositoryFacilitator(req.DBPostgres, filterMap),
-		PaginatorRepositoryFacilitator: paginator.NewPaginatorRepositoryFacilitator(req.DBPostgres),
+		FilterRepositoryFacilitator:    filter.NewFilterRepositoryFacilitator(filterMap),
+		PaginatorRepositoryFacilitator: paginator.NewPaginatorRepositoryFacilitator(),
 	}
 }
 
