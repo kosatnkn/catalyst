@@ -8,6 +8,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
 	"github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
+	"github.com/kosatnkn/catalyst/v3/internal/db"
 	"github.com/kosatnkn/catalyst/v3/internal/req"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
@@ -191,7 +192,7 @@ func (repo *SamplePostgresRepository) getInsertID(data []map[string]interface{})
 		return 0
 	}
 
-	return data[0]["last_insert_id"].(int64)
+	return data[0][db.LastInsertID].(int64)
 }
 
 // getInsertID returns the id for the inserted record.
@@ -200,5 +201,5 @@ func (repo *SamplePostgresRepository) getAffectedRows(data []map[string]interfac
 		return 0
 	}
 
-	return data[0]["affected_rows"].(int64)
+	return data[0][db.AffectedRows].(int64)
 }
