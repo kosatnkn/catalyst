@@ -1,8 +1,8 @@
 package transformers
 
 import (
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/response/transformer"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
-	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
 )
 
 // PaginatorTransformer is used to transform a paginator object.
@@ -33,10 +33,10 @@ func (t *PaginatorTransformer) TransformAsObject(data interface{}) (interface{},
 
 // TransformAsCollection map data to a collection of transformer objects.
 func (t *PaginatorTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
-	return nil, errors.NewTransformerError("", "Cannot transform paginator as a collection", nil)
+	return nil, transformer.NewTransformerError("", "Cannot transform paginator as a collection", nil)
 }
 
 // dataMismatchError returns a data mismatch error of TransformerError type.
 func (t *PaginatorTransformer) dataMismatchError() error {
-	return errors.NewTransformerError("", "Cannot map given data to PaginatorTransformer", nil)
+	return transformer.NewTransformerError("", "Cannot map given data to PaginatorTransformer", nil)
 }

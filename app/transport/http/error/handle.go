@@ -9,9 +9,9 @@ import (
 
 	middlewareErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/middleware/errors"
 	unpackerErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpacker"
+	transformerErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/response/transformer"
 	domainErrs "github.com/kosatnkn/catalyst/v3/domain/errors"
 	repositoryErrs "github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
-	transformerErrs "github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
 )
 
 // Handle handles all errors globally.

@@ -1,4 +1,4 @@
-package errors
+package transformer
 
 import e "github.com/kosatnkn/catalyst/v3/internal/errors"
 

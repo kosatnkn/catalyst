@@ -1,8 +1,8 @@
 package transformers
 
 import (
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/response/transformer"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
-	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"
 )
 
 // SampleTransformer is used to transform sample
@@ -59,5 +59,5 @@ func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}
 
 // dataMismatchError returns a data mismatch error of TransformerError type.
 func (t *SampleTransformer) dataMismatchError() error {
-	return errors.NewTransformerError("100", "Cannot map given data to SampleTransformer", nil)
+	return transformer.NewTransformerError("100", "Cannot map given data to SampleTransformer", nil)
 }
