@@ -4,9 +4,9 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/externals/adapters"
 	"github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
 	"github.com/kosatnkn/catalyst/v3/internal/db"
 	"github.com/kosatnkn/catalyst/v3/internal/req"

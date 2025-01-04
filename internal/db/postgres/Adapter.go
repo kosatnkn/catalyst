@@ -10,7 +10,7 @@ import (
 	// database driver for postgres
 	_ "github.com/lib/pq"
 
-	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/externals/adapters"
 	"github.com/kosatnkn/catalyst/v3/internal/db"
 )
 

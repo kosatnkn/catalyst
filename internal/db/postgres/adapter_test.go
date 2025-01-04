@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/kosatnkn/catalyst/v3/app/adapters"
+	"github.com/kosatnkn/catalyst/v3/externals/adapters"
 	"github.com/kosatnkn/catalyst/v3/internal/db"
 	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
 )

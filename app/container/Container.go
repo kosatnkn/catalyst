@@ -3,6 +3,7 @@ package container
 import (
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
+	extAdapters "github.com/kosatnkn/catalyst/v3/externals/adapters"
 )
 
 // Container holds all resolved dependencies that needs to be injected at run time.
@@ -15,7 +16,7 @@ type Container struct {
 //
 // These are wrappers around third party libraries. All adapters will be of a corresponding adapter interface type.
 type Adapters struct {
-	DB        adapters.DBAdapterInterface
+	DB        extAdapters.DBAdapterInterface
 	Log       adapters.LogAdapterInterface
 	Validator adapters.ValidatorAdapterInterface
 }

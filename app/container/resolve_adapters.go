@@ -5,6 +5,7 @@ import (
 
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/app/config"
+	extAdapters "github.com/kosatnkn/catalyst/v3/externals/adapters"
 	"github.com/kosatnkn/catalyst/v3/internal/db/postgres"
 	"github.com/kosatnkn/catalyst/v3/internal/log"
 	"github.com/kosatnkn/catalyst/v3/internal/validator"
@@ -21,7 +22,7 @@ func resolveAdapters(cfg *config.Config) Adapters {
 }
 
 // resolveDBAdapter resolves the database adapter.
-func resolveDBAdapter(cfg postgres.Config) adapters.DBAdapterInterface {
+func resolveDBAdapter(cfg postgres.Config) extAdapters.DBAdapterInterface {
 	db, err := postgres.NewAdapter(cfg)
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
