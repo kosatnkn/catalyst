@@ -18,8 +18,8 @@ import (
 
 // Controller is the base struct that holds fields and functionality common to all controllers.
 type Controller struct {
-	logger    adapters.LogAdapterInterface
-	validator adapters.ValidatorAdapterInterface
+	Logger    adapters.LogAdapterInterface
+	Validator adapters.ValidatorAdapterInterface
 	*filter.FilterControllerFacilitator
 	*paginator.PaginatorControllerFacilitator
 }
@@ -27,25 +27,25 @@ type Controller struct {
 // NewController creates a new instance of the controller.
 func NewController(c *container.Container) *Controller {
 	return &Controller{
-		logger:                         c.Adapters.Log,
-		validator:                      c.Adapters.Validator,
+		Logger:                         c.Adapters.Log,
+		Validator:                      c.Adapters.Validator,
 		FilterControllerFacilitator:    filter.NewFilterControllerFacilitator(),
 		PaginatorControllerFacilitator: paginator.NewPaginatorControllerFacilitator(),
 	}
 }
 
-// withTrace adds an optional tracing string that will be displayed in error messages.
-func (ctl *Controller) withTrace(ctx context.Context, point string) context.Context {
-	return ctl.logger.AppendTracePoint(ctx, point)
+// WithTrace adds an optional tracing string that will be displayed in error messages.
+func (ctl *Controller) WithTrace(ctx context.Context, point string) context.Context {
+	return ctl.Logger.AppendTracePoint(ctx, point)
 }
 
-// routeVar returns the value of the route variable denoted by the name.
-func (ctl *Controller) routeVar(r *http.Request, name string) string {
+// RouteVar returns the value of the route variable denoted by the name.
+func (ctl *Controller) RouteVar(r *http.Request, name string) string {
 	return mux.Vars(r)[name]
 }
 
 // filters extracts filters from query parameters.
-func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
+func (ctl *Controller) Filters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
 	// create empty filters slice
 	filters := make([]filter.Filter, 0)
 
@@ -62,7 +62,7 @@ func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) 
 	}
 
 	// validate unpacked data
-	errs := ctl.validator.Validate(fu)
+	errs := ctl.Validator.Validate(fu)
 	if errs != nil {
 		return filters, errs
 	}
@@ -70,8 +70,8 @@ func (ctl *Controller) filters(r *http.Request, fu unpackers.UnpackerInterface) 
 	return ctl.GetFilters(fu)
 }
 
-// paginator extracts pagination data from query parameters
-func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interface{}) {
+// Paginator extracts pagination data from query parameters
+func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interface{}) {
 	// create default paginator
 	paginator := ctl.GetPaginator(1, 10)
 
@@ -90,7 +90,7 @@ func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interfac
 	}
 
 	// validate unpacked data
-	errs := ctl.validator.Validate(pu)
+	errs := ctl.Validator.Validate(pu)
 	if errs != nil {
 		return paginator, errs
 	}
@@ -102,8 +102,8 @@ func (ctl *Controller) paginator(r *http.Request) (paginator.Paginator, interfac
 	return paginator, nil
 }
 
-// unpackBody unpacks and validates the request body.
-func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface) interface{} {
+// UnpackBody unpacks and validates the request body.
+func (ctl *Controller) UnpackBody(r *http.Request, u unpackers.UnpackerInterface) interface{} {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -115,7 +115,7 @@ func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface
 	}
 
 	// validate unpacked data
-	errs := ctl.validator.Validate(u)
+	errs := ctl.Validator.Validate(u)
 	if errs != nil {
 		return errs
 	}
@@ -123,15 +123,15 @@ func (ctl *Controller) unpackBody(r *http.Request, u unpackers.UnpackerInterface
 	return nil
 }
 
-// transform is a convenience function wrapping the actual `response.Transform` function
+// Transform is a convenience function wrapping the actual `response.Transform` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) transform(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
+func (ctl *Controller) Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
 	return response.Transform(data, t, isCollection)
 }
 
-// sendResponse is a convenience function wrapping the actual `response.Send` function
+// SendResponse is a convenience function wrapping the actual `response.Send` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) sendResponse(w http.ResponseWriter, code int, payload ...interface{}) {
+func (ctl *Controller) SendResponse(w http.ResponseWriter, code int, payload ...interface{}) {
 	if len(payload) == 0 {
 		response.Send(w, code, nil)
 		return
@@ -140,8 +140,8 @@ func (ctl *Controller) sendResponse(w http.ResponseWriter, code int, payload ...
 	response.Send(w, code, payload)
 }
 
-// sendError is a convenience function wrapping the actual `response.Error` function
+// SendError is a convenience function wrapping the actual `response.Error` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) sendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
-	response.Error(ctx, w, ctl.logger, err)
+func (ctl *Controller) SendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
+	response.Error(ctx, w, ctl.Logger, err)
 }

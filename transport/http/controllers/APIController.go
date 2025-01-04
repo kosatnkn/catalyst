@@ -5,19 +5,20 @@ import (
 	"strings"
 
 	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/controllers"
 	"github.com/kosatnkn/catalyst/v3/metadata"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // APIController contains controller logic for endpoints.
 type APIController struct {
-	*Controller
+	*controllers.Controller
 }
 
 // NewAPIController creates a new instance of the controller.
 func NewAPIController(c *container.Container) *APIController {
 	return &APIController{
-		Controller: NewController(c),
+		Controller: controllers.NewController(c),
 	}
 }
 
@@ -31,5 +32,5 @@ func (ctl *APIController) GetInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// send response
-	ctl.sendResponse(w, http.StatusOK, tr)
+	ctl.SendResponse(w, http.StatusOK, tr)
 }
