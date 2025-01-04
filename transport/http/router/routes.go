@@ -6,8 +6,8 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/middleware"
 	"github.com/kosatnkn/catalyst/v3/transport/http/controllers"
-	"github.com/kosatnkn/catalyst/v3/transport/http/middleware"
 )
 
 // Init initializes the router.

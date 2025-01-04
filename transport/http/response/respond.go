@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
-	errHandler "github.com/kosatnkn/catalyst/v3/transport/http/error"
+	errHandler "github.com/kosatnkn/catalyst/v3/app/transport/http/error"
 )
 
 // Send sets all required fields and write the response.
