@@ -17,8 +17,8 @@ import (
 // SamplePostgresRepository is an example repository that implements test database functionality.
 type SamplePostgresRepository struct {
 	db adapters.DBAdapterInterface
-	*filter.FilterRepositoryFacilitator
-	*paginator.PaginatorRepositoryFacilitator
+	*filter.PostgresFilterRepositoryFacilitator
+	*paginator.PostgresPaginatorRepositoryFacilitator
 }
 
 // NewSamplePostgresRepository creates a new instance of the repository.
@@ -34,9 +34,9 @@ func NewSamplePostgresRepository(dbAdapter adapters.DBAdapterInterface) reposito
 	}
 
 	return &SamplePostgresRepository{
-		db:                             dbAdapter,
-		FilterRepositoryFacilitator:    filter.NewFilterRepositoryFacilitator(filterMap),
-		PaginatorRepositoryFacilitator: paginator.NewPaginatorRepositoryFacilitator(),
+		db:                                     dbAdapter,
+		PostgresFilterRepositoryFacilitator:    filter.NewPostgresFilterRepositoryFacilitator(filterMap),
+		PostgresPaginatorRepositoryFacilitator: paginator.NewPostgresPaginatorRepositoryFacilitator(),
 	}
 }
 

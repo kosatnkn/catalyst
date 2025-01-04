@@ -14,20 +14,20 @@ type extendedFilter struct {
 	Operator string
 }
 
-// FilterRepositoryFacilitator is the facilitator that will add filter handling capabilities to the repository.
-type FilterRepositoryFacilitator struct {
+// PostgresFilterRepositoryFacilitator is the facilitator that will add filter handling capabilities to the repository.
+type PostgresFilterRepositoryFacilitator struct {
 	filterMap map[string][]string
 }
 
-// NewFilterRepositoryFacilitator creates a new instance of the facilitator.
-func NewFilterRepositoryFacilitator(filterMap map[string][]string) *FilterRepositoryFacilitator {
-	return &FilterRepositoryFacilitator{
+// NewPostgresFilterRepositoryFacilitator creates a new instance of the facilitator.
+func NewPostgresFilterRepositoryFacilitator(filterMap map[string][]string) *PostgresFilterRepositoryFacilitator {
+	return &PostgresFilterRepositoryFacilitator{
 		filterMap: filterMap,
 	}
 }
 
 // WithFilters attaches filters as a WHERE clause to the query.
-func (repo *FilterRepositoryFacilitator) WithFilters(query string, fts []Filter) (string, map[string]interface{}, error) {
+func (repo *PostgresFilterRepositoryFacilitator) WithFilters(query string, fts []Filter) (string, map[string]interface{}, error) {
 	params := make(map[string]interface{})
 
 	if len(fts) == 0 {
@@ -60,7 +60,7 @@ func (repo *FilterRepositoryFacilitator) WithFilters(query string, fts []Filter)
 }
 
 // extendFilters sets additional filter parameters like table field and operator for filters.
-func (repo *FilterRepositoryFacilitator) extendFilters(filters []Filter) ([]extendedFilter, error) {
+func (repo *PostgresFilterRepositoryFacilitator) extendFilters(filters []Filter) ([]extendedFilter, error) {
 	efs := make([]extendedFilter, 0)
 
 	if repo.filterMap == nil {
@@ -85,7 +85,7 @@ func (repo *FilterRepositoryFacilitator) extendFilters(filters []Filter) ([]exte
 
 // getOperatorFor returns the operator from field mapping if one is set, otherwise
 // will return 'SelectEqual' as the default.
-func (repo *FilterRepositoryFacilitator) getOperatorFor(name string) string {
+func (repo *PostgresFilterRepositoryFacilitator) getOperatorFor(name string) string {
 	m := repo.filterMap[name]
 	if len(m) == 1 {
 		return req.SelectEqual
@@ -95,7 +95,7 @@ func (repo *FilterRepositoryFacilitator) getOperatorFor(name string) string {
 }
 
 // getConditionQueryPart returns the query part needed to add the filter condition to the query.
-func (repo *FilterRepositoryFacilitator) getConditionQueryPart(f extendedFilter) (string, map[string]interface{}) {
+func (repo *PostgresFilterRepositoryFacilitator) getConditionQueryPart(f extendedFilter) (string, map[string]interface{}) {
 	switch f.Operator {
 	case req.SelectLike:
 		return repo.getSelectLikeQueryPart(f)
@@ -109,7 +109,7 @@ func (repo *FilterRepositoryFacilitator) getConditionQueryPart(f extendedFilter)
 // getSelectEqualQueryPart creates the query part for an 'equal' operation.
 //
 // ex: AND `field` = `value`
-func (repo *FilterRepositoryFacilitator) getSelectEqualQueryPart(f extendedFilter) (string, map[string]interface{}) {
+func (repo *PostgresFilterRepositoryFacilitator) getSelectEqualQueryPart(f extendedFilter) (string, map[string]interface{}) {
 	m := make(map[string]interface{})
 	m[f.Name] = f.Value
 
@@ -119,7 +119,7 @@ func (repo *FilterRepositoryFacilitator) getSelectEqualQueryPart(f extendedFilte
 // getSelectLikeQueryPart creates the query part for a 'like' operation.
 //
 // ex: AND `field` LIKE `%value%`
-func (repo *FilterRepositoryFacilitator) getSelectLikeQueryPart(f extendedFilter) (string, map[string]interface{}) {
+func (repo *PostgresFilterRepositoryFacilitator) getSelectLikeQueryPart(f extendedFilter) (string, map[string]interface{}) {
 	m := make(map[string]interface{})
 	m[f.Name] = fmt.Sprintf("%%%s%%", f.Value)
 
@@ -129,7 +129,7 @@ func (repo *FilterRepositoryFacilitator) getSelectLikeQueryPart(f extendedFilter
 // getSelectInQueryPart creates the query part for an 'in' operation.
 //
 // ex: AND `field` IN (`value1`, `value2`, `value3`)
-func (repo *FilterRepositoryFacilitator) getSelectInQueryPart(f extendedFilter) (string, map[string]interface{}) {
+func (repo *PostgresFilterRepositoryFacilitator) getSelectInQueryPart(f extendedFilter) (string, map[string]interface{}) {
 	m := make(map[string]interface{})
 
 	// placeholders
