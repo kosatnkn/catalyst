@@ -13,6 +13,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/response"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
+	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
@@ -82,7 +83,7 @@ func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interfac
 	}
 
 	// unpack pagination data sent in query
-	pu := paginator.NewPaginatorUnpacker()
+	pu := unpackers.NewPaginatorUnpacker()
 
 	err := request.Unpack([]byte(pgn[0]), pu)
 	if err != nil {

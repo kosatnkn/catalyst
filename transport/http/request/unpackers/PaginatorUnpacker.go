@@ -1,4 +1,4 @@
-package paginator
+package unpackers
 
 // PaginatorUnpacker contains the unpacking structure for paginator request payload.
 //
