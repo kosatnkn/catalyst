@@ -9,7 +9,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/app/container"
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/request"
-	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpackers"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpacker"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response"
@@ -45,7 +45,7 @@ func (ctl *Controller) RouteVar(r *http.Request, name string) string {
 }
 
 // filters extracts filters from query parameters.
-func (ctl *Controller) Filters(r *http.Request, fu unpackers.UnpackerInterface) ([]filter.Filter, interface{}) {
+func (ctl *Controller) Filters(r *http.Request, fu unpacker.UnpackerInterface) ([]filter.Filter, interface{}) {
 	// create empty filters slice
 	filters := make([]filter.Filter, 0)
 
@@ -103,7 +103,7 @@ func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interfac
 }
 
 // UnpackBody unpacks and validates the request body.
-func (ctl *Controller) UnpackBody(r *http.Request, u unpackers.UnpackerInterface) interface{} {
+func (ctl *Controller) UnpackBody(r *http.Request, u unpacker.UnpackerInterface) interface{} {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err

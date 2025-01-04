@@ -8,7 +8,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 
 	middlewareErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/middleware/errors"
-	unpackerErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpackers/errors"
+	unpackerErrs "github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpacker"
 	domainErrs "github.com/kosatnkn/catalyst/v3/domain/errors"
 	repositoryErrs "github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
 	transformerErrs "github.com/kosatnkn/catalyst/v3/transport/http/response/transformers/errors"

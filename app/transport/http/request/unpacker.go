@@ -6,15 +6,14 @@ import (
 
 	"fmt"
 
-	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpackers/errors"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpacker"
 )
 
 // Unpack the request in to the given unpacker struct.
-func Unpack(data []byte, unpacker unpackers.UnpackerInterface) error {
-	err := json.Unmarshal(data, unpacker)
+func Unpack(data []byte, un unpacker.UnpackerInterface) error {
+	err := json.Unmarshal(data, un)
 	if err != nil {
-		return errors.NewUnpackerError("", formatUnpackerMessage(unpacker.RequiredFormat()), nil)
+		return unpacker.NewUnpackerError("", formatUnpackerMessage(un.RequiredFormat()), nil)
 	}
 
 	return nil
