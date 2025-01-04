@@ -1,4 +1,4 @@
-package repositories
+package postgres
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/domain/boundary/repositories"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
 	"github.com/kosatnkn/catalyst/v3/externals/adapters"
-	"github.com/kosatnkn/catalyst/v3/externals/repositories/errors"
+	extRepo "github.com/kosatnkn/catalyst/v3/externals/repositories"
 	"github.com/kosatnkn/catalyst/v3/internal/db"
 	"github.com/kosatnkn/catalyst/v3/internal/req"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
@@ -48,7 +48,7 @@ func (repo *SamplePostgresRepository) Get(ctx context.Context, fts []filter.Filt
 	// add filters to query
 	query, params, err := repo.WithFilters(query, fts)
 	if err != nil {
-		return nil, errors.ErrQuery(err)
+		return nil, extRepo.ErrQuery(err)
 	}
 
 	// add pagination
@@ -56,7 +56,7 @@ func (repo *SamplePostgresRepository) Get(ctx context.Context, fts []filter.Filt
 
 	result, err := repo.db.Query(ctx, query, params)
 	if err != nil {
-		return nil, errors.ErrQuery(err)
+		return nil, extRepo.ErrQuery(err)
 	}
 
 	return repo.mapResult(result)
@@ -77,12 +77,12 @@ func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (enti
 
 	result, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return entities.Sample{}, errors.ErrQuery(err)
+		return entities.Sample{}, extRepo.ErrQuery(err)
 	}
 
 	mapped, err := repo.mapResult(result)
 	if err != nil {
-		return entities.Sample{}, errors.ErrQuery(err)
+		return entities.Sample{}, extRepo.ErrQuery(err)
 	}
 	if len(mapped) == 0 {
 		return entities.Sample{}, nil
@@ -104,7 +104,7 @@ func (repo *SamplePostgresRepository) Add(ctx context.Context, sample entities.S
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return errors.ErrQuery(err)
+		return extRepo.ErrQuery(err)
 	}
 
 	return nil
@@ -124,7 +124,7 @@ func (repo *SamplePostgresRepository) Edit(ctx context.Context, sample entities.
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return errors.ErrQuery(err)
+		return extRepo.ErrQuery(err)
 	}
 
 	return nil
@@ -141,7 +141,7 @@ func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error 
 
 	_, err := repo.db.Query(ctx, query, parameters)
 	if err != nil {
-		return errors.ErrQuery(err)
+		return extRepo.ErrQuery(err)
 	}
 
 	return nil
@@ -154,7 +154,7 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
 	defer func() {
 		if r := recover(); r != nil {
-			err = errors.ErrQuery(r.(error))
+			err = extRepo.ErrQuery(r.(error))
 		}
 	}()
 
