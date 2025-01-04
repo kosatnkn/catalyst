@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -20,14 +19,14 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 		return nil
 	}
 
-	// register defined metrics
+	// register additional custom metrics
 	metrics.Register()
 
 	mux := http.NewServeMux()
 	mux.Handle(cfg.Metrics.Route, promhttp.Handler())
 
 	srv := &http.Server{
-		Addr: cfg.Host + ":" + strconv.Itoa(cfg.Metrics.Port),
+		Addr: fmt.Sprintf("%s:%d", cfg.Host, cfg.Metrics.Port),
 
 		// good practice to set timeouts to avoid Slowloris attacks
 		WriteTimeout: time.Second * 15,

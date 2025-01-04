@@ -6,7 +6,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kosatnkn/catalyst/v3/transport/http/metrics"
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+// HTTPReqDuration is the metric the MetricsMiddleware writes to.
+// It instruments metrics for http request durations.
+//
+// https://godoc.org/github.com/prometheus/client_golang/prometheus
+var HTTPReqDuration = prometheus.NewHistogramVec(
+	prometheus.HistogramOpts{
+		Name:    "http_request_duration_milliseconds",
+		Help:    "HTTP request duration in milliseconds, partitioned by status code, HTTP method and URL.",
+		Buckets: []float64{.5, 1, 2.5, 5, 10, 50, 100, 500, 1000},
+	},
+	[]string{"code", "method", "url"},
 )
 
 // MetricsMiddleware attaches metrics to the request.
@@ -28,7 +41,7 @@ func (m *MetricsMiddleware) Middleware(next http.Handler) http.Handler {
 		next.ServeHTTP(lrw, r)
 
 		duration := float64(time.Since(startTime).Nanoseconds() / 1000000)
-		obs := metrics.HTTPReqDuration.WithLabelValues(strconv.Itoa(lrw.statusCode), r.Method, m.generalizePath(r.URL.Path))
+		obs := HTTPReqDuration.WithLabelValues(strconv.Itoa(lrw.statusCode), r.Method, m.generalizePath(r.URL.Path))
 		obs.Observe(duration)
 	})
 }

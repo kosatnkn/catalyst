@@ -16,7 +16,7 @@ func main() {
 	// parse all configurations
 	cfg := config.Parse("./configs")
 
-	// show splash screen when starting
+	// show splash prompt when starting
 	splash.Show()
 
 	// resolve the container using parsed configurations
