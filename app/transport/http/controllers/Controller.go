@@ -8,10 +8,10 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/v3/app/adapters"
 	"github.com/kosatnkn/catalyst/v3/app/container"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/request"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpackers"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
-	"github.com/kosatnkn/catalyst/v3/transport/http/request"
-	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response"
 	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
@@ -73,33 +73,33 @@ func (ctl *Controller) Filters(r *http.Request, fu unpackers.UnpackerInterface) 
 // Paginator extracts pagination data from query parameters
 func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interface{}) {
 	// create default paginator
-	paginator := ctl.GetPaginator(1, 10)
+	p := ctl.GetPaginator(1, 10)
 
 	// get paginator from query params
 	pgn := r.URL.Query()["paginator"]
 	if len(pgn) == 0 {
-		return paginator, nil
+		return p, nil
 	}
 
 	// unpack pagination data sent in query
-	pu := unpackers.NewPaginatorUnpacker()
+	pu := paginator.NewPaginatorUnpacker()
 
 	err := request.Unpack([]byte(pgn[0]), pu)
 	if err != nil {
-		return paginator, err
+		return p, err
 	}
 
 	// validate unpacked data
 	errs := ctl.Validator.Validate(pu)
 	if errs != nil {
-		return paginator, errs
+		return p, errs
 	}
 
 	// bind unpacked data to paginator
-	paginator.Page = pu.Page
-	paginator.Size = uint32(pu.Size)
+	p.Page = pu.Page
+	p.Size = uint32(pu.Size)
 
-	return paginator, nil
+	return p, nil
 }
 
 // UnpackBody unpacks and validates the request body.
