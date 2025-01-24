@@ -3,7 +3,7 @@
 
 # Running
 run:
-	./scripts/set_metadata.sh
+	./metadata/set_metadata.sh $(PWD)
 	go run main.go
 
 run_in_docker: docker_build
