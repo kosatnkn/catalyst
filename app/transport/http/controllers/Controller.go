@@ -45,6 +45,11 @@ func (ctl *Controller) RouteVar(r *http.Request, name string) string {
 	return mux.Vars(r)[name]
 }
 
+// RouteVars return all route variables.
+func (ctl *Controller) RouteVars(r *http.Request) map[string]string {
+	return mux.Vars(r)
+}
+
 // filters extracts filters from query parameters.
 func (ctl *Controller) Filters(r *http.Request, fu unpacker.UnpackerInterface) ([]filter.Filter, interface{}) {
 	// create empty filters slice

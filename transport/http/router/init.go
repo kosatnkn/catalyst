@@ -10,6 +10,8 @@ import (
 	"github.com/kosatnkn/catalyst/v3/transport/http/controllers"
 )
 
+// TODO: rewrite this using standard library.
+
 // Init initializes the router.
 func Init(ctr *container.Container) *mux.Router {
 	// create new router

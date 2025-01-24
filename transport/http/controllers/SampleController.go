@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
 	"github.com/kosatnkn/catalyst/v3/app/container"
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/controllers"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
@@ -184,7 +183,7 @@ func (ctl *SampleController) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx := ctl.WithTrace(r.Context(), "SampleController.Delete")
 
 	// get id from request
-	vars := mux.Vars(r)
+	vars := ctl.RouteVars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
 	// validate request parameters
