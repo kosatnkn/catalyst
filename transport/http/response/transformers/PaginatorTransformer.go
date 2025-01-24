@@ -12,7 +12,7 @@ type PaginatorTransformer struct {
 }
 
 // NewPaginatorTransformer creates a new instance of the transformer.
-func NewPaginatorTransformer() TransformerInterface {
+func NewPaginatorTransformer() transformer.TransformerInterface {
 	return &PaginatorTransformer{}
 }
 

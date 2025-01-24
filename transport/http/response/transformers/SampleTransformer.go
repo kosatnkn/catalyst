@@ -12,7 +12,7 @@ type SampleTransformer struct {
 }
 
 // NewSampleTransformer creates a new instance of the transformer.
-func NewSampleTransformer() TransformerInterface {
+func NewSampleTransformer() transformer.TransformerInterface {
 	return &SampleTransformer{}
 }
 

@@ -11,10 +11,10 @@ import (
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/request"
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/request/unpacker"
 	"github.com/kosatnkn/catalyst/v3/app/transport/http/response"
+	"github.com/kosatnkn/catalyst/v3/app/transport/http/response/transformer"
 	"github.com/kosatnkn/catalyst/v3/internal/req/filter"
 	"github.com/kosatnkn/catalyst/v3/internal/req/paginator"
 	"github.com/kosatnkn/catalyst/v3/transport/http/request/unpackers"
-	"github.com/kosatnkn/catalyst/v3/transport/http/response/transformers"
 )
 
 // Controller is the base struct that holds fields and functionality common to all controllers.
@@ -126,7 +126,7 @@ func (ctl *Controller) UnpackBody(r *http.Request, u unpacker.UnpackerInterface)
 
 // Transform is a convenience function wrapping the actual `response.Transform` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) Transform(data interface{}, t transformers.TransformerInterface, isCollection bool) (interface{}, error) {
+func (ctl *Controller) Transform(data interface{}, t transformer.TransformerInterface, isCollection bool) (interface{}, error) {
 	return response.Transform(data, t, isCollection)
 }
 
