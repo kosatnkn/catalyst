@@ -7,24 +7,24 @@ import (
 
 // Config is the master config struct that holds all other config structs.
 type Config struct {
-	App AppConfig
-	DB  postgres.Config
-	Log log.Config
+	App AppConfig       `mapstructure:"app"`
+	DB  postgres.Config `mapstructure:"db"`
+	Log log.Config      `mapstructure:"log"`
 }
 
 // AppConfig holds application configurations.
 type AppConfig struct {
-	Name     string       `yaml:"name"`
-	Mode     string       `yaml:"mode"`
-	Host     string       `yaml:"host"`
-	Port     int          `yaml:"port"`
-	Timezone string       `yaml:"timezone"`
-	Metrics  MetricConfig `yaml:"metrics"`
+	Name     string       `mapstructure:"name"`
+	Mode     string       `mapstructure:"mode"`
+	Host     string       `mapstructure:"host"`
+	Port     int          `mapstructure:"port"`
+	Timezone string       `mapstructure:"timezone"`
+	Metrics  MetricConfig `mapstructure:"metrics"`
 }
 
 // MetricConfig holds application metric configurations.
 type MetricConfig struct {
-	Enabled bool   `yaml:"enabled"`
-	Port    int    `yaml:"port"`
-	Route   string `yaml:"route"`
+	Enabled bool   `mapstructure:"enabled"`
+	Port    int    `mapstructure:"port"`
+	Route   string `mapstructure:"route"`
 }

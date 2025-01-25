@@ -9,5 +9,5 @@ type Config struct {
 	//  WARN: log messages with log level 'ERROR' and 'WARN'
 	//  DEBUG: log messages with log level 'ERROR', 'WARN' and 'DEBUG'
 	//  INFO: log messages with log level 'ERROR', 'WARN', 'DEBUG' and 'INFO'
-	Level string `yaml:"level"`
+	Level string `yaml:"level" mapstructure:"level"`
 }

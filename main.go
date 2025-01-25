@@ -13,11 +13,15 @@ import (
 )
 
 func main() {
-	// parse all configurations
-	cfg := config.Parse("./configs")
-
 	// show splash prompt when starting
 	splash.Show()
+
+	// parse all configurations
+	cfg, err := config.Parse(".")
+	if err != nil {
+		fmt.Println("Error parsing configurations:", err)
+		os.Exit(1)
+	}
 
 	// resolve the container using parsed configurations
 	ctr := container.Resolve(cfg)
