@@ -3,12 +3,21 @@ package config
 import (
 	"fmt"
 	"os"
+	"reflect"
+	"strings"
 
 	"github.com/spf13/viper"
 )
 
 // Parse parses all configuration to a single Config object.
-// `cfgDir` is the path of the configuration directory.
+//
+// `cfgDir` is the path of the directory where the config file is located.
+// The config file should be named `config.yaml` and should be in the YAML format.
+//
+// The precedence of picking up of configuration values is as follows:
+//  1. Environment variables
+//  2. Config file
+//  3. Default values
 func Parse(cfgDir string) (*Config, error) {
 	var config Config
 
@@ -16,41 +25,38 @@ func Parse(cfgDir string) (*Config, error) {
 	dir := getConfigDir(cfgDir)
 
 	// initialize viper
-	viper.SetConfigName("config") // Name of the config file (without extension)
-	viper.SetConfigType("yaml")   // Config file format
-	viper.AddConfigPath(dir)      // Path to the directory containing the config file
-	viper.SetEnvPrefix("CATALYST")
-	viper.AutomaticEnv() // Enable environment variable override
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(dir)
 
-	// set default values
-	viper.SetDefault("app.name", "no-name")
-	viper.SetDefault("app.mode", "DEBUG")
-	viper.SetDefault("app.host", "")
-	viper.SetDefault("app.port", "8080")
-	viper.SetDefault("app.timezone", "UTC")
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix("CATALYST")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	// bind environment variables
+	keys := keysOfStruct(config, "")
+	for _, key := range keys {
+		_ = viper.BindEnv(key)
+	}
+
+	// default values
 	viper.SetDefault("app.metrics.enabled", true)
-	viper.SetDefault("app.metrics.port", 8081)
+	viper.SetDefault("app.metrics.port", 8001)
 	viper.SetDefault("app.metrics.route", "/metrics")
-	viper.SetDefault("db.host", "localhost")
-	viper.SetDefault("db.port", 5432)
-	viper.SetDefault("db.database", "postgres")
-	viper.SetDefault("db.user", "postgres")
-	viper.SetDefault("db.password", "")
-	viper.SetDefault("db.pool_size", 10)
-	viper.SetDefault("db.check", true)
-	viper.SetDefault("log.level", "INFO")
 
 	// try to read the config file
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("falling back to environment variables:", err)
+		fmt.Println(err)
+	} else {
+		fmt.Println("using configs from ", viper.ConfigFileUsed())
 	}
 
-	// Unmarshal into the struct
+	fmt.Println(viper.AllKeys())
+
+	// unmarshal into the struct
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
-
-	fmt.Printf("Config: %+v\n", config)
 
 	return &config, nil
 }
@@ -64,4 +70,52 @@ func getConfigDir(dir string) string {
 	}
 
 	return dir + string(os.PathSeparator)
+}
+
+// keysOfStruct traverses a struct and generates all keys by concatenating mapstructure tags with '.'
+func keysOfStruct(input interface{}, prefix string) []string {
+	var keys []string
+
+	// Get the reflect type and value of the input
+	t := reflect.TypeOf(input)
+	v := reflect.ValueOf(input)
+
+	// Ensure input is a struct
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+		v = v.Elem()
+	}
+
+	if t.Kind() != reflect.Struct {
+		return keys
+	}
+
+	// Traverse each field of the struct
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i)
+
+		// Get the mapstructure tag
+		tag, ok := field.Tag.Lookup("mapstructure")
+		if !ok || tag == "" {
+			continue
+		}
+
+		// Generate the full key by combining the prefix with the current tag
+		fullKey := tag
+		if prefix != "" {
+			fullKey = prefix + "." + tag
+		}
+
+		// If the field is a struct, recursively traverse it
+		if field.Type.Kind() == reflect.Struct || (field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct) {
+			childKeys := keysOfStruct(value.Interface(), fullKey)
+			keys = append(keys, childKeys...)
+		} else {
+			// Otherwise, add the key to the result
+			keys = append(keys, fullKey)
+		}
+	}
+
+	return keys
 }

@@ -6,6 +6,26 @@ run:
 	./metadata/set_metadata.sh $(PWD)
 	go run main.go
 
+.PHONY: run_with_env
+run_with_env:
+	./metadata/set_metadata.sh $(PWD)
+
+	CATALYST_APP_NAME="env_app_name" \
+	CATALYST_APP_MODE="DEBUG" \
+	CATALYST_APP_PORT=8000 \
+	CATALYST_APP_TIMEZONE="UTF" \
+	CATALYST_APP_METRICS_ENABLED=true \
+	CATALYST_APP_METRICS_PORT=8001 \
+	CATALYST_DB_HOST="env_db_host" \
+	CATALYST_DB_PORT=5432 \
+	CATALYST_DB_DATABASE="env_db_name" \
+	CATALYST_DB_USER="env_db_user" \
+	CATALYST_DB_PASSWORD="env_db_pwd" \
+	CATALYST_DB_POOLSIZE=5 \
+	CATALYST_DB_CHECK=false \
+	CATALYST_LOG_LEVEL="INFO" \
+	go run main.go
+
 .PHONY: run_in_docker
 run_in_docker: docker_build
 	docker run --name catalyst-test-api --rm -p 8000:8000 -p 8001:8001 kosatnkn/catalyst-test-api:latest

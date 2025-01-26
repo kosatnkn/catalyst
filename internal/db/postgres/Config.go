@@ -7,6 +7,6 @@ type Config struct {
 	Database string `yaml:"database" mapstructure:"database"`
 	User     string `yaml:"user" mapstructure:"user"`
 	Password string `yaml:"password" mapstructure:"password"`
-	PoolSize int    `yaml:"pool_size" mapstructure:"pool_size"`
+	PoolSize int    `yaml:"poolsize" mapstructure:"poolsize"`
 	Check    bool   `yaml:"check" mapstructure:"check"`
 }
