@@ -15,7 +15,7 @@ func NewFilterControllerFacilitator() *FilterControllerFacilitator {
 // GetFilters return the data passed in to it as a slice of filters.
 //
 // The underlying type of 'data' should be a slice.
-func (ctl *FilterControllerFacilitator) GetFilters(data interface{}) (filters []Filter, err error) {
+func (ctl *FilterControllerFacilitator) GetFilters(data any) (filters []Filter, err error) {
 	fts := convertToSlice(data)
 	for _, ft := range fts {
 		f, err := ctl.mapFilter(ft)
@@ -30,7 +30,7 @@ func (ctl *FilterControllerFacilitator) GetFilters(data interface{}) (filters []
 }
 
 // mapFilter maps the ftr unpacker to filter entity.
-func (ctl *FilterControllerFacilitator) mapFilter(ftr interface{}) (filter Filter, err error) {
+func (ctl *FilterControllerFacilitator) mapFilter(ftr any) (filter Filter, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = r.(error)

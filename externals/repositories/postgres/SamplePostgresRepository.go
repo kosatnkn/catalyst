@@ -71,7 +71,7 @@ func (repo *SamplePostgresRepository) GetByID(ctx context.Context, id int) (enti
 				FROM test.sample
 				WHERE "id"=?id`
 
-	parameters := map[string]interface{}{
+	parameters := map[string]any{
 		"id": id,
 	}
 
@@ -97,7 +97,7 @@ func (repo *SamplePostgresRepository) Add(ctx context.Context, sample entities.S
 				("name", "password")
 				VALUES(?name, ?password)`
 
-	parameters := map[string]interface{}{
+	parameters := map[string]any{
 		"name":     sample.Name,
 		"password": sample.Password,
 	}
@@ -116,7 +116,7 @@ func (repo *SamplePostgresRepository) Edit(ctx context.Context, sample entities.
 				SET "name"=?name, "password"=?password
 				WHERE "id"=?id`
 
-	parameters := map[string]interface{}{
+	parameters := map[string]any{
 		"id":       sample.ID,
 		"name":     sample.Name,
 		"password": sample.Password,
@@ -135,7 +135,7 @@ func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error 
 	query := `DELETE FROM test.sample
 				WHERE "id"=?id`
 
-	parameters := map[string]interface{}{
+	parameters := map[string]any{
 		"id": id,
 	}
 
@@ -148,7 +148,7 @@ func (repo *SamplePostgresRepository) Delete(ctx context.Context, id int) error 
 }
 
 // mapResult maps the result to entities.
-func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{}) (samples []entities.Sample, err error) {
+func (repo *SamplePostgresRepository) mapResult(result []map[string]any) (samples []entities.Sample, err error) {
 	// Applying type assertion in this manner will result in a panic when the db data structure changes.
 	// This defer recover pattern is used to recover from the panic and to return an error instead.
 	// Notice the use of `named returned values` for this function (without which the recover pattern will not work).
@@ -172,7 +172,7 @@ func (repo *SamplePostgresRepository) mapResult(result []map[string]interface{})
 //
 // Using 'nil' instead of zero values of types ensures that a 'NULL' is inserted to the db field.
 // This is helpful when a field of a table is set to have a 'NULL' value when a value is not assigned to it.
-func (repo *SamplePostgresRepository) fallbackToNil(val interface{}) interface{} {
+func (repo *SamplePostgresRepository) fallbackToNil(val any) any {
 	v := reflect.ValueOf(val)
 	if v.IsZero() {
 		return nil
@@ -187,7 +187,7 @@ func (repo *SamplePostgresRepository) convertToBool(val int64) bool {
 }
 
 // getInsertID returns the id for the inserted record.
-func (repo *SamplePostgresRepository) getInsertID(data []map[string]interface{}) int64 {
+func (repo *SamplePostgresRepository) getInsertID(data []map[string]any) int64 {
 	if len(data) == 0 {
 		return 0
 	}
@@ -196,7 +196,7 @@ func (repo *SamplePostgresRepository) getInsertID(data []map[string]interface{})
 }
 
 // getInsertID returns the id for the inserted record.
-func (repo *SamplePostgresRepository) getAffectedRows(data []map[string]interface{}) int64 {
+func (repo *SamplePostgresRepository) getAffectedRows(data []map[string]any) int64 {
 	if len(data) == 0 {
 		return 0
 	}

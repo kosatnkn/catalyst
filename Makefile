@@ -53,4 +53,4 @@ dep_upgrade_list:
 
 .PHONY: dep_upgrade_all
 dep_upgrade_all:
-	go get -t -u ./... && go mod
+	go get -t -u ./... && go mod tidy

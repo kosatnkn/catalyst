@@ -19,7 +19,7 @@ func TestSingleTxSuccess(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values ('Success Data 2', 'pwd2') returning id`
 	q3 := `insert into sample.sample(name, password) values ('Success Data 3', 'pwd3') returning id`
 
-	r, err := adapter.WrapInTx(context.Background(), func(ctx context.Context) (interface{}, error) {
+	r, err := adapter.WrapInTx(context.Background(), func(ctx context.Context) (any, error) {
 		r, err := adapter.Query(ctx, q1, nil)
 		if err != nil {
 			return r, err
@@ -41,7 +41,7 @@ func TestSingleTxSuccess(t *testing.T) {
 		t.Error("Error running query")
 	}
 
-	result, ok := r.([]map[string]interface{})
+	result, ok := r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -65,7 +65,7 @@ func TestSingleTxFail(t *testing.T) {
 	q2 := `insert into non_existant_table(name, password) values ('Data to non existant table', 'pwd')` // failing query
 	q3 := `insert into sample.sample(name, password) values ('Success Query 3', 'pwd3') returning id`
 
-	_, err := adapter.WrapInTx(context.Background(), func(ctx context.Context) (interface{}, error) {
+	_, err := adapter.WrapInTx(context.Background(), func(ctx context.Context) (any, error) {
 		r, err := adapter.Query(ctx, q1, nil)
 		if err != nil {
 			return r, err
@@ -107,7 +107,7 @@ func TestMultipleTxSuccess(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values ('Success Data 2', 'pwd2') returning id`
 
 	// run q1
-	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r, err := adapter.Query(ctx, q1, nil)
 		if err != nil {
 			return nil, err
@@ -119,7 +119,7 @@ func TestMultipleTxSuccess(t *testing.T) {
 		t.Error("Error running query 1")
 	}
 
-	result, ok := r.([]map[string]interface{})
+	result, ok := r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -131,7 +131,7 @@ func TestMultipleTxSuccess(t *testing.T) {
 	}
 
 	// run q2
-	r, err = adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err = adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r, err = adapter.Query(ctx, q2, nil)
 		if err != nil {
 			return nil, err
@@ -143,7 +143,7 @@ func TestMultipleTxSuccess(t *testing.T) {
 		t.Error("Error running query 2")
 	}
 
-	result, ok = r.([]map[string]interface{})
+	result, ok = r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -156,7 +156,7 @@ func TestMultipleTxSuccess(t *testing.T) {
 
 	// check whether all data is inserted
 	r, err = adapter.Query(context.Background(), `select count(*) as count from sample.sample`, nil)
-	result, ok = r.([]map[string]interface{})
+	result, ok = r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -181,7 +181,7 @@ func TestMultipleTxFail(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values ('Success Data 2', 'pwd2') returning id`
 
 	// run q1 (failing query)
-	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r, err := adapter.Query(ctx, q1, nil)
 		if err != nil {
 			return nil, err
@@ -200,7 +200,7 @@ func TestMultipleTxFail(t *testing.T) {
 	}
 
 	// run q2
-	r, err = adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err = adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r, err = adapter.Query(ctx, q2, nil)
 		if err != nil {
 			return nil, err
@@ -212,7 +212,7 @@ func TestMultipleTxFail(t *testing.T) {
 		t.Error("Error running query 2")
 	}
 
-	result, ok := r.([]map[string]interface{})
+	result, ok := r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -225,7 +225,7 @@ func TestMultipleTxFail(t *testing.T) {
 
 	// check whether all data is inserted
 	r, err = adapter.Query(context.Background(), `select count(*) as count from sample.sample`, nil)
-	result, ok = r.([]map[string]interface{})
+	result, ok = r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -250,14 +250,14 @@ func TestNestedTxSuccess(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values ('Success Data 2', 'pwd2') returning id`
 
 	// run q1
-	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r1, err1 := adapter.Query(ctx, q1, nil)
 		if err1 != nil {
 			return nil, err1
 		}
 
 		// run q2
-		r2, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+		r2, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 			r2, err2 := adapter.Query(ctx, q2, nil)
 			if err2 != nil {
 				return nil, err2
@@ -269,7 +269,7 @@ func TestNestedTxSuccess(t *testing.T) {
 			t.Error("Error running query 2")
 		}
 
-		result2, ok2 := r2.([]map[string]interface{})
+		result2, ok2 := r2.([]map[string]any)
 		if !ok2 {
 			t.Fatal("Result type mismatch")
 		}
@@ -287,7 +287,7 @@ func TestNestedTxSuccess(t *testing.T) {
 		t.Errorf("Error running query 1: %s", err.Error())
 	}
 
-	result, ok := r.([]map[string]interface{})
+	result, ok := r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -304,7 +304,7 @@ func TestNestedTxSuccess(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	result, ok = r.([]map[string]interface{})
+	result, ok = r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -329,14 +329,14 @@ func TestNestedTxInnerFail(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values (no quotes around this string, 'pwd')` // failing query
 
 	// run q1
-	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	r, err := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r1, err1 := adapter.Query(ctx, q1, nil)
 		if err1 != nil {
 			return nil, err1
 		}
 
 		// run q2 (failing query)
-		_, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+		_, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 			r2, err2 := adapter.Query(ctx, q2, nil)
 			if err2 != nil {
 				return nil, err2
@@ -361,7 +361,7 @@ func TestNestedTxInnerFail(t *testing.T) {
 		t.Errorf("Error running query 1: %s", err.Error())
 	}
 
-	result, ok := r.([]map[string]interface{})
+	result, ok := r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -378,7 +378,7 @@ func TestNestedTxInnerFail(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	result, ok = r.([]map[string]interface{})
+	result, ok = r.([]map[string]any)
 	if !ok {
 		t.Fatal("Result type mismatch")
 	}
@@ -403,14 +403,14 @@ func TestNestedTxOuterFail(t *testing.T) {
 	q2 := `insert into sample.sample(name, password) values ('Success Data 2', 'pwd2') returning id`
 
 	// run q1 (failing query)
-	_, err := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+	_, err := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 		r1, err1 := adapter.Query(ctx, q1, nil)
 		if err1 != nil {
 			return r1, err1
 		}
 
 		// run q2
-		r2, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (interface{}, error) {
+		r2, err2 := adapter.WrapInTx(ctx, func(ctx context.Context) (any, error) {
 			r2, err2 := adapter.Query(ctx, q2, nil)
 			if err2 != nil {
 				return r2, err2
@@ -422,7 +422,7 @@ func TestNestedTxOuterFail(t *testing.T) {
 			t.Error("Error running query 2")
 		}
 
-		result2, ok2 := r2.([]map[string]interface{})
+		result2, ok2 := r2.([]map[string]any)
 		if !ok2 {
 			t.Fatal("Result type mismatch")
 		}

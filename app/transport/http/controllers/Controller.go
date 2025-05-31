@@ -51,7 +51,7 @@ func (ctl *Controller) RouteVars(r *http.Request) map[string]string {
 }
 
 // filters extracts filters from query parameters.
-func (ctl *Controller) Filters(r *http.Request, fu unpacker.UnpackerInterface) ([]filter.Filter, interface{}) {
+func (ctl *Controller) Filters(r *http.Request, fu unpacker.UnpackerInterface) ([]filter.Filter, any) {
 	// create empty filters slice
 	filters := make([]filter.Filter, 0)
 
@@ -77,7 +77,7 @@ func (ctl *Controller) Filters(r *http.Request, fu unpacker.UnpackerInterface) (
 }
 
 // Paginator extracts pagination data from query parameters
-func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interface{}) {
+func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, any) {
 	// create default paginator
 	p := ctl.GetPaginator(1, 10)
 
@@ -109,7 +109,7 @@ func (ctl *Controller) Paginator(r *http.Request) (paginator.Paginator, interfac
 }
 
 // UnpackBody unpacks and validates the request body.
-func (ctl *Controller) UnpackBody(r *http.Request, u unpacker.UnpackerInterface) interface{} {
+func (ctl *Controller) UnpackBody(r *http.Request, u unpacker.UnpackerInterface) any {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -131,13 +131,13 @@ func (ctl *Controller) UnpackBody(r *http.Request, u unpacker.UnpackerInterface)
 
 // Transform is a convenience function wrapping the actual `response.Transform` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) Transform(data interface{}, t transformer.TransformerInterface, isCollection bool) (interface{}, error) {
+func (ctl *Controller) Transform(data any, t transformer.TransformerInterface, isCollection bool) (any, error) {
 	return response.Transform(data, t, isCollection)
 }
 
 // SendResponse is a convenience function wrapping the actual `response.Send` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) SendResponse(w http.ResponseWriter, code int, payload ...interface{}) {
+func (ctl *Controller) SendResponse(w http.ResponseWriter, code int, payload ...any) {
 	if len(payload) == 0 {
 		response.Send(w, code, nil)
 		return
@@ -148,6 +148,6 @@ func (ctl *Controller) SendResponse(w http.ResponseWriter, code int, payload ...
 
 // SendError is a convenience function wrapping the actual `response.Error` function
 // to provide a cleaner usage interface.
-func (ctl *Controller) SendError(ctx context.Context, w http.ResponseWriter, err interface{}) {
+func (ctl *Controller) SendError(ctx context.Context, w http.ResponseWriter, err any) {
 	response.Error(ctx, w, ctl.Logger, err)
 }

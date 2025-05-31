@@ -27,8 +27,8 @@ func NewPostgresFilterRepositoryFacilitator(filterMap map[string][]string) *Post
 }
 
 // WithFilters attaches filters as a WHERE clause to the query.
-func (repo *PostgresFilterRepositoryFacilitator) WithFilters(query string, fts []Filter) (string, map[string]interface{}, error) {
-	params := make(map[string]interface{})
+func (repo *PostgresFilterRepositoryFacilitator) WithFilters(query string, fts []Filter) (string, map[string]any, error) {
+	params := make(map[string]any)
 
 	if len(fts) == 0 {
 		return query, params, nil
@@ -95,7 +95,7 @@ func (repo *PostgresFilterRepositoryFacilitator) getOperatorFor(name string) str
 }
 
 // getConditionQueryPart returns the query part needed to add the filter condition to the query.
-func (repo *PostgresFilterRepositoryFacilitator) getConditionQueryPart(f extendedFilter) (string, map[string]interface{}) {
+func (repo *PostgresFilterRepositoryFacilitator) getConditionQueryPart(f extendedFilter) (string, map[string]any) {
 	switch f.Operator {
 	case req.SelectLike:
 		return repo.getSelectLikeQueryPart(f)
@@ -109,8 +109,8 @@ func (repo *PostgresFilterRepositoryFacilitator) getConditionQueryPart(f extende
 // getSelectEqualQueryPart creates the query part for an 'equal' operation.
 //
 // ex: AND `field` = `value`
-func (repo *PostgresFilterRepositoryFacilitator) getSelectEqualQueryPart(f extendedFilter) (string, map[string]interface{}) {
-	m := make(map[string]interface{})
+func (repo *PostgresFilterRepositoryFacilitator) getSelectEqualQueryPart(f extendedFilter) (string, map[string]any) {
+	m := make(map[string]any)
 	m[f.Name] = f.Value
 
 	return fmt.Sprintf(" AND %s %s ?%s", f.Field, f.Operator, f.Name), m
@@ -119,8 +119,8 @@ func (repo *PostgresFilterRepositoryFacilitator) getSelectEqualQueryPart(f exten
 // getSelectLikeQueryPart creates the query part for a 'like' operation.
 //
 // ex: AND `field` LIKE `%value%`
-func (repo *PostgresFilterRepositoryFacilitator) getSelectLikeQueryPart(f extendedFilter) (string, map[string]interface{}) {
-	m := make(map[string]interface{})
+func (repo *PostgresFilterRepositoryFacilitator) getSelectLikeQueryPart(f extendedFilter) (string, map[string]any) {
+	m := make(map[string]any)
 	m[f.Name] = fmt.Sprintf("%%%s%%", f.Value)
 
 	return fmt.Sprintf(" AND %s %s ?%s", f.Field, f.Operator, f.Name), m
@@ -129,12 +129,12 @@ func (repo *PostgresFilterRepositoryFacilitator) getSelectLikeQueryPart(f extend
 // getSelectInQueryPart creates the query part for an 'in' operation.
 //
 // ex: AND `field` IN (`value1`, `value2`, `value3`)
-func (repo *PostgresFilterRepositoryFacilitator) getSelectInQueryPart(f extendedFilter) (string, map[string]interface{}) {
-	m := make(map[string]interface{})
+func (repo *PostgresFilterRepositoryFacilitator) getSelectInQueryPart(f extendedFilter) (string, map[string]any) {
+	m := make(map[string]any)
 
 	// placeholders
 	var phs string
-	var vs []interface{}
+	var vs []any
 
 	switch reflect.TypeOf(f.Value).Kind() {
 	case reflect.Slice:
@@ -149,7 +149,7 @@ func (repo *PostgresFilterRepositoryFacilitator) getSelectInQueryPart(f extended
 		return "", m
 	}
 
-	// iterate through the interface{} slice to build the `in` clause
+	// iterate through the any slice to build the `in` clause
 	for i, v := range vs {
 		ph := fmt.Sprintf("%s%d", f.Name, i)
 		phs += fmt.Sprintf(",?%s", ph)

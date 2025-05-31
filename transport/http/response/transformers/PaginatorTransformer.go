@@ -17,7 +17,7 @@ func NewPaginatorTransformer() transformer.TransformerInterface {
 }
 
 // TransformAsObject map data to a transformer object.
-func (t *PaginatorTransformer) TransformAsObject(data interface{}) (interface{}, error) {
+func (t *PaginatorTransformer) TransformAsObject(data any) (any, error) {
 	p, ok := data.(paginator.Paginator)
 	if !ok {
 		return nil, t.dataMismatchError()
@@ -32,7 +32,7 @@ func (t *PaginatorTransformer) TransformAsObject(data interface{}) (interface{},
 }
 
 // TransformAsCollection map data to a collection of transformer objects.
-func (t *PaginatorTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
+func (t *PaginatorTransformer) TransformAsCollection(data any) (any, error) {
 	return nil, transformer.NewTransformerError("", "Cannot transform paginator as a collection", nil)
 }
 

@@ -59,7 +59,7 @@ func (a *Adapter) Ping() error {
 //
 // Note: For INSERT statements postgres does not return the insert id by default.
 // The returning identifier should be defined in the query using the RETURNING clause.
-func (a *Adapter) Query(ctx context.Context, query string, params map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *Adapter) Query(ctx context.Context, query string, params map[string]any) ([]map[string]any, error) {
 	convertedQuery, placeholders := a.convertQuery(query)
 
 	reorderedParams, err := a.reorderParameters(params, placeholders)
@@ -102,7 +102,7 @@ func (a *Adapter) Query(ctx context.Context, query string, params map[string]int
 //
 // This query is intended to do bulk INSERTS, UPDATES and DELETES.
 // Using this for SELECTS will result in an error.
-func (a *Adapter) QueryBulk(ctx context.Context, query string, params []map[string]interface{}) ([]map[string]interface{}, error) {
+func (a *Adapter) QueryBulk(ctx context.Context, query string, params []map[string]any) ([]map[string]any, error) {
 	convertedQuery, placeholders := a.convertQuery(query)
 
 	// check whether the query is a select statement
@@ -116,7 +116,7 @@ func (a *Adapter) QueryBulk(ctx context.Context, query string, params []map[stri
 	}
 	defer stmt.Close()
 
-	var lastID interface{}
+	var lastID any
 	var affRows int64
 
 	if a.isInsert(convertedQuery) {
@@ -157,7 +157,7 @@ func (a *Adapter) QueryBulk(ctx context.Context, query string, params []map[stri
 }
 
 // WrapInTx runs the content of the function in a single transaction.
-func (a *Adapter) WrapInTx(ctx context.Context, fn func(ctx context.Context) (interface{}, error)) (interface{}, error) {
+func (a *Adapter) WrapInTx(ctx context.Context, fn func(ctx context.Context) (any, error)) (any, error) {
 	// attach a transaction to context
 	ctx, err := a.attachTx(ctx)
 	if err != nil {
@@ -263,8 +263,8 @@ func (a *Adapter) convertQuery(query string) (string, []string) {
 }
 
 // reorderParameters reorders the parameters map in the order of named parameters slice.
-func (a *Adapter) reorderParameters(params map[string]interface{}, namedParams []string) ([]interface{}, error) {
-	var reorderedParams []interface{}
+func (a *Adapter) reorderParameters(params map[string]any, namedParams []string) ([]any, error) {
+	var reorderedParams []any
 
 	for _, param := range namedParams {
 		// return an error if a named parameter is missing from params
@@ -295,16 +295,16 @@ func (a *Adapter) prepareStatement(ctx context.Context, query string) (*sql.Stmt
 // prepareDataSet creates a dataset using the output of a SELECT statement.
 //
 // Source: https://kylewbanks.com/blog/query-result-to-map-in-golang
-func (a *Adapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, error) {
+func (a *Adapter) prepareDataSet(rows *sql.Rows) ([]map[string]any, error) {
 	defer rows.Close()
 
-	var data []map[string]interface{}
+	var data []map[string]any
 	cols, _ := rows.Columns()
 
-	// create a slice of interface{}'s to represent each column
+	// create a slice of any's to represent each column
 	// and a second slice to contain pointers to each item in the columns slice
-	columns := make([]interface{}, len(cols))
-	columnPointers := make([]interface{}, len(cols))
+	columns := make([]any, len(cols))
+	columnPointers := make([]any, len(cols))
 
 	for i := range columns {
 		columnPointers[i] = &columns[i]
@@ -319,10 +319,10 @@ func (a *Adapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, erro
 
 		// create our map, and retrieve the value for each column from the pointers slice
 		// storing it in the map with the name of the column as the key
-		row := make(map[string]interface{})
+		row := make(map[string]any)
 
 		for i, colName := range cols {
-			val := columnPointers[i].(*interface{})
+			val := columnPointers[i].(*any)
 			row[colName] = *val
 		}
 
@@ -333,12 +333,12 @@ func (a *Adapter) prepareDataSet(rows *sql.Rows) ([]map[string]interface{}, erro
 }
 
 // prepareInsertResultSet creates a resultset using the result of QueryRow().
-func (a *Adapter) prepareInsertResultSet(row *sql.Row) ([]map[string]interface{}, error) {
+func (a *Adapter) prepareInsertResultSet(row *sql.Row) ([]map[string]any, error) {
 	if err := row.Err(); err != nil {
 		return nil, err
 	}
 
-	var id interface{}
+	var id any
 	row.Scan(&id)
 
 	return a.formatResultSet(id, 1), nil
@@ -349,7 +349,7 @@ func (a *Adapter) prepareInsertResultSet(row *sql.Row) ([]map[string]interface{}
 // This is used with UPDATE and DELETE statements.
 //
 // Note: result.LastInsertId() is not supported by Postgres. So this cannot be used with INSERT statements.
-func (a *Adapter) prepareResultSet(result sql.Result) ([]map[string]interface{}, error) {
+func (a *Adapter) prepareResultSet(result sql.Result) ([]map[string]any, error) {
 	aff, err := result.RowsAffected()
 	if err != nil {
 		return nil, err
@@ -359,10 +359,10 @@ func (a *Adapter) prepareResultSet(result sql.Result) ([]map[string]interface{},
 }
 
 // formatResultSet creates a resultset using last insert id and affected rows.
-func (a *Adapter) formatResultSet(id interface{}, aff int64) []map[string]interface{} {
-	data := make([]map[string]interface{}, 0)
+func (a *Adapter) formatResultSet(id any, aff int64) []map[string]any {
+	data := make([]map[string]any, 0)
 
-	return append(data, map[string]interface{}{
+	return append(data, map[string]any{
 		db.AffectedRows: aff,
 		db.LastInsertID: id,
 	})

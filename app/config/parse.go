@@ -51,8 +51,6 @@ func Parse(cfgDir string) (*Config, error) {
 		fmt.Println("using configs from ", viper.ConfigFileUsed())
 	}
 
-	fmt.Println(viper.AllKeys())
-
 	// unmarshal into the struct
 	if err := viper.Unmarshal(&config); err != nil {
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
@@ -73,7 +71,7 @@ func getConfigDir(dir string) string {
 }
 
 // keysOfStruct traverses a struct and generates all keys by concatenating mapstructure tags with '.'
-func keysOfStruct(input interface{}, prefix string) []string {
+func keysOfStruct(input any, prefix string) []string {
 	var keys []string
 
 	// Get the reflect type and value of the input

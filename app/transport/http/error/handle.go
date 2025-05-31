@@ -15,7 +15,7 @@ import (
 )
 
 // Handle handles all errors globally.
-func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (interface{}, int) {
+func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (any, int) {
 	switch err.(type) {
 	case *transformerErrs.TransformerError:
 		logError(ctx, log, err)
@@ -35,7 +35,7 @@ func Handle(ctx context.Context, err error, log adapters.LogAdapterInterface) (i
 }
 
 // HandleValidatorErrors specifically handles validation errors thrown by the validator.
-func HandleValidatorErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (interface{}, int) {
+func HandleValidatorErrors(ctx context.Context, errs map[string]string, log adapters.LogAdapterInterface) (any, int) {
 	log.Error(ctx, fmt.Sprintf("Validation Errors: %v", errs))
 	return formatValidatorErrors(errs), http.StatusUnprocessableEntity
 }

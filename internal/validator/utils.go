@@ -5,7 +5,7 @@ import (
 )
 
 // isSlice checks whether the given unpacker is a slice or an array.
-func isSlice(data interface{}) bool {
+func isSlice(data any) bool {
 	value := reflect.ValueOf(data)
 
 	// if data is a pointer, get the underlying value
@@ -18,7 +18,7 @@ func isSlice(data interface{}) bool {
 }
 
 // convertToSlice converts the given interface type that has a slice as its underlying type in to a slice of interfaces.
-func convertToSlice(data interface{}) []interface{} {
+func convertToSlice(data any) []any {
 	value := reflect.ValueOf(data)
 
 	// if data is a pointer, get the underlying value
@@ -31,7 +31,7 @@ func convertToSlice(data interface{}) []interface{} {
 	}
 
 	length := value.Len()
-	result := make([]interface{}, length)
+	result := make([]any, length)
 
 	for i := 0; i < length; i++ {
 		result[i] = value.Index(i).Interface()

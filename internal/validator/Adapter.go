@@ -30,7 +30,7 @@ func NewAdapter() (adapters.ValidatorAdapterInterface, error) {
 }
 
 // Validate validates structs and slices of structs.
-func (a *Adapter) Validate(data interface{}) map[string]string {
+func (a *Adapter) Validate(data any) map[string]string {
 	if isSlice(data) {
 		return a.validateSliceOfStructs(convertToSlice(data))
 	}
@@ -39,7 +39,7 @@ func (a *Adapter) Validate(data interface{}) map[string]string {
 }
 
 // ValidateField validates a single variable.
-func (a *Adapter) ValidateField(name string, value interface{}, rules string) map[string]string {
+func (a *Adapter) ValidateField(name string, value any, rules string) map[string]string {
 	// returns nil or ValidationErrors ( []FieldError )
 	err := a.validate.Var(value, rules)
 	if err == nil {
@@ -57,7 +57,7 @@ func (a *Adapter) ValidateField(name string, value interface{}, rules string) ma
 }
 
 // validateStruct validates a struct.
-func (a *Adapter) validateStruct(data interface{}) map[string]string {
+func (a *Adapter) validateStruct(data any) map[string]string {
 	// returns nil or ValidationErrors ( []FieldError )
 	err := a.validate.Struct(data)
 	if err == nil {
@@ -71,7 +71,7 @@ func (a *Adapter) validateStruct(data interface{}) map[string]string {
 }
 
 // validateStruct validates an array of structs.
-func (a *Adapter) validateSliceOfStructs(data []interface{}) map[string]string {
+func (a *Adapter) validateSliceOfStructs(data []any) map[string]string {
 	e := make(map[string]string)
 
 	for i, d := range data {

@@ -74,7 +74,7 @@ func TestSelect(t *testing.T) {
 		t.Fatalf("Error: %v", err)
 	}
 
-	need := reflect.TypeOf(make([]map[string]interface{}, 0))
+	need := reflect.TypeOf(make([]map[string]any, 0))
 	got := reflect.TypeOf(r)
 
 	if got != need {
@@ -90,7 +90,7 @@ func TestInsert(t *testing.T) {
 	defer adapter.Destruct()
 
 	q := `insert into sample.sample(name, password) values (?name, ?password) returning id`
-	params := map[string]interface{}{
+	params := map[string]any{
 		"name":     "Success Data 1",
 		"password": "pwd1",
 	}
@@ -137,7 +137,7 @@ func TestUpdate(t *testing.T) {
 
 	// insert
 	q := `insert into sample.sample(name, password) values (?name, ?password)`
-	params := map[string]interface{}{
+	params := map[string]any{
 		"name":     "Success Data 1",
 		"password": "pwd1",
 	}
@@ -149,7 +149,7 @@ func TestUpdate(t *testing.T) {
 
 	//update
 	q = `update sample.sample set name = ?name, password = ?password where id = ?id`
-	params = map[string]interface{}{
+	params = map[string]any{
 		"id":       1,
 		"name":     "Success Data 2",
 		"password": "pwd2",
@@ -163,8 +163,8 @@ func TestUpdate(t *testing.T) {
 		t.Errorf("Need 1 record, got %d records", len(r))
 	}
 
-	var need interface{}
-	var got interface{}
+	var need any
+	var got any
 
 	need = 1
 	got = int(r[0][db.AffectedRows].(int64))
@@ -200,7 +200,7 @@ func TestDelete(t *testing.T) {
 
 	// insert
 	q := `insert into sample.sample(name, password) values (?name, ?password)`
-	params := map[string]interface{}{
+	params := map[string]any{
 		"name":     "Success Data 1",
 		"password": "pwd1",
 	}
@@ -212,7 +212,7 @@ func TestDelete(t *testing.T) {
 
 	// delete
 	q = `delete from sample.sample where id = ?id`
-	params = map[string]interface{}{
+	params = map[string]any{
 		"id": 1,
 	}
 
@@ -224,8 +224,8 @@ func TestDelete(t *testing.T) {
 		t.Errorf("Need 1 record, got %d records", len(r))
 	}
 
-	var need interface{}
-	var got interface{}
+	var need any
+	var got any
 
 	need = 1
 	got = int(r[0][db.AffectedRows].(int64))
@@ -276,12 +276,12 @@ func TestInsertBulk(t *testing.T) {
 
 	q := `insert into sample.sample(name, password) values (?name, ?password) returning id`
 
-	params := make([]map[string]interface{}, 0)
-	params = append(params, map[string]interface{}{
+	params := make([]map[string]any, 0)
+	params = append(params, map[string]any{
 		"name":     "Name 1",
 		"password": "pwd1",
 	})
-	params = append(params, map[string]interface{}{
+	params = append(params, map[string]any{
 		"name":     "Name 2",
 		"password": "pwd2",
 	})
@@ -335,12 +335,12 @@ func TestUpdateBulk(t *testing.T) {
 	// insert
 	q := `insert into sample.sample(name, password) values (?name, ?password) returning id`
 
-	ips := make([]map[string]interface{}, 0)
-	ips = append(ips, map[string]interface{}{
+	ips := make([]map[string]any, 0)
+	ips = append(ips, map[string]any{
 		"name":     "Name 1",
 		"password": "pwd1",
 	})
-	ips = append(ips, map[string]interface{}{
+	ips = append(ips, map[string]any{
 		"name":     "Name 2",
 		"password": "pwd2",
 	})
@@ -353,13 +353,13 @@ func TestUpdateBulk(t *testing.T) {
 	// update
 	q = `update sample.sample set name = ?name, password = ?password where id = ?id`
 
-	ups := make([]map[string]interface{}, 0)
-	ups = append(ups, map[string]interface{}{
+	ups := make([]map[string]any, 0)
+	ups = append(ups, map[string]any{
 		"id":       1,
 		"name":     "Name 1 Updated",
 		"password": "pwd1 Updated",
 	})
-	ups = append(ups, map[string]interface{}{
+	ups = append(ups, map[string]any{
 		"id":       2,
 		"name":     "Name 2 Updated",
 		"password": "pwd2 Updated",
@@ -373,8 +373,8 @@ func TestUpdateBulk(t *testing.T) {
 		t.Errorf("Need 1 record, got %d records", len(r))
 	}
 
-	var need interface{}
-	var got interface{}
+	var need any
+	var got any
 
 	need = 2
 	got = int(r[0][db.AffectedRows].(int64))
@@ -417,12 +417,12 @@ func TestDeleteBulk(t *testing.T) {
 	// insert
 	q := `insert into sample.sample(name, password) values (?name, ?password) returning id`
 
-	ips := make([]map[string]interface{}, 0)
-	ips = append(ips, map[string]interface{}{
+	ips := make([]map[string]any, 0)
+	ips = append(ips, map[string]any{
 		"name":     "Name 1",
 		"password": "pwd1",
 	})
-	ips = append(ips, map[string]interface{}{
+	ips = append(ips, map[string]any{
 		"name":     "Name 2",
 		"password": "pwd2",
 	})
@@ -435,11 +435,11 @@ func TestDeleteBulk(t *testing.T) {
 	// delete
 	q = `delete from sample.sample where id = ?id`
 
-	dps := make([]map[string]interface{}, 0)
-	dps = append(dps, map[string]interface{}{
+	dps := make([]map[string]any, 0)
+	dps = append(dps, map[string]any{
 		"id": 1,
 	})
-	dps = append(dps, map[string]interface{}{
+	dps = append(dps, map[string]any{
 		"id": 2,
 	})
 
@@ -451,8 +451,8 @@ func TestDeleteBulk(t *testing.T) {
 		t.Errorf("Need 1 record, got %d records", len(r))
 	}
 
-	var need interface{}
-	var got interface{}
+	var need any
+	var got any
 
 	need = 2
 	got = int(r[0][db.AffectedRows].(int64))

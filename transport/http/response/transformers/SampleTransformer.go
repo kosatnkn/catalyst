@@ -17,7 +17,7 @@ func NewSampleTransformer() transformer.TransformerInterface {
 }
 
 // TransformAsObject map data to a transformer object.
-func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, error) {
+func (t *SampleTransformer) TransformAsObject(data any) (any, error) {
 	sample, ok := data.(entities.Sample)
 	if !ok {
 		return nil, t.dataMismatchError()
@@ -32,7 +32,7 @@ func (t *SampleTransformer) TransformAsObject(data interface{}) (interface{}, er
 }
 
 // TransformAsCollection map data to a collection of transformer objects.
-func (t *SampleTransformer) TransformAsCollection(data interface{}) (interface{}, error) {
+func (t *SampleTransformer) TransformAsCollection(data any) (any, error) {
 	// Make sure that you declare the transformer slice in this manner.
 	// Otherwise the marshaller will return `null` instead of `[]` when
 	// marshalling empty slices
