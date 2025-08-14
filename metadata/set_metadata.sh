@@ -14,4 +14,4 @@ if [ $? -eq 0 ]; then
 fi
 
 echo "built from [$(git rev-parse --abbrev-ref HEAD)] branch, commit [$(git rev-parse --short HEAD)]${release}" > ${work_dir}/metadata/build.txt
-echo "build date $(date +"%Y.%m.%d %T")" >> ${work_dir}/metadata/build.txt
+echo "built on $(date +"%Y.%m.%d %T (%z)")" >> ${work_dir}/metadata/build.txt
