@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/kosatnkn/catalyst/v3/app/config"
 	"github.com/kosatnkn/catalyst/v3/app/container"
@@ -36,9 +37,9 @@ func main() {
 
 	// enable graceful shutdown
 	c := make(chan os.Signal, 1)
-	// accept graceful shutdowns when quit via SIGINT (Ctrl+C)
-	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught
-	signal.Notify(c, os.Interrupt)
+	// accept graceful shutdowns when quit via SIGINT (Ctrl+C) or SIGTERM (Ctrl+/)
+	// SIGKILL or SIGQUIT will not be caught
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 
 	// block until a registered signal is received
 	<-c
@@ -49,6 +50,7 @@ func main() {
 	metricsServer.Stop(msrv)
 
 	// release resources
+	fmt.Println("Releasing resources...")
 	ctr.Destruct()
 
 	fmt.Println("Done")

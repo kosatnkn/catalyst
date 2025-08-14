@@ -44,6 +44,11 @@ func Run(cfg config.AppConfig, ctr *container.Container) *http.Server {
 
 // Stop stops the server.
 func Stop(srv *http.Server) {
-	fmt.Println("HTTP server shutting down...")
-	srv.Shutdown(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	fmt.Println("HTTP server: shutting down...")
+	if err := srv.Shutdown(ctx); err != nil {
+		fmt.Println("HTTP server: error shutting down, ", err)
+	}
 }

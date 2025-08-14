@@ -55,6 +55,11 @@ func Stop(srv *http.Server) {
 		return
 	}
 
-	fmt.Println("Metrics server shutting down...")
-	srv.Shutdown(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	fmt.Println("Metrics server: shutting down...")
+	if err := srv.Shutdown(ctx); err != nil {
+		fmt.Println("Metrics server: error shutting down, ", err)
+	}
 }

@@ -3,8 +3,8 @@
 # Running
 .PHONY: run
 run:
-	./metadata/set_metadata.sh $(PWD)
-	go run main.go
+	@./metadata/set_metadata.sh $(PWD)
+	@go run .
 
 .PHONY: run_with_env
 run_with_env:
