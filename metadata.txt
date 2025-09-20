@@ -1,8 +1,0 @@
-
-  ___|       |         |            |
- |      _' | __|  _' | | |   |  __| __|
- |     (   | |   (   | | |   |\__ \ |
-\____|\__,_|\__|\__,_|_|\__, |____/\__|
-                       ____/
-
-Go Clean Architecture Base Project for REST Services
