@@ -1,7 +1,7 @@
 # Catalyst
 A `Clean Architecture` microservice template.
 
-![catalyst_logo](./docs/img/catalyst_logo_256.svg)
+![catalyst_logo](./docs/img/catalyst_logo_alt.svg)
 
 [![CI](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml)
