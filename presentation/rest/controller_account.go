@@ -1,0 +1,81 @@
+package rest
+
+import (
+	"context"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/kosatnkn/catalyst/v3/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/domain/usecases"
+	"github.com/kosatnkn/catalyst/v3/infra"
+)
+
+// NOTE: This is the sample controller that we have created in order to demonstrate the implementation.
+// A controller is used to group handlers that needs access to additional resources like the same set of persistence.
+// It can also be used to logically group handlers together.
+
+// AccountController is the collection of handlers used to manipulate accounts.
+type AccountController struct {
+	accounts *usecases.AccountUseCases
+}
+
+func NewAccountController(ctr *infra.Container) *AccountController {
+	return &AccountController{
+		accounts: usecases.NewAccountUseCases(ctr),
+	}
+}
+
+func (c *AccountController) Get(ctx *gin.Context) {
+	// get data from request
+	paging, err := paging(ctx.Query("paging"))
+	if err != nil {
+		// set error to Gin context so that the logging middleware can access it
+		ctx.Error(err)
+		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		return
+	}
+
+	filters, err := filters(ctx.Query("filters"))
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		return
+	}
+
+	// pass on to the usecase
+	data, err := c.accounts.GetAccounts(context.Background(), filters, paging)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusBadRequest, responseError(err))
+		return
+	}
+
+	// respond
+	ctx.JSON(http.StatusOK, responseData(data, nil))
+}
+
+func (c *AccountController) Create(ctx *gin.Context) {
+	// get data from request and validate (gin does this under the hood using 'go-playground/validator/v10')
+	var reqBody accountRequest
+	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		return
+	}
+
+	// assign data to account struct
+	a := entities.Account{
+		Owner: reqBody.Owner,
+	}
+
+	// pass on to the usecase
+	data, err := c.accounts.CreateAccount(context.Background(), a)
+	if err != nil {
+		ctx.Error(err)
+		ctx.JSON(http.StatusBadRequest, responseError(err))
+		return
+	}
+
+	// respond
+	ctx.JSON(http.StatusOK, responseData(data, nil))
+}

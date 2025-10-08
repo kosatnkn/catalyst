@@ -1,0 +1,24 @@
+app:
+  name: catalyst
+  mode: DEBUG
+  timezone: GMT+0530
+rest:
+  port: 8000
+  wait: 5
+  release: true
+metrics:
+  enabled: true
+  port: 8001
+  route: /metrics
+db:
+  ## Postgres
+  host: localhost
+  port: 5432
+  database: test
+  user: postgres
+  password: admin
+  poolsize: 10
+  # check whether db is accessible
+  check: false
+log:
+  level: INFO
