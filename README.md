@@ -1,5 +1,5 @@
 # Catalyst
-A `Clean Architecture` microservice template.
+A `Clean Architecture` microservice template written in `Go`.
 
 ![catalyst_logo](./docs/img/catalyst_logo_alt.svg)
 
@@ -13,7 +13,7 @@ A `Clean Architecture` microservice template.
 
 ## Introduction
 
-For **version 3** of **Catalyst**, my main focus is to make it simple, clean (obviously) and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
+For **version 3** of **Catalyst**, my main focus is to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
 
 I have removed a substantial amount of code that I had passionately written for **Catalyst** over the years. In hindsight, I realized that I was just reinventing the wheel again and again, while better alternatives already existed. The more code I added for things like dynamic IoC container resolution, generalized DB transactions, and even logging and metric generation, the more opinionated **Catalyst** became.
 
@@ -43,7 +43,7 @@ The **Domain** contains all the business logic executed by the microservice. It 
 **Usecases** contain all the business logic. Any external dependencies needed by the Use Cases (e.g., database resources) are injected into them using dependency inversion.
 
 #### Boundary
-The **Boundary** marks the interface between the Domain and the orchestration layers. It contains contracts (`Go` interfaces) that facilitate dependency inversion.
+The **Boundary** marks the interface between the **Domain** and the **orchestration layers**. It contains contracts (`Go` interfaces) that facilitate dependency inversion.
 
 ### Orchestration
 Orchestration contains **Infrastructure**, **Presentation** and **Persistence**.
@@ -54,7 +54,7 @@ Orchestration contains **Infrastructure**, **Presentation** and **Persistence**.
 #### Presentation
 **Presentation** contains all outward-facing interfaces. These are the communication channels between the microservice and the outside world. This is where you place your RESTful, GraphQL, gRPC, or WebSocket servers. It’s worth noting that you don’t need to implement all of these in a single microservice; it solely depends on the specifics of your implementation.
 
-Telemetry configurations for metrics and traces can be set up here as well. However, with the currently available options, I would use an [eBPF](https://ebpf.io/) collector to gather telemetry. Unless you need to export custom metrics from your service, this approach provides sufficient information about your service.
+Telemetry configurations for metrics and traces can be set up here as well. However, with currently available options, I would use an [eBPF](https://ebpf.io/) collector to gather telemetry. Unless you need to export custom metrics from your service, this approach provides sufficient information about your service.
 
 #### Persistence
-**Persistence** is used to hold all data-related resources, whether it’s simple file writes, an RDBMS, an object store, or even an event-sourcing system backed by a local store. The important thing to remember is that all implementation details should be encapsulated within the **Persistence** layer. The domain using these resources must not know (or care) about how persistence is implemented. From the perspective of the Domain layer, saving to a static file should be no different than saving to a messaging backend. All complexities related to the underlying persistence technologies should remain contained within the **Persistence** layer.
+**Persistence** is used to hold all data-related resources, whether it’s simple file writes, an RDBMS, an object store, or even an event-sourcing system backed by a local store. The important thing to remember is that all implementation details should be encapsulated within the **Persistence** layer. The **Domain** using these resources must not know (or care) about how persistence is implemented. Saving to a static file should be no different than saving to a messaging backend from the perspective of the **Domain** layer. All complexities related to the underlying persistence technologies should remain contained within the **Persistence** layer.
