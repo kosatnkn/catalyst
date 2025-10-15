@@ -9,7 +9,6 @@ import (
 type Config struct {
 	App      AppConfig         `mapstructure:"app"`
 	Rest     RESTConfig        `mapstructure:"rest"`
-	Metrics  MetricConfig      `mapstructure:"metrics"`
 	Log      loggerjson.Config `mapstructure:"log"`
 	Database postgres.Config   `mapstructure:"db"`
 }
@@ -32,11 +31,4 @@ type RESTConfig struct {
 	// Denotes whether the server should run in release (production) mode or not.
 	// The server will run in debug mode when this is set to false.
 	Release bool `mapstructure:"release"`
-}
-
-// MetricConfig holds application metric configurations.
-type MetricConfig struct {
-	Enabled bool   `mapstructure:"enabled"`
-	Port    int    `mapstructure:"port"`
-	Route   string `mapstructure:"route"`
 }

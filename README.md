@@ -11,7 +11,7 @@ A `Clean Architecture` microservice template written in `Go`.
 [![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v3.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v3)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
-## Introduction
+## 1. Introduction
 
 For **version 3** of **Catalyst**, my main focus is to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
 
@@ -23,7 +23,7 @@ For example, you can use a simple struct implementation as the IoC container and
 
 I’m maintaining a separate GitHub repository at [kosatnkn/catalyst-pkgs](https://github.com/kosatnkn/catalyst-pkgs) to host some of the packages I use here. The logger is a wrapper around [rs/zerolog](https://github.com/rs/zerolog), and the configuration parser is a wrapper around [spf13/viper](https://github.com/spf13/viper). Feel free to swap them out for whatever better suits your needs.
 
-## Architecture
+## 2. Architecture
 
 There are many ways to organize a project that follows the **Clean Architecture** paradigm. This is how I’ve organized **Catalyst**.
 
@@ -33,28 +33,28 @@ When this architecture is mapped to the directory structure of **Catalyst**, it 
 
 ![Clean Architecture Dir Mapping](./docs/img/clean_arch_dir_mapping.drawio.svg)
 
-### Domain
+### 2.1. Domain
 The **Domain** contains all the business logic executed by the microservice. It consists of three main parts: **Entities**, **Use Cases**, and **Boundary**.
 
-#### Entities
+#### 2.1.1. Entities
 **Entities** define the data model for the domain. These are simple `Go` structs used within the domain as well as across the domain boundary to transfer data.
 
-#### Usecases
+#### 2.1.2. Usecases
 **Usecases** contain all the business logic. Any external dependencies needed by the Use Cases (e.g., database resources) are injected into them using dependency inversion.
 
-#### Boundary
+#### 2.1.3. Boundary
 The **Boundary** marks the interface between the **Domain** and the **orchestration layers**. It contains contracts (`Go` interfaces) that facilitate dependency inversion.
 
-### Orchestration
+### 2.2. Orchestration
 Orchestration contains **Infrastructure**, **Presentation** and **Persistence**.
 
-#### Infrastructure
+#### 2.2.1. Infrastructure
 **Infrastructure** contains the lowest-level resources needed by the microservice, such as configuration and the IoC container.
 
-#### Presentation
+#### 2.2.2. Presentation
 **Presentation** contains all outward-facing interfaces. These are the communication channels between the microservice and the outside world. This is where you place your RESTful, GraphQL, gRPC, or WebSocket servers. It’s worth noting that you don’t need to implement all of these in a single microservice; it solely depends on the specifics of your implementation.
 
 Telemetry configurations for metrics and traces can be set up here as well. However, with currently available options, I would use an [eBPF](https://ebpf.io/) collector to gather telemetry. Unless you need to export custom metrics from your service, this approach provides sufficient information about your service.
 
-#### Persistence
+#### 2.2.3. Persistence
 **Persistence** is used to hold all data-related resources, whether it’s simple file writes, an RDBMS, an object store, or even an event-sourcing system backed by a local store. The important thing to remember is that all implementation details should be encapsulated within the **Persistence** layer. The **Domain** using these resources must not know (or care) about how persistence is implemented. Saving to a static file should be no different than saving to a messaging backend from the perspective of the **Domain** layer. All complexities related to the underlying persistence technologies should remain contained within the **Persistence** layer.

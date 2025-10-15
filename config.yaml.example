@@ -6,10 +6,6 @@ rest:
   port: 8000
   wait: 5
   release: true
-metrics:
-  enabled: true
-  port: 8001
-  route: /metrics
 db:
   ## Postgres
   host: localhost
