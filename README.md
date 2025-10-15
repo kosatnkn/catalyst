@@ -1,7 +1,7 @@
 # Catalyst
 A `Clean Architecture` microservice template written in `Go`.
 
-![catalyst_logo](./docs/img/catalyst_logo_alt.svg)
+![catalyst_logo](./docs/img/catalyst_logo.svg)
 
 [![CI](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml)
