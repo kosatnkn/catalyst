@@ -13,7 +13,7 @@ if [ $? -gt 0 ]; then
   tag="none"
 fi
 
-repo=$(basename `git rev-parse --show-toplevel` | tr '\n' ' ')
+repo=$(basename "$(git rev-parse --show-toplevel)")
 
 echo "${repo}" > ${work_dir}/metadata/name.txt
 
