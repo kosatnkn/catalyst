@@ -1,0 +1,32 @@
+name: Draft New Release
+
+on:
+  push:
+    tags:
+    - "v*.*.*"
+    branches:
+    - "v3" # DEBUG: remove later
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code for '${{ github.ref_name }}'
+      uses: actions/checkout@v5
+
+    - name: Create 'new_from_${{ github.ref_name }}.sh'
+      run: |
+        cp new.sh "new_from_${{ github.ref_name }}.sh"
+        sed -i "s|<ph_ref>|${{ github.ref_name }}|g" "new_from_${{ github.ref_name }}.sh"
+
+    - name: Upload new.sh as release asset
+      uses: softprops/action-gh-release@v2
+      with:
+        draft: true
+        name: ${{ github.ref_name }}
+        generate_release_notes: true
+        files: new_from_${{ github.ref_name }}.sh
+        make_latest: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
