@@ -4,7 +4,7 @@ set -e
 CATALYST_BASE="https://github.com/kosatnkn/catalyst"
 # The ref should be a placeholder which must be the release version
 # TODO: need to enforce checking this when trying to create new tag
-CATALYST_REF="v3"
+CATALYST_REF="<ph_ref>"
 CATALYST_MODULE="github.com/kosatnkn/catalyst/v3"
 
 
@@ -181,7 +181,7 @@ echo -e "# ${PROJECT_DIR}
 TODO: Add content
 
 ---
-Powered by https://github.com/kosatnkn/catalyst (${CATALYST_REF})
+Powered by [https://github.com/kosatnkn/catalyst](kosatnkn/catalyst) (${CATALYST_REF})
 " > README.md
 msg_done
 
