@@ -155,6 +155,7 @@ REMOVE_LIST=(
   "docs/img/*.drawio.*"
   "LICENSE"
   "README.md"
+  "NOTES.md"
   "new.sh"
 )
 for item in "${REMOVE_LIST[@]}"; do
