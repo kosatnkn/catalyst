@@ -1,6 +1,7 @@
 # Catalyst
+A `Clean Architecture` microservice template written in `Go`.
 
-![catalyst_logo](./docs/images/catalyst_logo_256.svg)
+![catalyst_logo](./docs/img/catalyst_logo.svg)
 
 [![CI](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/kosatnkn/catalyst/actions/workflows/codeql-analysis.yml)
@@ -10,257 +11,79 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/kosatnkn/catalyst/v3.svg)](https://pkg.go.dev/github.com/kosatnkn/catalyst/v3)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
-> ### Version 3
-> Version 3 of Catalyst is in progress. We are planning to simplify a lot of things. :)
+## 1. Introduction
 
-`Catalyst` started out as a microservice base that can be used to create REST APIs. It contains many features that are essential, such as.
-- Configurability
-- A basic dependency injection mechanism
-- HTTP request, response cycle handling
-- Structure and field validations
-- Error handling
-- Logging
-- Database resource management
-- Application metrics
+For **version 3** of **Catalyst**, my main focus is to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
 
-Written in **Go** using the **Clean Architecture** paradigm it offers clean separation between business (domain) logic and facilitation logic.
+I have removed a substantial amount of code that I had passionately written for **Catalyst** over the years. In hindsight, I realized that I was just reinventing the wheel again and again, while better alternatives already existed. The more code I added for things like dynamic IoC container resolution, generalized DB transactions, and even logging and metric generation, the more opinionated **Catalyst** became.
 
-## Creating a New Project Using Catalyst
+With all that bulk gone, **Catalyst** has become more of a template. Now, instead of dictating which resources to use, **Catalyst** simply defines where each type of resource should go. As the developer, you have the freedom to choose whatever you feel best fits your implementation.
 
-A new project can be created in one of two ways.
+For example, you can use a simple struct implementation as the IoC container and resolve it manually. This is what I’ve done here for demo purposes (and also what I would actually do unless there’s a very good reason to opt for something else). Alternatively, you can plug in a heavy-duty IoC container. The same applies to loggers, database adapters, and so on.
 
-### Use Cauldron
+I’m maintaining a separate GitHub repository at [kosatnkn/catalyst-pkgs](https://github.com/kosatnkn/catalyst-pkgs) to host some of the packages I use here. The logger is a wrapper around [rs/zerolog](https://github.com/rs/zerolog), and the configuration parser is a wrapper around [spf13/viper](https://github.com/spf13/viper). Feel free to swap them out for whatever better suits your needs.
 
-The easiest way to create a project using `Catalyst` as the base is to use `Cauldron`.
+## 2. Architecture
 
-`Cauldron` is a project generation tool that creates new projects using `Catalyst` as the base.
+There are many ways to organize a project that follows the **Clean Architecture** paradigm. This is how I’ve organized **Catalyst**.
 
-More information about `Cauldron` can be found [here](https://github.com/kosatnkn/cauldron)
+![Clean Architecture](./docs/img/clean_arch.drawio.svg)
 
-Begin by installing `Cauldron`.
-```bash
-go get github.com/kosatnkn/cauldron
+When this architecture is mapped to the directory structure of **Catalyst**, it looks like this.
+
+![Clean Architecture Dir Mapping](./docs/img/clean_arch_dir_mapping.drawio.svg)
+
+### 2.1. Domain
+The **Domain** contains all the business logic executed by the microservice. It consists of three main parts: **Entities**, **Use Cases**, and **Boundary**.
+
+#### 2.1.1. Entities
+**Entities** define the data model for the domain. These are simple `Go` structs used within the domain as well as across the domain boundary to transfer data.
+
+#### 2.1.2. Usecases
+**Usecases** contain all the business logic. Any external dependencies needed by the Use Cases (e.g., database resources) are injected into them using dependency inversion.
+
+#### 2.1.3. Boundary
+The **Boundary** marks the interface between the **Domain** and the **orchestration layers**. It contains contracts (`Go` interfaces) that facilitate dependency inversion.
+
+### 2.2. Orchestration
+Orchestration contains **Infrastructure**, **Presentation** and **Persistence**.
+
+#### 2.2.1. Infrastructure
+**Infrastructure** contains the lowest-level resources needed by the microservice, such as configuration and the IoC container.
+
+#### 2.2.2. Presentation
+**Presentation** contains all outward-facing interfaces. These are the communication channels between the microservice and the outside world. This is where you place your RESTful, GraphQL, gRPC, or WebSocket servers. It’s worth noting that you don’t need to implement all of these in a single microservice; it solely depends on the specifics of your implementation.
+
+Telemetry configurations for metrics and traces can be set up here as well. However, with currently available options, I would use an [eBPF](https://ebpf.io/) collector to gather telemetry. Unless you need to export custom metrics from your service, this approach provides sufficient information about your service.
+
+#### 2.2.3. Persistence
+**Persistence** is used to hold all data-related resources, whether it’s simple file writes, an RDBMS, an object store, or even an event-sourcing system backed by a local store. The important thing to remember is that all implementation details should be encapsulated within the **Persistence** layer. The **Domain** using these resources must not know (or care) about how persistence is implemented. Saving to a static file should be no different than saving to a messaging backend from the perspective of the **Domain** layer. All complexities related to the underlying persistence technologies should remain contained within the **Persistence** layer.
+
+## 3. Usage
+
+**Catalyst** comes with a script that makes it easy to create new projects from it. You can find this script included with each release. It is version-locked to that specific release.
+
+
+Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
+```shell
+curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh | bash -s -- --module="example.com/dummyuser/sampler"
 ```
 
-**Command**
-```bash
-cauldron -n Sample -s github.com/username [-t v1.0.0]
-```
-```bash
-cauldron --name Sample --namespace github.com/username [--tag v1.0.0]
-```
+If you prefer to first download the script, inspect it, and then run it (which is the safer approach), use following commands.
+```shell
+# download first
+curl -fsSL -o new_from_v3.0.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh
 
-**Input Parameters**
-- `-n --name` Project name (ex: Sample). The name will be converted to lowercase to be used in module path.
-- `-s --namespace` Namespace for the project (ex: github.com/username)
-- `-t --tag` Release version of `Catalyst` to be used. The latest version will be used if `-t` is not provided
-- `-h --help` Show help message
+# inspect
+# ...
 
-This will create a new project with **go.mod** module path of `github.com/username/sample`
-
-`Cauldron` will do a `git init` on the newly created project but you will have to stage all the files and do the first commit yourself.
-```bash
-git add .
-
-git commit -m "first commit"
+# once ready, run
+chmod +x new_from_v3.0.0.sh
+./new_from_v3.0.0.sh --module="example.com/dummyuser/sampler"
 ```
 
-### Cloning
-
-This is the work intensive approach.
-
-Clone `Catalyst`
-```bash
-git clone https://github.com/kosatnkn/catalyst.git <new_project_name>
-```
-
-Remove `.git`
-```bash
-cd <new_project_name>
-
-rm -rf .git
-```
-
-Change import paths
-> NOTE: Since `Catalyst` uses go mod the the newly created application will still work. But all the import paths would be as in `Catalyst` base project which is not what you will want.
-- First change the module name in the `go.mod` file to a module name of your choice
-- Then do a `Find & Replace` in the entire project to update all the import paths
-- You may also need to change the splash text in `app/splash/styles.go`
-- Now run and see whether the project compiles and run properly
-- If so you can do a `git init` to the project
-
-## Configurations
-Configuration files for a `Catalyst` project can be found in `configs` directory.
-
-Initially you will have a set of config files with the extension of `.yaml.example`. You can create `.yaml` configuration files using these **example** files as a template.
-
-## The Sample Set
-We have included a sample set of endpoints and their corresponding controller and domain logic by default.
-
-This is to make it easier for you to follow through and understand how Catalyst handles the request response cycle for a given request.
-
-The sample set will cover all basic CRUD operations that a REST API will normally need.
-
-There is also an `openapi.yaml` file in `doc/api` directory that corresponds to the set of **Sample APIs** that are implemented.
-
-## Transport Mediums
-In the context of `Catalyst` we use a concept called `Transport mediums` to define ways in which you can communicate
-with the microservice.
-
-A package inside the `transport` directory consists of all the logic needed to handle communication with the
-outside world using one type of transport medium.
-
-Out of the box, Catalyst contain two such transport mediums.
-- `http` (to handle REST web requests)
-- `metrics` (to expose application metrics)
-
-What makes `Catalyst` a REST API is this `http` package which handles the complete lifecycle of REST web requests.
-### `http` Transport Medium
-
-REST API is implemented in this package.
-
-Following is the request, response cycle executed when a request comes to a REST endpoint.
-```text
-                               + ------- +           + -------- +
-                               | REQUEST |           | RESPONSE |
-                               + ------- +           + -------- +
-                                   ||                     /\
-                                   \/                     ||
-                            + ------------ +              ||
-                            |  Middleware  |              ||
-                            + ------------ +              ||
-                                   ||                     ||
-                                   \/                     ||
-                            + ------------ +              ||
-                            |    Router    |              ||
-                            + ------------ +              ||
-                                       ||                 ||
-                                       ||                 ||
-                                       ||   + --------------------------- +
-                                       ||   | Transformer | Error Handler |
-                                       ||   + --------------------------- +
-                                       ||    /\
-                                       \/    ||
-    + -------------------- +  =>  + -------------- +
-    | Unpacker | Validator |      |   Controller   |
-    + -------------------- +  <=  + -------------- +
-                                      ||       /\
-                                      \/       ||
-                                  + -------------- +
-                                  |    Use Case    |
-                                  + -------------- +
-                                      ||       /\
-                                      \/       ||
-                          _____________________________________
-                              + ---------- +    + ------- +
-                              | Repository |    | Service |
-                              + ---------- +    + ------- +
-                                ||    /\          ||  /\
-                                \/    ||          \/  ||
-                              + ---------- +    + ------- +
-                              |  Database  |    |   APIs  |
-                              + ---------- +    + ------- +
-```
-
-### `metrics` Transport Medium
-
-Likewise the `metrics` transport medium exposes an endpoint to let `Prometheus` scrape application metrics.
-
-### Extending the Microservice
-
-You can add other `transport mediums` to leverage a project based on `Catalyst`.
-
-For an example a `stream` package can be added to `transport` to communicate with a streaming platform like `Kafka`,
-or an `mqtt` package can be added to communicate with `IoT` devices.
-
-## View GoDoc Locally
-```bash
-godoc -http=:6060 -v
-```
-
-Navigate to [http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v3](http://localhost:6060/pkg/github.com/kosatnkn/catalyst/v3)
-
-
-## Using Go mod
-
-Go mod is used as the dependency management mechanism. Visit [here](https://github.com/golang/go/wiki/Modules) for more details.
-
-Some commonly used go mod commands for quick reference.
-
-Use go mod in projects that are within the `GOPATH`
-```bash
-export GO111MODULE=on
-```
-
-Initialize go mod
-```bash
-go mod init github.com/my/repo
-```
-
-View final versions that will be used in a build for all direct and indirect dependencies
-```bash
-go list -m all
-```
-View available minor and patch upgrades for all direct and indirect dependencies
-```bash
-go list -u -m all
-```
-Update all direct and indirect dependencies to latest minor or patch upgrades (pre-releases are ignored)
-```bash
-go get -u or go get -u=patch
-```
-Build or test all packages in the module when run from the module root directory
-```bash
-go build ./... or go test ./...
-```
-Prune any no-longer-needed dependencies from go.mod and add any dependencies needed for other combinations of OS, architecture, and build tags
-```bash
-go mod tidy
-```
-Optional step to create a vendor directory
-```bash
-go mod vendor
-```
-
-## Testing
-
-To run test and output coverage report
-```bash
-go test -covermode=count -coverprofile=cover.out ./...
-```
-
-To get coverage as a percentage of overall codebase use `-coverpkg=./...`
-```bash
-go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
-```
-
-## Docker
-
-Catalyst provides a basic multistage Dockerfile so you have a starting point for creating Docker images.
-
-```bash
-docker build -t <tag_name>:<tag_version> .
-```
-
-> NOTE: Do not forget the tailing `.` that indicates the current directory
-
-**Example**
-```bash
-docker build -t kosatnkn/catalyst:1.0.0 .
-```
-
-You can use it as follows
-```bash
-docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
-```
-
-Do both in one go
-```bash
-docker build -t kosatnkn/catalyst:1.0.0 . && docker run -it --rm --name catalyst -p 3000:3000 -p 3001:3001 kosatnkn/catalyst:1.0.0
-```
-
-## Wiki
-
-Wiki pages on technical aspects of the project can be found [here](https://github.com/kosatnkn/catalyst/wiki)
-
-> NOTE: Wiki is currently being updated.
+> **NOTE:**
+>
+>The directory name for your new microservice will be inferred from the Go module name that you provide with the `--module` parameter.
+>
+> The script can handle version information in the module name when inferring the directory name. For example, both `example.com/dummyuser/sampler` and `example.com/dummyuser/sampler/v2` will produce `sampler` as the directory name.

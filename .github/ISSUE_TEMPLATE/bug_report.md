@@ -28,4 +28,4 @@ If applicable, add screenshots to help explain your problem.
  - Architecture: [e.g. x64]
 
 **Additional context**
-Add any other context about the problem here.
+Add any other information about the problem here.
