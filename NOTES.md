@@ -6,9 +6,9 @@ The automation will create a release draft for that tag.
 
 ```shell
 # create an annotated tag
-git tag -a v3.0.0 -m "Version 3.0.0"
+git tag -a v3.0.0 -m "Release 3.0.0"
 # or
-git tag --annotate v3.0.0 --message="Version 3.0.0"
+git tag --annotate v3.0.0 --message="Release 3.0.0"
 
 # push tag upstream
 git push origin v3.0.0
