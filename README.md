@@ -61,14 +61,15 @@ Telemetry configurations for metrics and traces can be set up here as well. Howe
 
 ## 3. Usage
 
-**Catalyst** comes with a script to make it easy to create new projects with it. You can find this script with each release which is version locked to that specific release.
+**Catalyst** comes with a script that makes it easy to create new projects from it. You can find this script included with each release. It is version-locked to that specific release.
+
 
 Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
 ```shell
 curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh | bash -s -- --module="example.com/dummyuser/sampler"
 ```
 
-If you prefer first downloading the script, inspect it and then run it (which is the safer approach), then use following commands.
+If you prefer to first download the script, inspect it, and then run it (which is the safer approach), use following commands.
 ```shell
 # download first
 curl -fsSL -o new_from_v3.0.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh
@@ -83,6 +84,6 @@ chmod +x new_from_v3.0.0.sh
 
 > **NOTE:**
 >
->The directory name for your new microservice will be inferred from your Go module name which you will be passing in as the `--module` parameter.
+>The directory name for your new microservice will be inferred from the Go module name that you provide with the `--module` parameter.
 >
-> The script can handle version information in the module name when inferring a name for the directory. So both `example.com/dummyuser/sampler` and `example.com/dummyuser/sampler/v2` will produce `sampler` as the directory name.
+> The script can handle version information in the module name when inferring the directory name. For example, both `example.com/dummyuser/sampler` and `example.com/dummyuser/sampler/v2` will produce `sampler` as the directory name.
