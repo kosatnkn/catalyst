@@ -13,7 +13,7 @@ A `Clean Architecture` microservice template written in `Go`.
 
 ## 1. Introduction
 
-For **version 3** of **Catalyst**, my main focus is to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
+For **version 3** of **Catalyst**, my main focus was to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
 
 I have removed a substantial amount of code that I had passionately written for **Catalyst** over the years. In hindsight, I realized that I was just reinventing the wheel again and again, while better alternatives already existed. The more code I added for things like dynamic IoC container resolution, generalized DB transactions, and even logging and metric generation, the more opinionated **Catalyst** became.
 
@@ -66,7 +66,7 @@ Telemetry configurations for metrics and traces can be set up here as well. Howe
 
 Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
 ```shell
-curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh | bash -s -- --module="example.com/dummyuser/sampler"
+curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh | bash -s -- --module="example.com/dummyuser/sampler" --yes
 ```
 
 If you prefer to first download the script, inspect it, and then run it (which is the safer approach), use following commands.

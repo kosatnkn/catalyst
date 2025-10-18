@@ -2,11 +2,8 @@
 set -e
 
 CATALYST_BASE="https://github.com/kosatnkn/catalyst"
-# The ref should be a placeholder which must be the release version
-# TODO: need to enforce checking this when trying to create new tag
 CATALYST_REF="<ph_ref>"
 CATALYST_MODULE="github.com/kosatnkn/catalyst/v3"
-
 
 show_help() {
   echo -e "
@@ -14,6 +11,7 @@ Usage: $0 --module=<go_module_name> [--dir=<working_dir>]
 Options:
   --module     (Required) Go module path (e.g., example.com/sampler)
   --dir        (Optional) Target directory (default: current directory)
+  -y, --yes    Answer 'yes' to confirmation prompt
   -h, --help   Display this help message
 Example:
   $0 --module example.com/dummyuser/sampler --dir ./projects"
@@ -66,6 +64,7 @@ prompt_yes_no() {
 }
 
 # parse args
+CONFIRM=false
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --module)
@@ -84,12 +83,16 @@ while [[ $# -gt 0 ]]; do
       WORKING_DIR="${1#*=}"
       shift
       ;;
+    -y|--yes)
+      CONFIRM=true
+      shift
+      ;;
     -h|--help)
       show_help
       exit 0
       ;;
     *)
-      msg_err "unknown option '$1'"
+      msg_err "Unknown option '$1'"
       show_help
       exit 1
       ;;
@@ -123,7 +126,9 @@ fi
 msg_info "Go module:          ${MODULE}"
 msg_info "Working directory:  ${WORKING_DIR}"
 msg_info "Project directory:  ${PROJECT_DIR}"
-prompt_yes_no
+if [[ ${CONFIRM} = false ]]; then
+  prompt_yes_no
+fi
 
 msg_ongoing "Switching to working directory '${WORKING_DIR}'..."
 cd ${WORKING_DIR}
@@ -155,6 +160,7 @@ REMOVE_LIST=(
   "docs/img/*.drawio.*"
   "LICENSE"
   "README.md"
+  "NOTES.md"
   "new.sh"
 )
 for item in "${REMOVE_LIST[@]}"; do
