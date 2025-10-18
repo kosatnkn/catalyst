@@ -12,11 +12,11 @@ show_help() {
   echo -e "
 Usage: $0 --module=<go_module_name> [--dir=<working_dir>]
 Options:
-  -m, --module   (Required) Go module path (e.g., example.com/sampler)
-  -d, --dir      (Optional) Target directory (default: current directory)
-  -h, --help     Display this help message
+  --module     (Required) Go module path (e.g., example.com/sampler)
+  --dir        (Optional) Target directory (default: current directory)
+  -h, --help   Display this help message
 Example:
-  $0 --module example.com/sampler --dir ./project"
+  $0 --module example.com/dummyuser/sampler --dir ./projects"
 }
 
 # messages
