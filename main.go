@@ -22,9 +22,7 @@ func main() {
 		Dir:    ".",
 		Prefix: "CATALYST",
 		Defaults: map[string]any{
-			"metrics.enabled": true,
-			"metrics.port":    8001,
-			"metrics.route":   "/metrics",
+			"rest.port": 8000,
 		},
 	}
 	c, err := config.Parse(infra.Config{}, settings)

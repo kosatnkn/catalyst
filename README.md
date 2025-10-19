@@ -12,7 +12,6 @@ A `Clean Architecture` microservice template written in `Go`.
 [![Go Report Card](https://goreportcard.com/badge/github.com/kosatnkn/catalyst)](https://goreportcard.com/report/github.com/kosatnkn/catalyst)
 
 ## 1. Introduction
-
 For **version 3** of **Catalyst**, my main focus was to make it simple, clean and upgradable. Looking back, these are the very things I struggled with in both previous versions. Especially upgradability.
 
 I have removed a substantial amount of code that I had passionately written for **Catalyst** over the years. In hindsight, I realized that I was just reinventing the wheel again and again, while better alternatives already existed. The more code I added for things like dynamic IoC container resolution, generalized DB transactions, and even logging and metric generation, the more opinionated **Catalyst** became.
@@ -24,7 +23,6 @@ For example, you can use a simple struct implementation as the IoC container and
 I’m maintaining a separate GitHub repository at [kosatnkn/catalyst-pkgs](https://github.com/kosatnkn/catalyst-pkgs) to host some of the packages I use here. The logger is a wrapper around [rs/zerolog](https://github.com/rs/zerolog), and the configuration parser is a wrapper around [spf13/viper](https://github.com/spf13/viper). Feel free to swap them out for whatever better suits your needs.
 
 ## 2. Architecture
-
 There are many ways to organize a project that follows the **Clean Architecture** paradigm. This is how I’ve organized **Catalyst**.
 
 ![Clean Architecture](./docs/img/clean_arch.drawio.svg)
@@ -60,9 +58,8 @@ Telemetry configurations for metrics and traces can be set up here as well. Howe
 **Persistence** is used to hold all data-related resources, whether it’s simple file writes, an RDBMS, an object store, or even an event-sourcing system backed by a local store. The important thing to remember is that all implementation details should be encapsulated within the **Persistence** layer. The **Domain** using these resources must not know (or care) about how persistence is implemented. Saving to a static file should be no different than saving to a messaging backend from the perspective of the **Domain** layer. All complexities related to the underlying persistence technologies should remain contained within the **Persistence** layer.
 
 ## 3. Usage
-
+### 3.1. Create New
 **Catalyst** comes with a script that makes it easy to create new projects from it. You can find this script included with each release. It is version-locked to that specific release.
-
 
 Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
 ```shell
@@ -87,3 +84,39 @@ chmod +x new_from_v3.0.0.sh
 >The directory name for your new microservice will be inferred from the Go module name that you provide with the `--module` parameter.
 >
 > The script can handle version information in the module name when inferring the directory name. For example, both `example.com/dummyuser/sampler` and `example.com/dummyuser/sampler/v2` will produce `sampler` as the directory name.
+
+### 3.2. Understanding How it Works
+The best place to start how a microservice based on Catalyst works is the `main.go` file and the `main` function.
+
+You can easily identify how the microservice starts up and shuts down by going through the `main` function in execution order.
+
+By default it will,
+- Parse all configurations in to the `infra.Config` struct.
+- Resolve the container.
+- Start the **Presentation** layer. This includes the `REST` server, a `WebSocket` server etc.
+- Block the `main` function using a channel that waits for interrupt signals.
+
+### 3.3. Configuration
+You can provide configurations in one of two ways. Using a `config.yaml` file or using environment variables.
+
+#### 3.2.1. Configure Using `config.yaml`
+You can start by using the `config.yaml.example` file to create the basic `config.yaml` file. The current setup expects the config file (if there is a one) to be named as `config.yaml`.
+
+The structure of the `config.yaml` file depends on the structure of the `Config` struct in `./infra/config.go` file.
+
+#### 3.2.2. Configure Using Environment Variables
+> NOTE: When using environment variables it will override values read from the `config.yaml` file.
+
+To avoid conflicts environment variables used are prefixed. The prefix to use is configurable (see `config.Settings` used in the `main` function in `main.go`).
+
+Names of environment variables too depends on the structure of the `Config` struct in `./infra/config.go` file. You can find an example usage in the `Makefile`s `run-with-env` section.
+
+### 3.3. Metadata
+Basic set of metadata such as build info for the microservice can be obtained using the `metadata` package that comes with the microservice.
+
+You will have to use `make build` or `make run` commands from the `Makefile` to have these metadata properly read and loaded.
+
+If you need to add some additional static metadata, you can put them in the `./metadata.txt` file.
+
+### 3.4. Makefile
+A `Makefile` is used to streamline `run`, `build`, `test` and `dependency update` workflows.
