@@ -8,13 +8,13 @@ import (
 )
 
 type AccountPersisterPostgres struct {
-	a persistence.DatabaseAdapter
+	db persistence.DatabaseAdapter
 }
 
 // NewAccountPersisterPostgres creates a new instance.
 func NewAccountPersisterPostgres(adapter persistence.DatabaseAdapter) *AccountPersisterPostgres {
 	return &AccountPersisterPostgres{
-		a: adapter,
+		db: adapter,
 	}
 }
 

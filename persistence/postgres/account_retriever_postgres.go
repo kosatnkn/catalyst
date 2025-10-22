@@ -10,13 +10,13 @@ import (
 )
 
 type AccountRetrieverPostgres struct {
-	a persistence.DatabaseAdapter
+	db persistence.DatabaseAdapter
 }
 
 // NewAccountRetrieverPostgres creates a new instance.
 func NewAccountRetrieverPostgres(adapter persistence.DatabaseAdapter) *AccountRetrieverPostgres {
 	return &AccountRetrieverPostgres{
-		a: adapter,
+		db: adapter,
 	}
 }
 
@@ -35,7 +35,7 @@ func (r *AccountRetrieverPostgres) Get(ctx context.Context, filters map[string]a
 	// DEBUG:
 	fmt.Println(query)
 
-	accounts, err := r.a.Query(ctx, query, params)
+	accounts, err := r.db.Query(ctx, query, params)
 	if err != nil {
 		return a, errors.Join(errors.New("account-persister-postgres: error retrieving accounts"), err)
 	}
