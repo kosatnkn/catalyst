@@ -23,12 +23,7 @@ func NewAccountUseCases(c *infra.Container) *AccountUseCases {
 }
 
 func (a *AccountUseCases) GetAccounts(ctx context.Context, filters map[string]any, paging map[string]uint32) ([]entities.Account, error) {
-	// define allowed filters
-	allowedFilterKeys := []string{
-		"name",
-	}
-
-	return a.retriever.Get(ctx, allowedFiltersOnly(filters, allowedFilterKeys), paging)
+	return a.retriever.Get(ctx, filters, paging)
 }
 
 func (a *AccountUseCases) CreateAccount(ctx context.Context, acc entities.Account) (entities.Account, error) {
