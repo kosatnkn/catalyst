@@ -24,18 +24,11 @@ func NewAccountRetrieverPostgres(adapter persistence.DatabaseAdapter) *AccountRe
 
 // Get retrieves a slice of accounts that matches the filter.
 func (r *AccountRetrieverPostgres) Get(ctx context.Context, filters map[string]any, paging map[string]uint32) ([]entities.Account, error) {
-	// define allowed filters
-	allowedFilterKeys := []string{
-		"name",
-	}
-	filters = allowedFiltersOnly(filters, allowedFilterKeys)
-
-	var a []entities.Account
-
-	// TODO: process filters to update both the query and parameters
 	query := `SELECT * FROM account WHERE name LIKE ?name`
-	params := make(map[string]any)
-	params["name"] = filters["name"]
+
+	params := map[string]any{
+		"name": filters["name"],
+	}
 
 	// add pagination
 	query = withPagination(query, paging)
@@ -43,6 +36,7 @@ func (r *AccountRetrieverPostgres) Get(ctx context.Context, filters map[string]a
 	// DEBUG:
 	fmt.Println(query)
 
+	a := []entities.Account{}
 	accounts, err := r.db.Query(ctx, query, params)
 	if err != nil {
 		return a, errors.Join(fmt.Errorf("%s: error retrieving accounts", r.name), err)
