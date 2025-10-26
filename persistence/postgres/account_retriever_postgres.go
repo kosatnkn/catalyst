@@ -24,7 +24,7 @@ func NewAccountRetrieverPostgres(adapter persistence.DatabaseAdapter) *AccountRe
 
 // Get retrieves a slice of accounts that matches the filter.
 func (r *AccountRetrieverPostgres) Get(ctx context.Context, filters map[string]any, paging map[string]uint32) ([]entities.Account, error) {
-	query := `SELECT * FROM account WHERE name LIKE ?name`
+	query := `SELECT * FROM account WHERE name LIKE %?name%`
 
 	params := map[string]any{
 		"name": filters["name"],
