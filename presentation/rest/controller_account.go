@@ -14,18 +14,18 @@ import (
 // A controller is used to group handlers that needs access to additional resources like the same set of persistence.
 // It can also be used to logically group handlers together.
 
-// AccountController is the collection of handlers used to manipulate accounts.
-type AccountController struct {
+// accountController is the collection of handlers used to manipulate accounts.
+type accountController struct {
 	accounts *usecases.AccountUseCases
 }
 
-func NewAccountController(ctr *infra.Container) *AccountController {
-	return &AccountController{
+func newAccountController(ctr *infra.Container) *accountController {
+	return &accountController{
 		accounts: usecases.NewAccountUseCases(ctr),
 	}
 }
 
-func (c *AccountController) Get(ctx *gin.Context) {
+func (c *accountController) Get(ctx *gin.Context) {
 	// get data from request
 	paging, err := paging(ctx.Query("paging"))
 	if err != nil {
@@ -54,7 +54,7 @@ func (c *AccountController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, responseData(data, nil))
 }
 
-func (c *AccountController) Create(ctx *gin.Context) {
+func (c *accountController) Create(ctx *gin.Context) {
 	// get data from request and validate (gin does this under the hood using 'go-playground/validator/v10')
 	var reqBody accountRequest
 	if err := ctx.ShouldBindJSON(&reqBody); err != nil {

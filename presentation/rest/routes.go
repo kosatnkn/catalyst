@@ -29,7 +29,7 @@ func registerInfoHandlers(router *gin.Engine) {
 }
 
 func registerAccountHandlers(router *gin.Engine, ctr *infra.Container) {
-	accounts := NewAccountController(ctr)
+	accounts := newAccountController(ctr)
 
 	a := router.Group("/accounts")
 	a.GET("", accounts.Get)
