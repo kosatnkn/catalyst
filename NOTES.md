@@ -1,13 +1,14 @@
 # Notes
 
 ## Creating a Git Tag without a GitHub Release
-Since GitHub releases are automated you only need to create an annotated tag and push it upstream.
-The automation will create a release draft for that tag.
+Since GitHub releases are automated for Catalyst you only need to create an annotated tag from the `main` branch
+and push it upstream.
+The automation will create a release draft for that tag. Later you will have to review the draft and publish it.
 
 ```shell
 # create an annotated tag
 git tag -a v3.0.0 -m "Release 3.0.0"
-# or
+# or, the long fom
 git tag --annotate v3.0.0 --message="Release 3.0.0"
 
 # push tag upstream
