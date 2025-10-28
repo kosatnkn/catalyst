@@ -4,7 +4,7 @@ app:
   timezone: GMT+0530
 rest:
   port: 8000
-  wait: 5
+  wait: 5s
   release: true
 db:
   ## Postgres
