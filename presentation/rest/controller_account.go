@@ -30,23 +30,20 @@ func (c *accountController) Get(ctx *gin.Context) {
 	paging, err := paging(ctx.Query("paging"))
 	if err != nil {
 		// set error to Gin context so that the logging middleware can access it
-		ctx.Error(err)
-		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		bindErrorToCtx(ctx, err, http.StatusUnprocessableEntity)
 		return
 	}
 
 	filters, err := filters(ctx.Query("filters"))
 	if err != nil {
-		ctx.Error(err)
-		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		bindErrorToCtx(ctx, err, http.StatusUnprocessableEntity)
 		return
 	}
 
 	// pass on to the usecase
 	data, err := c.accounts.GetAccounts(context.Background(), filters, paging)
 	if err != nil {
-		ctx.Error(err)
-		ctx.JSON(http.StatusBadRequest, responseError(err))
+		bindErrorToCtx(ctx, err, http.StatusBadRequest)
 		return
 	}
 
@@ -58,8 +55,7 @@ func (c *accountController) Create(ctx *gin.Context) {
 	// get data from request and validate (gin does this under the hood using 'go-playground/validator/v10')
 	var reqBody accountRequest
 	if err := ctx.ShouldBindJSON(&reqBody); err != nil {
-		ctx.Error(err)
-		ctx.JSON(http.StatusUnprocessableEntity, responseError(err))
+		bindErrorToCtx(ctx, err, http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -71,8 +67,7 @@ func (c *accountController) Create(ctx *gin.Context) {
 	// pass on to the usecase
 	data, err := c.accounts.CreateAccount(context.Background(), a)
 	if err != nil {
-		ctx.Error(err)
-		ctx.JSON(http.StatusBadRequest, responseError(err))
+		bindErrorToCtx(ctx, err, http.StatusBadRequest)
 		return
 	}
 
