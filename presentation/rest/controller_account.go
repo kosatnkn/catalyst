@@ -34,7 +34,7 @@ func (c *accountController) Get(ctx *gin.Context) {
 		return
 	}
 
-	filters, err := filters(ctx.Query("filters"))
+	filters, err := filters(ctx)
 	if err != nil {
 		bindErrorToCtx(ctx, err, http.StatusUnprocessableEntity)
 		return

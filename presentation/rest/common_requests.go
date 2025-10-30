@@ -11,15 +11,23 @@ import (
 )
 
 // filters extracts filter data from the provided param and send it as a map.
-func filters(param string) (map[string]any, error) {
+//
+//	This function expects filters to be in the following format.
+//	<url>?filters=["filter1:val","filter2:1","filter3:true"]
+//	<url>?filters=["filter4:[1,2,3]","filter5:[\"a\",\"b\",\"c\"]","filter6:[1.2,2.4,4.5]"]
+//	<url>?filters=["filter7:{\"key1\":\"val1\",\"key2\":\"val2\"}"]
+func filters(ctx *gin.Context) (map[string]any, error) {
+	// default filters
 	f := map[string]any{}
-	if param == "" {
+
+	filters := ctx.Query("filters")
+	if filters == "" {
 		return f, nil
 	}
 
 	var arr []string
-	if err := json.Unmarshal([]byte(param), &arr); err != nil {
-		return f, errors.Join(errors.New("rest: error extracting filters from query param"), err)
+	if err := json.Unmarshal([]byte(filters), &arr); err != nil {
+		return f, errors.Join(errors.New("rest: error unmarshaling filters from query param"), err)
 	}
 
 	for _, item := range arr {
