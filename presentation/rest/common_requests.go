@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,36 +45,21 @@ func paging(ctx *gin.Context) (map[string]uint32, error) {
 // filters extracts filter data from the provided param and send it as a map.
 //
 //	This function expects filters to be in the following format.
-//	<url>?filters=["filter1:val","filter2:1","filter3:true"]
-//	<url>?filters=["filter4:[1,2,3]","filter5:[\"a\",\"b\",\"c\"]","filter6:[1.2,2.4,4.5]"]
-//	<url>?filters=["filter7:{\"key1\":\"val1\",\"key2\":\"val2\",\"key3\":[1,2,3]}"]
+//	<url>?filters={"name":"exam","tags":[1,2,3]}
 func filters(ctx *gin.Context) (map[string]any, error) {
 	// default filters
-	f := map[string]any{}
+	filters := map[string]any{}
 
-	filters := ctx.Query("filters")
-	if filters == "" {
-		return f, nil
+	f := ctx.Query("filters")
+	if f == "" {
+		return filters, nil
 	}
 
-	var arr []string
-	if err := json.Unmarshal([]byte(filters), &arr); err != nil {
-		return f, errors.Join(errors.New("rest: error unmarshaling filters from query param"), err)
+	if err := json.Unmarshal([]byte(f), &filters); err != nil {
+		return filters, errors.Join(errors.New("rest: error unmarshaling filters from query param"), err)
 	}
 
-	for _, item := range arr {
-		parts := strings.SplitN(item, ":", 2) // only split into 2 parts
-		if len(parts) != 2 {
-			return f, fmt.Errorf("rest: filter '%s' is of invalid format", item)
-		}
-
-		key := strings.TrimSpace(parts[0])
-		val := strings.TrimSpace(parts[1])
-
-		f[key] = val
-	}
-
-	return f, nil
+	return filters, nil
 }
 
 // accountRequest maps account details sent in the request payload.
