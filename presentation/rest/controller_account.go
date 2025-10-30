@@ -27,7 +27,7 @@ func newAccountController(ctr *infra.Container) *accountController {
 
 func (c *accountController) Get(ctx *gin.Context) {
 	// get data from request
-	paging, err := paging(ctx.Query("paging"))
+	paging, err := paging(ctx)
 	if err != nil {
 		// set error to Gin context so that the logging middleware can access it
 		bindErrorToCtx(ctx, err, http.StatusUnprocessableEntity)

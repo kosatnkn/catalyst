@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 // filters extracts filter data from the provided param and send it as a map.
@@ -36,18 +38,24 @@ func filters(param string) (map[string]any, error) {
 }
 
 // paging extracts pagination data from the provided param and send it as a map.
-func paging(param string) (map[string]uint32, error) {
+//
+//	This function expects 'paging' to be in the following format.
+//	<url>?paging=["page:1","size:10"]
+func paging(ctx *gin.Context) (map[string]uint32, error) {
+	// default paging
 	p := map[string]uint32{
 		"page": 1,
 		"size": 10,
 	}
-	if param == "" {
+
+	paging := ctx.Query("paging")
+	if paging == "" {
 		return p, nil
 	}
 
 	var arr []string
-	if err := json.Unmarshal([]byte(param), &arr); err != nil {
-		return p, errors.Join(errors.New("rest: error extracting 'paging' from query param"), err)
+	if err := json.Unmarshal([]byte(paging), &arr); err != nil {
+		return p, errors.Join(errors.New("rest: error unmarshaling 'paging' from query param"), err)
 	}
 
 	for _, item := range arr {
