@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/kosatnkn/catalyst/v3/infra"
 )
@@ -10,7 +11,10 @@ func newRouter(cfg infra.RESTConfig, ctr *infra.Container) *gin.Engine {
 
 	router := gin.New()
 	// middleware
-	router.Use(gin.Recovery(),
+	router.Use(
+		gin.Recovery(),
+		// NOTE: configure cors middleware as needed (https://github.com/gin-contrib/cors)
+		cors.Default(),
 		loggerMiddleware(ctr),
 	)
 

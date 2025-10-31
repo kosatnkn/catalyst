@@ -5,16 +5,15 @@ app:
 rest:
   port: 8000
   wait: 5s
-  release: true
+  release: false # set to true when deploying
+log:
+  level: INFO
 db:
-  ## Postgres
+  # Postgres
   host: localhost
   port: 5432
   database: test
   user: postgres
   password: admin
   poolsize: 10
-  # check whether db is accessible
-  check: false
-log:
-  level: INFO
+  check: false # set to true to check whether db is accessible at startup
