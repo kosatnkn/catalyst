@@ -60,3 +60,36 @@ dep-upgrade-list:
 .PHONY: dep-upgrade-all
 dep-upgrade-all:
 	go get -t -u ./... && go mod tidy
+
+SHELL := /bin/bash
+.PHONY: release
+release:
+	@echo "Checking if on 'main' branch ..."; \
+	git fetch origin main >/dev/null 2>&1; \
+	CURRENT_BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
+	if [ "$$CURRENT_BRANCH" != "main" ]; then \
+		echo "Error: Not on 'main' branch (currently on: $$CURRENT_BRANCH)"; \
+		exit 1; \
+	fi; \
+	echo "Checking if 'main' has local uncommitted changes..."; \
+	if ! git diff --quiet || ! git diff --cached --quiet; then \
+    echo "Error: Uncommitted changes exist in 'main'"; \
+    git status -s; \
+    exit 1; \
+	fi; \
+	echo "Checking if local 'main' branch is up to date with 'origin/main'..."; \
+	LOCAL_HASH=$$(git rev-parse main); \
+	REMOTE_HASH=$$(git rev-parse origin/main); \
+	if [ "$$LOCAL_HASH" != "$$REMOTE_HASH" ]; then \
+		echo "Error: 'main' is not up to date with 'origin/main'"; \
+		exit 1; \
+	fi; \
+	read -p "Enter new release tag (vX.Y.Z): " TAG; \
+	REGEX="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$$"; \
+	if [[ ! "$$TAG" =~ $$REGEX ]]; then \
+		echo "Error: Invalid version format for '$$TAG'"; \
+		echo "Version must follow vX.Y.Z format (e.g., v1.0.0, v2.1.5)."; \
+		exit 1; \
+	fi; \
+	echo "Creating new tag $$TAG and drafting a new release..."; \
+	git tag --annotate $$TAG --message="Release $$TAG" && git push origin $$TAG
