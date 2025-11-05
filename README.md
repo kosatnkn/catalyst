@@ -63,20 +63,20 @@ Telemetry configurations for metrics and traces can be set up here as well. Howe
 
 Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
 ```shell
-curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh | bash -s -- --module="example.com/dummyuser/sampler" --yes
+curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.1.0/new_from_v3.1.0.sh | bash -s -- --module="example.com/dummyuser/sampler" --yes
 ```
 
 If you prefer to first download the script, inspect it, and then run it (which is the safer approach), use following commands.
 ```shell
 # download first
-curl -fsSL -o new_from_v3.0.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.0.0/new_from_v3.0.0.sh
+curl -fsSL -o new_from_v3.1.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.1.0/new_from_v3.1.0.sh
 
 # inspect
 # ...
 
 # once ready, run
-chmod +x new_from_v3.0.0.sh
-./new_from_v3.0.0.sh --module="example.com/dummyuser/sampler"
+chmod +x new_from_v3.1.0.sh
+./new_from_v3.1.0.sh --module="example.com/dummyuser/sampler"
 ```
 
 > **NOTE:**
