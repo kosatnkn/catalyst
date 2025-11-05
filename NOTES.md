@@ -7,12 +7,12 @@ The automation will create a release draft for that tag. Later you will have to 
 
 ```shell
 # create an annotated tag
-git tag -a v3.0.0 -m "Release 3.0.0"
+git tag -a v3.1.0 -m "Release 3.1.0"
 # or, the long fom
-git tag --annotate v3.0.0 --message="Release 3.0.0"
+git tag --annotate v3.1.0 --message="Release 3.1.0"
 
 # push tag upstream
-git push origin v3.0.0
+git push origin v3.1.0
 ```
 
 ## Remove a Git Tag
@@ -20,12 +20,12 @@ If you need to remove a tag you will also have to remove the GitHub Release asso
 
 **Delete the remote tag**
 ```shell
-git push origin --delete v3.0.0
+git push origin --delete v3.1.0
 ```
 
 **Delete the local tag**
 ```shell
-git tag -d v3.0.0
+git tag -d v3.1.0
 ```
 
 **Tidy up**
