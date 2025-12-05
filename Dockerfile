@@ -7,11 +7,15 @@ WORKDIR /opt/app
 # copy source from current dir to working dir
 COPY . .
 
+# update metadata
+RUN chmod +x ./metadata/set_metadata.sh \
+  && sh ./metadata/set_metadata.sh $(pwd)
+
 # build
 RUN go build -o main .
 
 # Running
-FROM alpine:3.22.1 AS runner
+FROM alpine:3.22.2 AS runner
 
 WORKDIR /opt/
 
