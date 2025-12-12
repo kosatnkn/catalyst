@@ -3,14 +3,14 @@
 # Build
 .PHONY: build
 build:
-	@./metadata/set_metadata.sh $(PWD)
-	@go build -v ./...
+	@./metadata/set_metadata.sh $(pwd) \
+	&& go build -v -o main .
 
 # Running
 .PHONY: run
 run:
-	@./metadata/set_metadata.sh $(PWD)
-	@go run .
+	@./metadata/set_metadata.sh $(pwd) \
+	&& go run .
 
 .PHONY: run-with-env
 run-with-env:
@@ -30,7 +30,7 @@ run-with-env:
 	CATALYST_DB_POOLSIZE=5 \
 	CATALYST_DB_CHECK=false \
 	CATALYST_LOG_LEVEL="INFO" \
-	go run main.go
+	go run .
 
 .PHONY: run-in-docker
 run-in-docker: docker-build
