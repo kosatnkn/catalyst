@@ -3,18 +3,18 @@
 # Build
 .PHONY: build
 build:
-	@./metadata/set_metadata.sh $(pwd) \
+	@./metadata/set_metadata.sh $$(pwd) \
 	&& go build -v -o main .
 
 # Running
 .PHONY: run
 run:
-	@./metadata/set_metadata.sh $(pwd) \
+	@./metadata/set_metadata.sh $$(pwd) \
 	&& go run .
 
 .PHONY: run-with-env
 run-with-env:
-	./metadata/set_metadata.sh $(PWD)
+	./metadata/set_metadata.sh $$(pwd)
 
 	CATALYST_APP_NAME="env_app_name" \
 	CATALYST_APP_MODE="DEBUG" \
@@ -44,7 +44,7 @@ test:
 # Spin up a mock API using the OpenAPI document
 .PHONY: mock
 mock:
-	docker run --init --name catalyst_mock -it --rm -v $(PWD)/docs/api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
+	docker run --init --name catalyst_mock -it --rm -v $$(pwd)/docs/api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
 
 # Containerizing
 .PHONY: docker-build
