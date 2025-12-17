@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/kosatnkn/catalyst/v3/domain/boundary"
@@ -27,26 +26,18 @@ func (a *AccountUseCases) GetAccounts(ctx context.Context, filters map[string]an
 }
 
 func (a *AccountUseCases) CreateAccount(ctx context.Context, acc entities.Account) (entities.Account, error) {
-	ident := "usecase-create-account"
-
 	// check whether account with details already exists
 	filters := map[string]any{
 		"owner": acc.Owner,
 	}
-	accounts, err := a.retriever.Get(ctx, filters, map[string]uint32{"page": 1, "size": 5})
+	accounts, err := a.retriever.Get(ctx, filters, map[string]uint32{"page": 1, "size": 1})
 	if err != nil {
-		return entities.Account{}, errors.Join(fmt.Errorf("%s: error retrieving account", ident), err)
+		return entities.Account{}, err
 	}
 	if len(accounts) > 0 {
-		return entities.Account{}, fmt.Errorf("%s: such account already exists", ident)
+		return entities.Account{}, fmt.Errorf("account already exists")
 	}
 
 	// create account
-	account, err := a.persister.Create(ctx, acc)
-	if err != nil {
-		return entities.Account{}, errors.Join(fmt.Errorf("%s: error creating account", ident), err)
-	}
-
-	// return details
-	return account, nil
+	return a.persister.Create(ctx, acc)
 }
