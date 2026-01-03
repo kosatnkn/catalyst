@@ -61,6 +61,9 @@ dep-upgrade-list:
 dep-upgrade-all:
 	go get -t -u ./... && go mod tidy
 
+# Releasing
+# This will create a new release tag and push it upstream.
+# The creation of a new tag will trigger the release pipeline and draft a new release in GitHub.
 SHELL := /bin/bash
 .PHONY: release
 release:
