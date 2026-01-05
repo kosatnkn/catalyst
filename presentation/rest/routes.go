@@ -29,7 +29,7 @@ func newRouter(cfg infra.RESTConfig, ctr *infra.Container) *gin.Engine {
 func registerInfoHandlers(router *gin.Engine) {
 	router.GET("/", infoHandler)
 	router.GET("/healthz", healthHandler)
-	router.GET("/ready", readyHandler)
+	router.GET("/readyz", readyHandler)
 }
 
 func registerAccountHandlers(router *gin.Engine, ctr *infra.Container) {
