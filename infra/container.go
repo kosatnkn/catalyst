@@ -16,6 +16,7 @@ import (
 // There is nothing fancy in this implementation. Dependencies are resolved manually.
 // This can be replaced with a DI container of your choice.
 type Container struct {
+	Lifecycle        *lifecycle
 	dbAdapter        persistence.DatabaseAdapter
 	Logger           log.Logger
 	AccountRetriever boundary.AccountRetriever
@@ -24,7 +25,9 @@ type Container struct {
 
 // NewResolvedContainer returns a fresh instance of the container after resolving dependencies.
 func NewResolvedContainer(cfg Config) (*Container, error) {
-	c := &Container{}
+	c := &Container{
+		Lifecycle: newLifecycle(),
+	}
 
 	logger, err := loggerjson.NewLoggerJSON(cfg.Log)
 	if err != nil {

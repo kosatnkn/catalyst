@@ -19,17 +19,19 @@ func newRouter(cfg infra.RESTConfig, ctr *infra.Container) *gin.Engine {
 	)
 
 	// api info handlers
-	registerInfoHandlers(router)
+	registerInfoHandlers(router, ctr)
 	// usecase handlers
 	registerAccountHandlers(router, ctr)
 
 	return router
 }
 
-func registerInfoHandlers(router *gin.Engine) {
-	router.GET("/", infoHandler)
-	router.GET("/healthz", healthHandler)
-	router.GET("/readyz", readyHandler)
+func registerInfoHandlers(router *gin.Engine, ctr *infra.Container) {
+	info := newInfoController(ctr)
+
+	router.GET("/", info.Info)
+	router.GET("/healthz", info.Health)
+	router.GET("/readyz", info.Ready)
 }
 
 func registerAccountHandlers(router *gin.Engine, ctr *infra.Container) {
