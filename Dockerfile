@@ -1,6 +1,9 @@
 # Building
 FROM golang:1.24-alpine3.23 AS builder
 
+# install git (required for go modules / metadata scripts)
+RUN apk add --no-cache git
+
 # define working directory
 WORKDIR /opt/app
 
