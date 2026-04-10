@@ -30,5 +30,5 @@ git tag -d v3.1.0
 
 **Tidy up**
 ```shell
-git fetch
+git fetch --prune
 ```

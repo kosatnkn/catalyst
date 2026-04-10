@@ -37,7 +37,7 @@ run-with-env: ## Run using environment variables
 
 .PHONY: run-in-docker ## Run in a Docker container
 run-in-docker: docker-build
-	docker run --name catalyst-test-api --rm -p 8000:8000 -p 8001:8001 kosatnkn/catalyst-test-api:latest
+	docker run --name catalyst-test-api --rm -p 8000:8000 kosatnkn/catalyst-test-api:latest
 
 .PHONY: test
 test: ## Run tests
@@ -45,7 +45,7 @@ test: ## Run tests
 
 .PHONY: mock
 mock: ## Spin up a mock API using the OpenAPI document
-	docker run --init --name catalyst_mock -it --rm -v $$(pwd)/docs/api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
+	docker run --init --name catalyst_mock -it --rm -v $$(pwd)/docs/api:/tmp -p 8000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
 
 .PHONY: docker-build
 docker-build: ## Build Docker image
