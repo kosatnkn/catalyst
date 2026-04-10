@@ -25,8 +25,7 @@ run-with-env: ## Run using environment variables
 	CATALYST_APP_MODE="DEBUG" \
 	CATALYST_APP_PORT=8000 \
 	CATALYST_APP_TIMEZONE="UTF" \
-	CATALYST_APP_METRICS_ENABLED=true \
-	CATALYST_APP_METRICS_PORT=8001 \
+	CATALYST_LOG_LEVEL="INFO" \
 	CATALYST_DB_HOST="env_db_host" \
 	CATALYST_DB_PORT=5432 \
 	CATALYST_DB_DATABASE="env_db_name" \
@@ -34,7 +33,6 @@ run-with-env: ## Run using environment variables
 	CATALYST_DB_PASSWORD="env_db_pwd" \
 	CATALYST_DB_POOLSIZE=5 \
 	CATALYST_DB_CHECK=false \
-	CATALYST_LOG_LEVEL="INFO" \
 	go run .
 
 .PHONY: run-in-docker ## Run in a Docker container
