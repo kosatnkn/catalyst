@@ -1,0 +1,23 @@
+app:
+  name: catalyst  # optional; a name for the service; default: directory name
+  mode: DEBUG     # optional; the mode the service running in; values: [DEBUG, PROD]; default: DEBUG
+  timezone: UTC   # optional; the timezone the service is running in; default: UTC
+rest:
+  port: 8000      # optional; port used by the service to expose it's REST endpoints; default: 8000
+  wait: 5s        # optional; REST server shutdown wait period; default: 5s
+  release: false  # optional; REST server running mode. set to 'true' in production; default: false
+log:
+  level: INFO     # optional; log level used by the internal logger; values: [ERROR, WARN, INFO, DEBUG] default: INFO
+
+# Following configurations varies depending on what other configurations are needed for the service.
+# The following configuration is used for demonstration purposes. It reflects to the config structure used by the
+# Postgres adapter used in here (as an example).
+db:
+  # Postgres
+  host: localhost
+  port: 5432
+  database: test
+  user: postgres
+  password: admin
+  poolsize: 10
+  check: false # set to true to check whether db is accessible at startup

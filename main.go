@@ -25,7 +25,13 @@ func main() {
 		Dir:    ".",
 		Prefix: "CATALYST",
 		Defaults: map[string]any{
-			"rest.port": 8000,
+			"app.name":     metadata.Name(),
+			"app.mode":     "DEBUG",
+			"app.timezone": "UTC",
+			"rest.port":    8000,
+			"rest.wait":    "5s",
+			"rest.release": false,
+			"log.level":    "INFO",
 		},
 	}
 	c, err := config.Parse(infra.Config{}, settings)
