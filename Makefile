@@ -1,19 +1,24 @@
 # ref: https://bytes.usc.edu/cs104/wiki/makefile
 
-# Build
+.PHONY: help
+help: ## Show available make targets
+	@echo "Usage: make [target]"
+	@echo ""
+	@echo "Available targets:"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-20s %s\n", $$1, $$2}' ${MAKEFILE_LIST}
+
 .PHONY: build
-build:
+build: ## Build go binary
 	@./metadata/set_metadata.sh $$(pwd) \
 	&& go build -v -o main .
 
-# Running
 .PHONY: run
-run:
+run: ## Run binary
 	@./metadata/set_metadata.sh $$(pwd) \
 	&& go run .
 
 .PHONY: run-with-env
-run-with-env:
+run-with-env: ## Run using environment variables
 	./metadata/set_metadata.sh $$(pwd)
 
 	CATALYST_APP_NAME="env_app_name" \
@@ -32,33 +37,29 @@ run-with-env:
 	CATALYST_LOG_LEVEL="INFO" \
 	go run .
 
-.PHONY: run-in-docker
+.PHONY: run-in-docker ## Run in a Docker container
 run-in-docker: docker-build
 	docker run --name catalyst-test-api --rm -p 8000:8000 -p 8001:8001 kosatnkn/catalyst-test-api:latest
 
-# Testing
 .PHONY: test
-test:
+test: ## Run tests
 	go test -covermode=count -coverpkg=./... -coverprofile=cover.out ./...
 
-# Spin up a mock API using the OpenAPI document
 .PHONY: mock
-mock:
+mock: ## Spin up a mock API using the OpenAPI document
 	docker run --init --name catalyst_mock -it --rm -v $$(pwd)/docs/api:/tmp -p 3000:4010 stoplight/prism mock -h 0.0.0.0 "/tmp/openapi.yaml"
 
-# Containerizing
 .PHONY: docker-build
-docker-build:
+docker-build: ## Build Docker image
 	./scripts/set_metadata.sh
 	docker build --tag kosatnkn/catalyst-test-api:latest .
 
-# Go dependency management
 .PHONY: dep-upgrade-list
-dep-upgrade-list:
+dep-upgrade-list: ## List all upgradable dependencies
 	go list -u -m all
 
 .PHONY: dep-upgrade-all
-dep-upgrade-all:
+dep-upgrade-all: ## Upgrade all dependencies
 	go get -t -u ./... && go mod tidy
 
 # Releasing
@@ -66,7 +67,7 @@ dep-upgrade-all:
 # The creation of a new tag will trigger the release pipeline and draft a new release in GitHub.
 SHELL := /bin/bash
 .PHONY: release
-release:
+release: ## Create a new release tag and push it upstream
 	@echo "Checking if on 'main' branch ..."; \
 	git fetch origin main >/dev/null 2>&1; \
 	CURRENT_BRANCH=$$(git rev-parse --abbrev-ref HEAD); \
