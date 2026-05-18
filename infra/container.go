@@ -3,12 +3,11 @@ package infra
 import (
 	"errors"
 
-	"github.com/kosatnkn/catalyst-pkgs/persistence"
-	"github.com/kosatnkn/catalyst-pkgs/persistence/postgres"
-	"github.com/kosatnkn/catalyst-pkgs/telemetry/log"
+	pg "github.com/kosatnkn/catalyst-pkgs/persistence/postgres"
 	"github.com/kosatnkn/catalyst-pkgs/telemetry/log/loggerjson"
 	"github.com/kosatnkn/catalyst/v3/domain/boundary"
-	external "github.com/kosatnkn/catalyst/v3/persistence/postgres"
+	"github.com/kosatnkn/catalyst/v3/persistence"
+	"github.com/kosatnkn/catalyst/v3/persistence/postgres"
 )
 
 // Container is a simple implementation of a dependency inversion container.
@@ -16,33 +15,43 @@ import (
 // There is nothing fancy in this implementation. Dependencies are resolved manually.
 // This can be replaced with a DI container of your choice.
 type Container struct {
-	Lifecycle        *lifecycle
-	dbAdapter        persistence.DatabaseAdapter
-	Logger           log.Logger
+	Logger           Logger
+	Readiness        *Readiness
+	DBAdapter        persistence.DatabaseAdapter
 	AccountRetriever boundary.AccountRetriever
 	AccountPersister boundary.AccountPersister
 }
 
 // NewResolvedContainer returns a fresh instance of the container after resolving dependencies.
 func NewResolvedContainer(cfg Config) (*Container, error) {
-	c := &Container{
-		Lifecycle: newLifecycle(),
-	}
+	var err error
+	c := &Container{}
 
-	logger, err := loggerjson.NewLoggerJSON(cfg.Log)
-	if err != nil {
+	// logger
+	if c.Logger, err = loggerjson.NewLoggerJSON(cfg.Log); err != nil {
 		return nil, errors.Join(errors.New("container: error creating logger"), err)
 	}
-	c.Logger = logger
 
-	pg, err := postgres.NewDatabaseAdapterPostgres(cfg.Database)
-	if err != nil {
+	// readiness
+	// NOTE: Set up the readiness probe to enable service readiness querying.
+	c.Readiness = newReadiness(c.Logger)
+
+	// database
+	if c.DBAdapter, err = pg.NewDatabaseAdapterPostgres(cfg.Database); err != nil {
 		return nil, errors.Join(errors.New("container: error creating postgres adapter"), err)
 	}
-	c.dbAdapter = pg
+	c.Readiness.RegisterComponentChecker(
+		postgres.Identity, // NOTE: reference the component identifier from one place
+		func() (bool, error) { // NOTE: function to run in order to check readiness of component
+			if err := c.DBAdapter.Ping(); err != nil {
+				return false, err
+			}
+			return true, nil
+		})
 
-	c.AccountRetriever = external.NewAccountRetrieverPostgres(c.dbAdapter)
-	c.AccountPersister = external.NewAccountPersisterPostgres(c.dbAdapter)
+	// domain
+	c.AccountRetriever = postgres.NewAccountRetrieverPostgres(c.DBAdapter, c.Readiness) // NOTE: pass in the readiness probe only in to objects that needs readiness tracking
+	c.AccountPersister = postgres.NewAccountPersisterPostgres(c.DBAdapter)
 
 	return c, nil
 }
@@ -51,7 +60,7 @@ func NewResolvedContainer(cfg Config) (*Container, error) {
 //
 // NOTE: For this container destruct is done manually.
 func (c *Container) Destroy() error {
-	err := c.dbAdapter.Destruct()
+	err := c.DBAdapter.Destruct()
 	if err != nil {
 		return errors.Join(errors.New("container: error destroying database adapter"), err)
 	}

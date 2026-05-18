@@ -3,20 +3,18 @@ package postgres
 import (
 	"context"
 
-	"github.com/kosatnkn/catalyst-pkgs/persistence"
 	"github.com/kosatnkn/catalyst/v3/domain/entities"
+	"github.com/kosatnkn/catalyst/v3/persistence"
 )
 
 type AccountPersisterPostgres struct {
-	name string
-	db   persistence.DatabaseAdapter
+	db persistence.DatabaseAdapter
 }
 
 // NewAccountPersisterPostgres creates a new instance.
 func NewAccountPersisterPostgres(adapter persistence.DatabaseAdapter) *AccountPersisterPostgres {
 	return &AccountPersisterPostgres{
-		name: "account-persister-postgres",
-		db:   adapter,
+		db: adapter,
 	}
 }
 

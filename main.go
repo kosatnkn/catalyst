@@ -73,7 +73,6 @@ func main() {
 	}()
 
 	// mark service as ready to accept connections
-	ctr.Lifecycle.SetReady(true)
 	ctr.Logger.Info(loggingCtx, fmt.Sprintf("ready to accept connections on port %d", cfg.Rest.Port))
 
 	// enable graceful shutdown
@@ -84,7 +83,6 @@ func main() {
 
 	// block until a registered signal is received
 	<-sig
-	ctr.Lifecycle.SetReady(false)
 	ctr.Logger.Info(loggingCtx, "stopping service")
 	// NOTE: We have used a service shutdown pattern leveraging `defer`.
 	// This way, whenever a critical resource is created we do the destruction of that resource

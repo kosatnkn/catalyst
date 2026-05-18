@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,10 +39,16 @@ func (c *infoController) Health(ctx *gin.Context) {
 
 // Ready to be used by the Kubernetes readiness probe.
 func (c *infoController) Ready(ctx *gin.Context) {
-	if c.ctr.Lifecycle.Ready() {
-		ctx.String(http.StatusOK, "ready")
+	var snapshot string
+
+	if c.ctr.Readiness.Ready() {
+		snapshot = fmt.Sprintf("ready: [%s]", c.ctr.Readiness.String())
+		c.ctr.Logger.Info(ctx, snapshot)
+		ctx.String(http.StatusOK, snapshot)
 		return
 	}
 
-	ctx.String(http.StatusServiceUnavailable, "not ready")
+	snapshot = fmt.Sprintf("not ready: [%s]", c.ctr.Readiness.String())
+	c.ctr.Logger.Warn(ctx, snapshot)
+	ctx.String(http.StatusServiceUnavailable, snapshot)
 }
