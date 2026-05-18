@@ -63,20 +63,20 @@ Telemetry configurations for metrics and traces can be set up here as well. Howe
 
 Use the following command to directly create a new microservice using **Catalyst** in your current working directory.
 ```shell
-curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.3.0/new_from_v3.3.0.sh | bash -s -- --module="example.com/dummyuser/sampler" --yes
+curl -fsSL https://github.com/kosatnkn/catalyst/releases/download/v3.4.0/new_from_v3.4.0.sh | bash -s -- --module="example.com/dummyuser/sampler" --yes
 ```
 
 If you prefer to first download the script, inspect it, and then run it (which is the safer approach), use following commands.
 ```shell
 # download first
-curl -fsSL -o new_from_v3.3.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.3.0/new_from_v3.3.0.sh
+curl -fsSL -o new_from_v3.4.0.sh https://github.com/kosatnkn/catalyst/releases/download/v3.4.0/new_from_v3.4.0.sh
 
 # inspect
 # ...
 
 # once ready, run
-chmod +x new_from_v3.3.0.sh
-./new_from_v3.3.0.sh --module="example.com/dummyuser/sampler"
+chmod +x new_from_v3.4.0.sh
+./new_from_v3.4.0.sh --module="example.com/dummyuser/sampler"
 ```
 
 > **NOTE:**
@@ -120,3 +120,6 @@ If you need to add some additional static metadata, you can put them in the `./m
 
 ### 3.4. Makefile
 A `Makefile` is used to streamline `run`, `build`, `test` and `dependency update` workflows.
+
+### 3.5 Readiness Updater
+The readiness updater keeps track of the state of critical components of the service and expose the readiness through a `/readyz` REST endpoint. This can be used by readiness probes (i.e. in Kubernetes) to assess the health of the service.
