@@ -47,7 +47,7 @@ The **Boundary** marks the interface between the **Domain** and the **orchestrat
 Orchestration contains **Infrastructure**, **Presentation** and **Persistence**.
 
 #### 2.2.1. Infrastructure
-**Infrastructure** contains the lowest-level resources needed by the microservice, such as configuration and the IoC container.
+**Infrastructure** contains the lowest-level resources needed by the microservice, such as configuration, the IoC container and the readiness updater.
 
 #### 2.2.2. Presentation
 **Presentation** contains all outward-facing interfaces. These are the communication channels between the microservice and the outside world. This is where you place your RESTful, GraphQL, gRPC, or WebSocket servers. It’s worth noting that you don’t need to implement all of these in a single microservice; it solely depends on the specifics of your implementation.
@@ -93,7 +93,7 @@ You can easily identify how the microservice starts up and shuts down by going t
 By default it will,
 - Parse all configurations in to the `infra.Config` struct.
 - Resolve the container.
-- Start the **Presentation** layer. This includes the `REST` server, a `WebSocket` server etc.
+- Start components in the **Presentation** layer. By default this is the `REST` server, you can additionally place components like a `WebSocket` server, a `GRPC` server or `GraphQL` server, etc. here depending on your need. If you are planning to configure custom `Telemetry` server that too can go here.
 - Block the `main` function using a channel that waits for interrupt signals.
 
 ### 3.3. Configuration
@@ -122,4 +122,12 @@ If you need to add some additional static metadata, you can put them in the `./m
 A `Makefile` is used to streamline `run`, `build`, `test` and `dependency update` workflows.
 
 ### 3.5 Readiness Updater
-The readiness updater keeps track of the state of critical components of the service and expose the readiness through a `/readyz` REST endpoint. This can be used by readiness probes (i.e. in Kubernetes) to assess the health of the service.
+The readiness updater keeps track of the state of critical components of the service and expose the readiness through a `/readyz` REST endpoint.
+
+This can be used by readiness probes (i.e. in Kubernetes) to assess the health of the service.
+
+The implementation is straightforward.
+- The readiness updater is defined in `./infra/readiness.go`.
+- It is loaded and configured while resolving the IoC container, you can find inline comments describing the process.
+- The created readiness object can be passed to other objects so that the central readiness state can be updated from within those objects. A sample update flow is written in `./persistence/postgres/account_retriever_postgres.go` which updates the readiness of the database adapter.
+
