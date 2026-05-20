@@ -25,7 +25,7 @@ func newReadinessCheckHelper(ready persistence.DatabaseReadinessAdapter) *readin
 // readiness check logic before returning it.
 func (h *readinessCheckHelper) withReadinessCheck(err error) error {
 	if err != nil && h.isReadinessFail(err) {
-		h.ready.SetComponent(Identity, false)
+		h.ready.SetReadiness(Identity, false)
 	}
 
 	return err

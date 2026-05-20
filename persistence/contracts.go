@@ -31,6 +31,6 @@ type DatabaseTxAdapter interface {
 // DatabaseReadinessAdapter is used to report readiness state of the database adapter
 // back in to the infrastructure.
 type DatabaseReadinessAdapter interface {
-	// SetComponent sets the readiness state of the database adapter.
-	SetComponent(name string, ready bool)
+	// SetReadiness sets the readiness state of the database adapter.
+	SetReadiness(component string, ready bool)
 }

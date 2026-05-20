@@ -3,8 +3,9 @@ package infra
 import (
 	"errors"
 
+	rd "github.com/kosatnkn/catalyst-pkgs/infra/readiness/basic"
 	pg "github.com/kosatnkn/catalyst-pkgs/persistence/postgres"
-	"github.com/kosatnkn/catalyst-pkgs/telemetry/log/loggerjson"
+	lg "github.com/kosatnkn/catalyst-pkgs/telemetry/log/loggerjson"
 	"github.com/kosatnkn/catalyst/v3/domain/boundary"
 	"github.com/kosatnkn/catalyst/v3/persistence"
 	"github.com/kosatnkn/catalyst/v3/persistence/postgres"
@@ -16,7 +17,7 @@ import (
 // This can be replaced with a DI container of your choice.
 type Container struct {
 	Logger           Logger
-	Readiness        *Readiness
+	Readiness        Readiness
 	DBAdapter        persistence.DatabaseAdapter
 	AccountRetriever boundary.AccountRetriever
 	AccountPersister boundary.AccountPersister
@@ -28,19 +29,19 @@ func NewResolvedContainer(cfg Config) (*Container, error) {
 	c := &Container{}
 
 	// logger
-	if c.Logger, err = loggerjson.NewLoggerJSON(cfg.Log); err != nil {
+	if c.Logger, err = lg.NewLoggerJSON(cfg.Log); err != nil {
 		return nil, errors.Join(errors.New("container: error creating logger"), err)
 	}
 
 	// readiness
 	// NOTE: Set up the readiness probe to enable service readiness querying.
-	c.Readiness = newReadiness(c.Logger)
+	c.Readiness = rd.NewReadiness(c.Logger)
 
 	// database
 	if c.DBAdapter, err = pg.NewDatabaseAdapterPostgres(cfg.Database); err != nil {
 		return nil, errors.Join(errors.New("container: error creating postgres adapter"), err)
 	}
-	c.Readiness.RegisterComponentChecker(
+	c.Readiness.RegisterCheckerFn(
 		postgres.Identity, // NOTE: reference the component identifier from one place
 		func() (bool, error) { // NOTE: function to run in order to check readiness of component
 			if err := c.DBAdapter.Ping(); err != nil {
