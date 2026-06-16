@@ -80,13 +80,14 @@ func main() {
 	// accept graceful shutdowns when quit via SIGINT (Ctrl+C) or SIGTERM (Ctrl+/)
 	// SIGKILL or SIGQUIT will not be caught
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+	defer signal.Stop(sig)
 
 	// block until a registered signal is received
 	<-sig
 	ctr.Logger.Info(loggingCtx, "stopping service")
 	// NOTE: We have used a service shutdown pattern leveraging `defer`.
 	// This way, whenever a critical resource is created we do the destruction of that resource
-	// right after the creation with a `defer`. This way when the `main` function returns or panics
+	// right after the creation with a `defer`. So when the `main` function returns or panics
 	// it will destroy all attached resources properly.
 }
 
