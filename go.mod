@@ -5,7 +5,7 @@ go 1.26
 require (
 	github.com/gin-contrib/cors v1.7.7
 	github.com/gin-gonic/gin v1.12.0
-	github.com/kosatnkn/catalyst-pkgs v0.3.0
+	github.com/kosatnkn/catalyst-pkgs v0.4.0
 )
 
 require (

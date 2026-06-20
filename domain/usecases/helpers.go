@@ -6,7 +6,7 @@ import "github.com/kosatnkn/catalyst/v3/domain/boundary"
 // This will set the database readiness to 'false' if the readiness check fails.
 func withDBReadinessCheck(tx boundary.DatabaseTx, r boundary.Readiness, err error) error {
 	if err != nil && tx.IsReadinessFail(err) {
-		r.SetReadiness("postgres", false)
+		r.SetReadiness(tx.Identity(), false)
 	}
 
 	return err

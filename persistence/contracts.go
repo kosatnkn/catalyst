@@ -4,6 +4,9 @@ import "context"
 
 // DatabaseAdapter is the interface that any database adapter attaching to the service should implement.
 type DatabaseAdapter interface {
+	// Identity returns an identifier for the adapter.
+	Identity() string
+
 	// Ping checks wether the database is accessible.
 	Ping() error
 
@@ -27,13 +30,16 @@ type DatabaseAdapter interface {
 
 // DatabaseTxAdapter is the interface that any database transaction adapter attaching to the service should implement.
 type DatabaseTxAdapter interface {
+	// Identity returns an identifier for the adapter.
+	Identity() string
+
 	// WrapInTx runs the content of the function in a single transaction.
 	WrapInTx(ctx context.Context, fn func(ctx context.Context) (any, error)) (any, error)
 }
 
-// DatabaseReadinessAdapter is used to report readiness state of the database adapter
+// Readiness is used to report readiness state of the database adapter
 // back in to the infrastructure.
-type DatabaseReadinessAdapter interface {
+type Readiness interface {
 	// SetReadiness sets the readiness state of the database adapter.
 	SetReadiness(component string, ready bool)
 }

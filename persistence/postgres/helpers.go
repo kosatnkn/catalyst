@@ -3,11 +3,9 @@ package postgres
 import (
 	"fmt"
 	"regexp"
-)
 
-// Identity provides a single reference point to be used
-// as an identifier for package resources.
-const Identity = "postgres"
+	"github.com/kosatnkn/catalyst/v3/persistence"
+)
 
 // withPagination adds pagination to the query.
 func withPagination(query string, paging map[string]uint32) string {
@@ -73,4 +71,13 @@ func to[T any](in any, idx int) (T, error) {
 	}
 
 	return out, nil
+}
+
+// withDBReadinessCheck pipe the error through readiness check logic before returning it.
+func withDBReadinessCheck(db persistence.DatabaseAdapter, r persistence.Readiness, err error) error {
+	if err != nil && db.IsReadinessFail(err) {
+		r.SetReadiness(db.Identity(), false)
+	}
+
+	return err
 }

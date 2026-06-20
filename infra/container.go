@@ -42,7 +42,7 @@ func NewResolvedContainer(cfg Config) (*Container, error) {
 		return nil, errors.Join(errors.New("container: error creating postgres adapter"), err)
 	}
 	c.Readiness.RegisterCheckerFn(
-		postgres.Identity, // NOTE: reference the component identifier from one place
+		c.DBAdapter.Identity(), // NOTE: reference the component identifier from one place
 		func() (bool, error) { // NOTE: function to run in order to check readiness of component
 			if err := c.DBAdapter.Ping(); err != nil {
 				return false, err

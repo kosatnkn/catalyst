@@ -8,17 +8,15 @@ import (
 )
 
 type AccountRetrieverPostgres struct {
-	db persistence.DatabaseAdapter
-
-	// NOTE: embed the helper to facilitate readiness updates
-	*readinessCheckHelper
+	db    persistence.DatabaseAdapter
+	ready persistence.Readiness
 }
 
 // NewAccountRetrieverPostgres creates a new instance.
-func NewAccountRetrieverPostgres(adapter persistence.DatabaseAdapter, ready persistence.DatabaseReadinessAdapter) *AccountRetrieverPostgres {
+func NewAccountRetrieverPostgres(adapter persistence.DatabaseAdapter, ready persistence.Readiness) *AccountRetrieverPostgres {
 	return &AccountRetrieverPostgres{
-		db:                   adapter,
-		readinessCheckHelper: newReadinessCheckHelper(ready),
+		db:    adapter,
+		ready: ready,
 	}
 }
 
@@ -35,7 +33,7 @@ func (r *AccountRetrieverPostgres) Get(ctx context.Context, filters map[string]a
 
 	result, err := r.db.Query(ctx, query, params)
 	if err != nil {
-		return nil, r.withReadinessCheck(err) // NOTE: pipe the error returned by the db adapter to update readiness state of the component
+		return nil, withDBReadinessCheck(r.db, r.ready, err) // NOTE: pipe the error returned by the db adapter to update readiness state of the component
 	}
 
 	accounts, err := r.mapResult(result)
