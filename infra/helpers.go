@@ -2,6 +2,7 @@ package infra
 
 import "strings"
 
+// FormatMsg to make it JSON friendly.
 func FormatMsg(msg string) string {
 	sChrs := map[string]string{
 		"\n": ",",

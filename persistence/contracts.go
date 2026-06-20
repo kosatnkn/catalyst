@@ -16,6 +16,9 @@ type DatabaseAdapter interface {
 	// Using this for SELECTS will result in an error.
 	QueryBulk(ctx context.Context, query string, params []map[string]any) ([]map[string]any, error)
 
+	// IsReadinessFail check for common readiness failure scenarios.
+	IsReadinessFail(err error) bool
+
 	// Destruct will close the database adapter releasing all resources.
 	Destruct() error
 
