@@ -7,10 +7,11 @@ import (
 
 // Config is the master config struct that holds all other config structs.
 type Config struct {
-	App      AppConfig         `mapstructure:"app"`
-	Rest     RESTConfig        `mapstructure:"rest"`
-	Log      loggerjson.Config `mapstructure:"log"`
-	Database postgres.Config   `mapstructure:"db"`
+	App       AppConfig         `mapstructure:"app"`
+	Rest      RESTConfig        `mapstructure:"rest"`
+	Log       loggerjson.Config `mapstructure:"log"`
+	Telemetry Telemetry         `mapstructure:"telemetry"`
+	Database  postgres.Config   `mapstructure:"db"`
 }
 
 // AppConfig holds application configurations.
@@ -31,4 +32,20 @@ type RESTConfig struct {
 	// Denotes whether the server should run in release (production) mode or not.
 	// The server will run in debug mode when this is set to false.
 	Release bool `mapstructure:"release"`
+}
+
+type Telemetry struct {
+	Profile ProfilerConfig `mapstructure:"profiler"`
+}
+
+type ProfilerConfig struct {
+	// Port is the port the pprof/metrics HTTP server listens on.
+	// Keep this on a non-public port (e.g. 6060) and never expose it externally.
+	Port int `yaml:"port" validate:"min=80,max=65535"`
+	// Enabled allows the telemetry server to be turned off entirely (e.g. in prod
+	// environments where you rely on an external profiler instead).
+	Enabled bool `yaml:"enabled"`
+	// ReadTimeoutSeconds is the HTTP read timeout for the telemetry server.
+	// Keep it high enough for long-running pprof captures (30s CPU profiles, etc.)
+	ReadTimeout int `yaml:"readtimeout"`
 }
