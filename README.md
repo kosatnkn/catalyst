@@ -131,3 +131,12 @@ The implementation is straightforward.
 - It is loaded and configured while resolving the IoC container, you can find inline comments describing the process.
 - The created readiness object can be passed to other objects so that the central readiness state can be updated from within those objects. A sample update flow is written in `./persistence/postgres/account_retriever_postgres.go` which updates the readiness of the database adapter.
 
+### 3.6 Profiler
+The profiling server exposes Go's `pprof` endpoints on a dedicated internal port, separate from the main REST server. It covers CPU usage, heap snapshots, goroutine traces, and allocation profiles.
+
+This enables both live capture via `go tool pprof` and a quick plain-text runtime stats snapshot without any tooling
+by accessing `/debug/stats` endpoint i.e. (http://localhost:6060/debug/stats).
+
+The server is lifecycle-managed identically to other servers in the service (Start/Stop) and can be disabled entirely via config with no code changes required.
+
+[More details here](./presentation/telemetry/profile/README.md)

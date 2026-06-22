@@ -8,6 +8,11 @@ rest:
   release: false  # optional; REST server running mode. set to 'true' in production; default: false
 log:
   level: INFO     # optional; log level used by the internal logger; values: [ERROR, WARN, INFO, DEBUG] default: INFO
+telemetry:
+  profiler:
+    enabled: true   # optional; enable/expose profiling info; default: false
+    port: 6060      # optional; port used by the service to expose it's profiling endpoints; default: 6060
+    readtimeout: 60 # optional:
 
 # Following configurations varies depending on what other configurations are needed for the service.
 # The following configuration is used for demonstration purposes. It reflects to the config structure used by the

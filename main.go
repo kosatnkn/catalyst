@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -14,6 +13,7 @@ import (
 	"github.com/kosatnkn/catalyst/v3/infra"
 	"github.com/kosatnkn/catalyst/v3/metadata"
 	"github.com/kosatnkn/catalyst/v3/presentation/rest"
+	"github.com/kosatnkn/catalyst/v3/presentation/telemetry/profile"
 )
 
 func main() {
@@ -32,23 +32,30 @@ func main() {
 			"rest.wait":    "5s",
 			"rest.release": false,
 			"log.level":    "INFO",
+			// NOTE: The profiling server is OPTIONAL
+			// if profiler is added, add sensible default
+			// values here so that the service
+			// can be started with minimal config
+			"telemetry.profiler.enabled":     false,
+			"telemetry.profiler.port":        6060,
+			"telemetry.profiler.readtimeout": 60,
 		},
 	}
 	c, err := config.Parse(infra.Config{}, settings)
 	if err != nil {
-		msgNPanic(nil, errors.Join(errors.New("main: config parse failed"), err).Error())
+		msgNPanic(lctx, nil, fmt.Errorf("main: config parse failed, %w", err).Error())
 	}
 	cfg := c.(infra.Config)
 
 	// resolve the container using parsed configurations
 	ctr, err := infra.NewResolvedContainer(cfg)
 	if err != nil {
-		msgNPanic(nil, errors.Join(errors.New("main: error resolving container"), err).Error())
+		msgNPanic(lctx, nil, fmt.Errorf("main: error resolving container, %w", err).Error())
 	}
 	defer func() {
 		ctr.Logger.Info(lctx, "destroying container")
 		if err := ctr.Destroy(); err != nil {
-			msgNPanic(ctr.Logger, errors.Join(errors.New("main: error destroying container"), err).Error())
+			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error destroying container, %w", err).Error())
 		}
 	}()
 
@@ -59,16 +66,32 @@ func main() {
 	// start the REST server to handle requests
 	restSrv, err := rest.NewServer(cfg.Rest, ctr)
 	if err != nil {
-		msgNPanic(ctr.Logger, errors.Join(errors.New("main: error creating REST server"), err).Error())
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error creating REST server, %w", err).Error())
 	}
 	ctr.Logger.Info(lctx, "starting REST server")
 	if err := restSrv.Start(); err != nil {
-		msgNPanic(ctr.Logger, errors.Join(errors.New("main: error starting REST server"), err).Error())
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error starting REST server, %w", err).Error())
 	}
 	defer func() {
 		ctr.Logger.Info(lctx, "stopping REST server")
 		if err := restSrv.Stop(); err != nil {
-			msgNPanic(ctr.Logger, errors.Join(errors.New("main: error stopping REST server"), err).Error())
+			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error stopping REST server, %w", err).Error())
+		}
+	}()
+
+	// start profiling server
+	// NOTE: The profiling server is OPTIONAL
+	// If you don't need it remove this section.
+	profSrv, err := profile.NewServer(cfg.Telemetry.Profile, ctr)
+	if err != nil {
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error creating profiling server, %w", err).Error())
+	}
+	if err := profSrv.Start(); err != nil {
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error starting profiling server, %w", err).Error())
+	}
+	defer func() {
+		if err := profSrv.Stop(); err != nil {
+			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error stopping profiling server, %w", err).Error())
 		}
 	}()
 
@@ -92,13 +115,13 @@ func main() {
 }
 
 // msgNPanic a convenient function to perform a logging and a panic to reduce redundancy.
-func msgNPanic(l log.Logger, msg string) {
+func msgNPanic(ctx context.Context, l log.Logger, msg string) {
 	msg = infra.FormatMsg(msg)
 
 	if l == nil {
 		fmt.Println(msg)
 	} else {
-		l.Error(context.Background(), msg)
+		l.Error(ctx, msg)
 	}
 
 	panic("main")
