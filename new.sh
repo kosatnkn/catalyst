@@ -187,7 +187,7 @@ echo -e "# ${PROJECT_DIR}
 TODO: Add content
 
 ---
-<img src="docs/img/catalyst_logo.svg" alt="catalyst" width="14"/>&nbsp;Powered by [kosatnkn/catalyst](https://github.com/kosatnkn/catalyst) (${CATALYST_REF})
+<img src="docs/img/catalyst_logo.svg" alt="catalyst" width="14"/>&nbsp;Based on [kosatnkn/catalyst](https://github.com/kosatnkn/catalyst) (${CATALYST_REF})
 " > README.md
 msg_done
 
