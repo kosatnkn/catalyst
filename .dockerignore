@@ -18,3 +18,9 @@ catalyst
 # Dependancies
 /vendor
 glide.lock
+
+# AI agent instructions and local config
+AGENTS.md
+CLAUDE.md
+CLAUDE.local.md
+/.claude/

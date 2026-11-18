@@ -1,5 +1,5 @@
 # Building
-FROM golang:1.24-alpine3.23 AS builder
+FROM golang:1.26-alpine3.23 AS builder
 
 # install git (required for go modules / metadata scripts)
 RUN apk add --no-cache git

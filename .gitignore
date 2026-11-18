@@ -21,3 +21,8 @@ glide.lock
 
 # config file
 config.yaml
+
+# AI agent local config
+CLAUDE.md
+CLAUDE.local.md
+/.claude/

@@ -139,3 +139,36 @@ by accessing `/debug/stats` endpoint i.e. (http://localhost:6060/debug/stats).
 The server is lifecycle-managed identically to other servers in the service (Start/Stop) and can be disabled entirely via config with no code changes required.
 
 [More details here](./presentation/telemetry/profile/README.md)
+
+### 3.7 AI Coding Agents
+Project instructions for AI coding agents live in [`AGENTS.md`](./AGENTS.md), following the open [AGENTS.md](https://agents.md) convention. It is the single source of truth, and tool-specific files should only point to it instead of duplicating its content.
+
+Tool-specific config is personal, so keep it out of commits. `CLAUDE.md`, `CLAUDE.local.md` and `.claude/` are already gitignored. For other tools, prefer their user-level config, or add their local files to `.gitignore`.
+
+| Agent | Reads `AGENTS.md` natively | Setup |
+|---|---|---|
+| OpenAI Codex | Yes | None |
+| Cursor | Yes | None |
+| GitHub Copilot | Yes | None for the Copilot coding agent. In VS Code, make sure the `chat.useAgentsMdFile` setting is enabled |
+| Claude Code | No (reads `CLAUDE.md`) | Create `CLAUDE.md` with an import (see below) |
+| Gemini CLI | No (reads `GEMINI.md`) | Point its context file setting at `AGENTS.md` (see below) |
+
+Other agents that follow the convention (e.g. Zed, Windsurf, Jules, Amp) should also pick up `AGENTS.md` without any setup.
+
+#### Claude Code
+Create a `CLAUDE.md` in the project root that imports `AGENTS.md`:
+```shell
+echo "@AGENTS.md" > CLAUDE.md
+```
+Add any Claude-specific instructions below the import line. Put personal notes in `CLAUDE.local.md`.
+
+#### Gemini CLI
+Add the following to `~/.gemini/settings.json` (user-level), or to `.gemini/settings.json` in the project:
+```json
+{
+  "context": {
+    "fileName": ["AGENTS.md", "GEMINI.md"]
+  }
+}
+```
+

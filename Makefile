@@ -49,7 +49,6 @@ mock: ## Spin up a mock API using the OpenAPI document
 
 .PHONY: docker-build
 docker-build: ## Build Docker image
-	./scripts/set_metadata.sh
 	docker build --tag kosatnkn/catalyst-test-api:latest .
 
 .PHONY: dep-upgrade-list
