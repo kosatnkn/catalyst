@@ -63,6 +63,12 @@ prompt_yes_no() {
   done
 }
 
+# safety gate: halt if not inside the project dir
+# NOTE: guards every destructive step (rm, sed -i, file writes)
+ensure_in_project_dir() {
+  [[ "$(pwd)" == "${PROJECT_PATH}" ]] || { msg_err "Not in '${PROJECT_PATH}', exiting!"; exit 1; }
+}
+
 # parse args
 CONFIRM=false
 while [[ $# -gt 0 ]]; do
@@ -145,16 +151,17 @@ msg_done
 # NOTE: it is very important that you change dir to project dir
 # safety gates are implemented to halt operation if it detects that you are not in the correct dir
 cd ${PROJECT_DIR}
+PROJECT_PATH="$(pwd)"
 
 # get source
 msg_ongoing "Copying files from '${CATALYST_BASE}' to '$(pwd)'..."
-[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+ensure_in_project_dir
 curl --silent --show-error --location "${CATALYST_BASE}/archive/${CATALYST_REF}.tar.gz" | tar --extract --gzip --strip-components=1
 msg_done
 
 # remove dirs and files
 msg_ongoing "Cleaning up..."
-[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+ensure_in_project_dir
 REMOVE_LIST=(
   ".github"
   "docs/img/*.drawio.*"
@@ -169,14 +176,14 @@ for item in "${REMOVE_LIST[@]}"; do
 done
 
 # remove catalyst specific sections from files
-msg_ongoing "Removing catalyst specific sections from 'Makefile'..."
-[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+msg_ongoing "Removing Catalyst specific sections from 'Makefile'..."
+ensure_in_project_dir
 sed -i '/^# >>> catalyst-only/,/^# <<< catalyst-only/d' Makefile && sed -i '${/^$/d}' Makefile
 
 # replace following
 # github.com/kosatnkn/catalyst/v3 with <new_module_name>
 msg_ongoing "Updating go module and references..."
-[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+ensure_in_project_dir
 file -i $(find . -type f ! -path "*/.git/*") | grep "text/" | cut -d: -f1 | while read -r file; do # NOTE: checks whether the file contains text
   before=$(md5sum ${file})
   sed -i -e "s#${CATALYST_MODULE}#${MODULE}#g" "${file}"
@@ -186,7 +193,7 @@ done
 
 # create necessary files
 msg_ongoing "Creating 'README.md'..."
-[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+ensure_in_project_dir
 echo -e "# ${PROJECT_DIR}
 
 TODO: Add content
