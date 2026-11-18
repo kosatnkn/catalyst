@@ -1,5 +1,5 @@
 # Building
-FROM golang:1.26-alpine3.23 AS builder
+FROM golang:1.26-alpine3.24 AS builder
 
 # install git (required for go modules / metadata scripts)
 RUN apk add --no-cache git
@@ -20,7 +20,7 @@ RUN chmod +x ./metadata/set_metadata.sh \
   && go build -v -o main .
 
 # Running
-FROM alpine:3.23.2 AS runner
+FROM alpine:3.24 AS runner
 
 WORKDIR /opt/
 
