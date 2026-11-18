@@ -59,6 +59,7 @@ dep-upgrade-list: ## List all upgradable dependencies
 dep-upgrade-all: ## Upgrade all dependencies
 	go get -t -u ./... && go mod tidy
 
+# >>> catalyst-only (removed by new.sh)
 # Releasing
 # This will create a new release tag and push it upstream.
 # The creation of a new tag will trigger the release pipeline and draft a new release in GitHub.
@@ -94,3 +95,4 @@ release: ## Create a new release tag and push it upstream
 	fi; \
 	echo "Creating new tag $$TAG and drafting a new release..."; \
 	git tag --annotate $$TAG --message="Release $$TAG" && git push origin $$TAG
+# <<< catalyst-only

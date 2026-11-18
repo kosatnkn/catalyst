@@ -168,6 +168,11 @@ for item in "${REMOVE_LIST[@]}"; do
   msg_success "Removed, '${item}'"
 done
 
+# remove catalyst specific sections from files
+msg_ongoing "Removing catalyst specific sections from 'Makefile'..."
+[[ $(basename "$(pwd)") == "${PROJECT_DIR}" ]] || { msg_err "Not in '${PROJECT_DIR}', exiting!"; exit 1; } # NOTE: safety gate
+sed -i '/^# >>> catalyst-only/,/^# <<< catalyst-only/d' Makefile && sed -i '${/^$/d}' Makefile
+
 # replace following
 # github.com/kosatnkn/catalyst/v3 with <new_module_name>
 msg_ongoing "Updating go module and references..."
