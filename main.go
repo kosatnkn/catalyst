@@ -105,16 +105,24 @@ func main() {
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	defer signal.Stop(sig)
 
-	// block until a registered signal is received
-	<-sig
-	ctr.Logger.Info(lctx, "stopping service")
+	// block until a registered signal is received or a server fails
+	// NOTE: a server failure here is unrecoverable (ex: the listener died),
+	// request failures never reach this point.
+	select {
+	case <-sig:
+		ctr.Logger.Info(lctx, "stopping service")
+	case err := <-restSrv.Err():
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: REST server failed, %w", err).Error())
+	case err := <-profSrv.Err():
+		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: profiling server failed, %w", err).Error())
+	}
 	// NOTE: We have used a service shutdown pattern leveraging `defer`.
 	// This way, whenever a critical resource is created we do the destruction of that resource
 	// right after the creation with a `defer`. So when the `main` function returns or panics
 	// it will destroy all attached resources properly.
 }
 
-// msgNPanic a convenient function to perform a logging and a panic to reduce redundancy.
+// msgNPanic a convenience function to perform a logging and a panic to reduce redundancy.
 func msgNPanic(ctx context.Context, l log.Logger, msg string) {
 	msg = infra.FormatMsg(msg)
 

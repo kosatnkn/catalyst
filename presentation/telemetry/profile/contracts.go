@@ -10,4 +10,9 @@ type Server interface {
 	// Stop performs a graceful shutdown, waiting for in-flight pprof requests
 	// (such as long CPU profiles) to complete before returning.
 	Stop() error
+
+	// Err returns a channel that receives an unrecoverable error if the server
+	// stops serving after a successful Start. A nil channel (never fires) is
+	// valid for servers that cannot fail at runtime.
+	Err() <-chan error
 }

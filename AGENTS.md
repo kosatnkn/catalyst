@@ -51,9 +51,9 @@ The layers and the direction of dependencies:
 1. `config.Parse(infra.Config{}, settings)` runs, with defaults set in `main.go` and env prefix `CATALYST`. For example, `db.host` becomes `CATALYST_DB_HOST`.
 2. `infra.NewResolvedContainer` runs.
 3. The servers start.
-4. The process blocks until it receives SIGINT or SIGTERM.
+4. The process blocks until it receives SIGINT or SIGTERM, or until a server reports an unrecoverable runtime error through `Err()`. A server error goes to `msgNPanic`, which still runs the defers.
 
-Each resource is torn down by a `defer` placed right after it's created, so the order of the `defer`s is the shutdown order. Every server follows the same `NewServer`/`Start()`/`Stop()` shape, and `Start` fails fast if the listener can't bind. When you add a config key, also add a sensible default in the `settings.Defaults` map in `main.go`.
+Each resource is torn down by a `defer` placed right after it's created, so the order of the `defer`s is the shutdown order. Every server follows the same `NewServer`/`Start()`/`Stop()`/`Err()` shape. `Start` fails fast if the listener can't bind, and `Err()` returns a channel that delivers a later serve failure (nil if the server can't fail). When you add a config key, also add a sensible default in the `settings.Defaults` map in `main.go`.
 
 **Readiness:** `/readyz` reports on the `Readiness` object built in the container. Components register a checker by their `Identity()` string, for example the DB adapter's ping. To mark a component not-ready at runtime, pipe its errors through `withDBReadinessCheck` (one helper in `persistence/postgres/helpers.go`, another in `domain/usecases/helpers.go`). That helper calls `IsReadinessFail` and then `SetReadiness(identity, false)`. Only pass `Readiness` into objects that need that tracking. A use case that wraps work in `tx.WrapInTx` must also receive `Readiness` and check the transaction error itself.
 

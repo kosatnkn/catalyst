@@ -32,6 +32,7 @@ type server struct {
 	cfg     infra.ProfilerConfig
 	log     infra.Logger
 	httpSrv *http.Server
+	errs    chan error
 }
 
 // NewServer creates a new telemetry server.
@@ -82,15 +83,21 @@ func (s *server) Start() error {
 		return fmt.Errorf("profile: Start, failed to bind to port %s, %w", s.httpSrv.Addr, err)
 	}
 
+	s.errs = make(chan error, 1)
 	go func() {
+		// Stop() causes ErrServerClosed, which is expected and ignored.
+		// Anything else is unrecoverable and is surfaced through Err().
 		if err := s.httpSrv.Serve(ln); err != nil && err != http.ErrServerClosed {
-			// Nothing useful to do here other than surface it; the server is
-			// typically stopped via Stop(), which causes ErrServerClosed.
-			_ = err
+			s.errs <- fmt.Errorf("profile: serve error, %w", err)
 		}
 	}()
 
 	return nil
+}
+
+// Err returns a channel that receives an unrecoverable serve error.
+func (s *server) Err() <-chan error {
+	return s.errs
 }
 
 // Stop gracefully shuts down the HTTP server, giving in-flight profiling

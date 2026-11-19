@@ -7,3 +7,6 @@ type nopServer struct{}
 
 func (n *nopServer) Start() error { return nil }
 func (n *nopServer) Stop() error  { return nil }
+
+// Err returns a nil channel, which never fires in a select.
+func (n *nopServer) Err() <-chan error { return nil }

@@ -14,6 +14,9 @@ type Server struct {
 	cfg infra.RESTConfig
 	ctr *infra.Container
 	srv *http.Server
+	// errs delivers an unrecoverable serve error (ex: listener failure) that
+	// happens after Start has returned. Request failures never reach here.
+	errs chan error
 }
 
 // NewServer returns a new REST server instance.
@@ -35,24 +38,28 @@ func (s *Server) Start() error {
 		Handler: newRouter(s.cfg, s.ctr).Handler(),
 	}
 
-	// channel to catch early startup failures before the server is stable
-	serr := make(chan error, 1)
+	// channel to catch serve failures, both early (startup) and late (runtime)
+	s.errs = make(chan error, 1)
 
 	go func() {
 		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			serr <- err // pass err through channel to calling routine
-			return
+			s.errs <- err // pass err through channel to calling routine
 		}
-		close(serr)
 	}()
 
 	// give it a moment to fail fast on startup (ex: port already in use)
 	select {
-	case err := <-serr:
+	case err := <-s.errs:
 		return err // ex: bind failed
 	case <-time.After(50 * time.Millisecond):
 		return nil // server is up and stable
 	}
+}
+
+// Err returns a channel that receives an unrecoverable error if the server
+// stops serving after a successful Start.
+func (s *Server) Err() <-chan error {
+	return s.errs
 }
 
 // Stop stops the REST server.
