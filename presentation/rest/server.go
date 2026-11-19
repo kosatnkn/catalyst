@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"time"
 
 	"github.com/kosatnkn/catalyst/v3/infra"
 )
@@ -14,8 +13,6 @@ type Server struct {
 	cfg infra.RESTConfig
 	ctr *infra.Container
 	srv *http.Server
-	// wait is how long Stop waits for in-flight requests before forcefully closing connections
-	wait time.Duration
 	// errs delivers an unrecoverable serve error (ex: listener failure) that
 	// happens after Start has returned. Request failures never reach here.
 	errs chan error
@@ -23,17 +20,9 @@ type Server struct {
 
 // NewServer returns a new REST server instance.
 func NewServer(cfg infra.RESTConfig, ctr *infra.Container) (*Server, error) {
-	// parse here (not in Stop) so that a bad value fails at startup
-	// instead of skipping the graceful shutdown
-	wait, err := time.ParseDuration(cfg.Wait)
-	if err != nil {
-		return nil, fmt.Errorf("rest, NewServer: invalid wait duration %q, %w", cfg.Wait, err)
-	}
-
 	s := &Server{
-		cfg:  cfg,
-		ctr:  ctr,
-		wait: wait,
+		cfg: cfg,
+		ctr: ctr,
 	}
 
 	return s, nil
@@ -77,12 +66,10 @@ func (s *Server) Err() <-chan error {
 	return s.errs
 }
 
-// Stop stops the REST server.
-func (s *Server) Stop() error {
+// Stop gracefully stops the REST server, waiting for in-flight requests until ctx is done
+// and then forcefully closing any remaining connections.
+func (s *Server) Stop(ctx context.Context) error {
 	s.ctr.Logger.Info(context.Background(), "stopping REST server")
-
-	ctx, cancel := context.WithTimeout(context.Background(), s.wait)
-	defer cancel()
 
 	if err := s.srv.Shutdown(ctx); err != nil {
 		// when timeout exceeds forcefully close any remaining connections

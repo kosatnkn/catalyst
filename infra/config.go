@@ -19,16 +19,17 @@ type AppConfig struct {
 	Name     string `mapstructure:"name"`
 	Mode     string `mapstructure:"mode"`
 	Timezone string `mapstructure:"timezone"`
+	// The time duration the service waits for all components to shut down gracefully
+	// when a terminate signal is received. This is a single deadline shared by every teardown step.
+	// This is a string value that can be parsed in to a time duration by `time.ParseDuration` function,
+	// i.e. "300ms", "1.5h", or "2h45m".
+	// Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+	Wait string `mapstructure:"wait"`
 }
 
 type RESTConfig struct {
 	// Port in which the REST server is running on.
 	Port int `mapstructure:"port" validate:"min=80,max=65535"`
-	// The time duration in which the server waits until shutdown when a terminate signal is received.
-	// This is a string value that can be parsed in to a time duration by `time.ParseDuration` function,
-	// i.e. "300ms", "1.5h", or "2h45m".
-	// Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
-	Wait string `mapstructure:"wait"`
 	// Denotes whether the server should run in release (production) mode or not.
 	// The server will run in debug mode when this is set to false.
 	Release bool `mapstructure:"release"`

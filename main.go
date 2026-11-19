@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/kosatnkn/catalyst-pkgs/config"
 	"github.com/kosatnkn/catalyst-pkgs/telemetry/log"
@@ -25,8 +26,8 @@ var confSettings = config.Settings{
 		"app.name":     metadata.Name(),
 		"app.mode":     "DEBUG",
 		"app.timezone": "UTC",
+		"app.wait":     "5s",
 		"rest.port":    8000,
-		"rest.wait":    "5s",
 		"rest.release": false,
 		"log.level":    "INFO",
 		// NOTE: The profiling server is OPTIONAL
@@ -72,6 +73,31 @@ func run() (retErr error) {
 	}
 	cfg := c.(infra.Config)
 
+	// parse here so that a bad value fails at startup instead of breaking the graceful shutdown
+	wait, err := time.ParseDuration(cfg.App.Wait)
+	if err != nil {
+		return logErr(lCtx, nil, fmt.Errorf("main, run: invalid app wait duration %q, %w", cfg.App.Wait, err))
+	}
+
+	// a single deadline (`app.wait`) shared by every teardown step
+	// NOTE: it is started lazily by the first teardown step that asks for it, because teardown can begin
+	// either after a signal or from an early return midway through startup.
+	// Teardown runs in this goroutine only, so no synchronization is needed.
+	var stopCtx context.Context
+	var stopCancel context.CancelFunc
+	shutdownCtx := func() context.Context {
+		if stopCtx == nil {
+			stopCtx, stopCancel = context.WithTimeout(context.Background(), wait)
+		}
+		return stopCtx
+	}
+	// registered before any resource defer, so that it runs last
+	defer func() {
+		if stopCancel != nil {
+			stopCancel()
+		}
+	}()
+
 	// resolve the container using parsed configurations
 	ctr, err := infra.NewResolvedContainer(cfg)
 	if err != nil {
@@ -97,7 +123,7 @@ func run() (retErr error) {
 		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error starting REST server, %w", err))
 	}
 	defer func() {
-		if err := restSrv.Stop(); err != nil {
+		if err := restSrv.Stop(shutdownCtx()); err != nil {
 			retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error stopping REST server, %w", err)))
 		}
 	}()
@@ -113,7 +139,7 @@ func run() (retErr error) {
 		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error starting profiling server, %w", err))
 	}
 	defer func() {
-		if err := profSrv.Stop(); err != nil {
+		if err := profSrv.Stop(shutdownCtx()); err != nil {
 			retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error stopping profiling server, %w", err)))
 		}
 	}()

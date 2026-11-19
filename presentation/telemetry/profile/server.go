@@ -23,10 +23,6 @@ import (
 	"github.com/kosatnkn/catalyst/v3/infra"
 )
 
-// stopTimeout is how long Stop() waits for in-flight requests (e.g. a 30s CPU
-// profile) to finish before forcibly closing the server.
-const stopTimeout = 65 * time.Second
-
 // server is the concrete implementation of Server.
 type server struct {
 	cfg     infra.ProfilerConfig
@@ -101,16 +97,19 @@ func (s *server) Err() <-chan error {
 }
 
 // Stop gracefully shuts down the HTTP server, giving in-flight profiling
-// requests up to stopTimeout to complete.
-func (s *server) Stop() error {
+// requests until ctx is done to complete, then forcefully closes remaining connections.
+func (s *server) Stop(ctx context.Context) error {
 	s.log.Info(context.Background(), "stopping profiling server")
 
-	ctx, cancel := context.WithTimeout(context.Background(), stopTimeout)
-	defer cancel()
-
 	if err := s.httpSrv.Shutdown(ctx); err != nil {
-		return fmt.Errorf("profile: Stop, shutdown error, %w", err)
+		// when the deadline is exceeded forcefully close any remaining connections
+		if cerr := s.httpSrv.Close(); cerr != nil {
+			return fmt.Errorf("profile, Stop: error in forceful connection termination, %w, %w", cerr, err)
+		}
+
+		return fmt.Errorf("profile, Stop: error in server shutdown, %w", err)
 	}
+
 	return nil
 }
 

@@ -53,7 +53,13 @@ The layers and the direction of dependencies:
 3. The servers start.
 4. The process blocks until it receives SIGINT or SIGTERM, or until a server reports an unrecoverable runtime error through `Err()`. Signals are caught with `signal.NotifyContext` at the very top of `run`, so a signal received during startup still goes through teardown. After the first signal, `stop()` restores the default behaviour, so a second Ctrl+C force-quits a shutdown that hangs. On any failure (startup, runtime or teardown), `run()` logs it with `logErr` and returns it. Its defers tear everything down, and then `main` exits with code 1. Don't `panic` or `os.Exit` inside `run`.
 
-Each resource is torn down by a `defer` placed right after it's created, so the order of the `defer`s is the shutdown order. Every server follows the same `NewServer`/`Start()`/`Stop()`/`Err()` shape. `Start` fails fast if the listener can't bind, and `Err()` returns a channel that delivers a later serve failure (nil if the server can't fail). When you add a config key, also add a sensible default in the `confSettings.Defaults` map in `main.go`.
+Each resource is torn down by a `defer` placed right after it's created, so the order of the `defer`s is the shutdown order. Every server follows the same `NewServer`/`Start()`/`Stop(ctx)`/`Err()` shape. `Start` fails fast if the listener can't bind, and `Err()` returns a channel that delivers a later serve failure (nil if the server can't fail).
+
+**Shutdown deadline:** `app.wait` (default `5s`) is the whole teardown budget, not a per-server one.
+- `run` parses it at startup, so a bad value fails fast. The deadline itself is created lazily by `shutdownCtx()` when the first teardown step asks for it.
+- Pass `shutdownCtx()` to every server's `Stop`. `Stop` waits for in-flight requests until the ctx is done, then calls `Close()` on whatever is left.
+- The steps run one after another, so a slow step uses up the budget of the ones after it. For example, a running 30s CPU profile can use all of it, and then REST force-closes immediately.
+- Keep `app.wait` below the orchestrator's grace period (Kubernetes: 30s). When you add a config key, also add a sensible default in the `confSettings.Defaults` map in `main.go`.
 
 **Readiness:** `/readyz` reports on the `Readiness` object built in the container. Components register a checker by their `Identity()` string, for example the DB adapter's ping. To mark a component not-ready at runtime, pipe its errors through `withDBReadinessCheck` (one helper in `persistence/postgres/helpers.go`, another in `domain/usecases/helpers.go`). That helper calls `IsReadinessFail` and then `SetReadiness(identity, false)`. Only pass `Readiness` into objects that need that tracking. A use case that wraps work in `tx.WrapInTx` must also receive `Readiness` and check the transaction error itself.
 

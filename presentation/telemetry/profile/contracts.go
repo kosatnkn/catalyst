@@ -1,5 +1,7 @@
 package profile
 
+import "context"
+
 // Server defines the lifecycle interface for the telemetry server.
 type Server interface {
 	// Start begins listening on the configured port in a background goroutine.
@@ -8,8 +10,8 @@ type Server interface {
 	Start() error
 
 	// Stop performs a graceful shutdown, waiting for in-flight pprof requests
-	// (such as long CPU profiles) to complete before returning.
-	Stop() error
+	// (such as long CPU profiles) until ctx is done, then closes remaining connections.
+	Stop(ctx context.Context) error
 
 	// Err returns a channel that receives an unrecoverable error if the server
 	// stops serving after a successful Start. A nil channel (never fires) is

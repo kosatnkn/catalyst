@@ -55,25 +55,27 @@ telemetry:
 | `port` | `6060` | Port the profiling server listens on |
 | `readtimeout` | `60` | HTTP read timeout — keep above your longest expected CPU capture |
 
-### 2. Lifecycle in `main.go`
+### 2. Lifecycle in `main.go` (inside `run`)
 
 ```go
 // start profiling server
 profSrv, err := profile.NewServer(cfg.Telemetry.Profile, ctr)
 if err != nil {
-  msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error creating profiling server, %w", err).Error())
+  return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error creating profiling server, %w", err))
 }
 if err := profSrv.Start(); err != nil {
-  msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error starting profiling server, %w", err).Error())
+  return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error starting profiling server, %w", err))
 }
 defer func() {
-  if err := profSrv.Stop(); err != nil {
-    msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error stopping profiling server, %w", err).Error())
+  if err := profSrv.Stop(shutdownCtx()); err != nil {
+    retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error stopping profiling server, %w", err)))
   }
 }()
 ```
 
-`Start()` binds the port eagerly — a port conflict surfaces immediately as an error rather than being swallowed in a goroutine. `Stop()` waits up to 65 seconds for in-flight captures to complete before closing.
+`Start()` binds the port eagerly, so a port conflict surfaces immediately as an error rather than being swallowed in a goroutine. If the server stops serving later, the error is delivered through `Err()` and `run` fails the service.
+
+`Stop(ctx)` waits for in-flight captures until the shared `app.wait` shutdown deadline, then forcefully closes remaining connections. A long CPU capture (e.g. `?seconds=30`) running at shutdown is cut off unless `app.wait` is raised above its duration.
 
 ## Endpoints
 
