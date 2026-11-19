@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -17,6 +18,15 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		// run has already logged the error and all of its defers have completed
+		os.Exit(1)
+	}
+}
+
+// run starts the service and blocks until it is stopped.
+// It returns a non nil error when the service failed (startup, runtime or teardown).
+func run() (err error) {
 	// create a single context to be used by all logging calls
 	lctx := context.Background()
 
@@ -43,19 +53,19 @@ func main() {
 	}
 	c, err := config.Parse(infra.Config{}, settings)
 	if err != nil {
-		msgNPanic(lctx, nil, fmt.Errorf("main: config parse failed, %w", err).Error())
+		return logErr(lctx, nil, fmt.Errorf("main: config parse failed, %w", err))
 	}
 	cfg := c.(infra.Config)
 
 	// resolve the container using parsed configurations
 	ctr, err := infra.NewResolvedContainer(cfg)
 	if err != nil {
-		msgNPanic(lctx, nil, fmt.Errorf("main: error resolving container, %w", err).Error())
+		return logErr(lctx, nil, fmt.Errorf("main: error resolving container, %w", err))
 	}
 	defer func() {
 		ctr.Logger.Info(lctx, "destroying container")
-		if err := ctr.Destroy(); err != nil {
-			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error destroying container, %w", err).Error())
+		if derr := ctr.Destroy(); derr != nil {
+			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error destroying container, %w", derr)))
 		}
 	}()
 
@@ -66,16 +76,16 @@ func main() {
 	// start the REST server to handle requests
 	restSrv, err := rest.NewServer(cfg.Rest, ctr)
 	if err != nil {
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error creating REST server, %w", err).Error())
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error creating REST server, %w", err))
 	}
 	ctr.Logger.Info(lctx, "starting REST server")
 	if err := restSrv.Start(); err != nil {
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error starting REST server, %w", err).Error())
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error starting REST server, %w", err))
 	}
 	defer func() {
 		ctr.Logger.Info(lctx, "stopping REST server")
-		if err := restSrv.Stop(); err != nil {
-			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error stopping REST server, %w", err).Error())
+		if serr := restSrv.Stop(); serr != nil {
+			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error stopping REST server, %w", serr)))
 		}
 	}()
 
@@ -84,14 +94,14 @@ func main() {
 	// If you don't need it remove this section.
 	profSrv, err := profile.NewServer(cfg.Telemetry.Profile, ctr)
 	if err != nil {
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error creating profiling server, %w", err).Error())
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error creating profiling server, %w", err))
 	}
 	if err := profSrv.Start(); err != nil {
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error starting profiling server, %w", err).Error())
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error starting profiling server, %w", err))
 	}
 	defer func() {
-		if err := profSrv.Stop(); err != nil {
-			msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: error stopping profiling server, %w", err).Error())
+		if serr := profSrv.Stop(); serr != nil {
+			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error stopping profiling server, %w", serr)))
 		}
 	}()
 
@@ -111,20 +121,22 @@ func main() {
 	select {
 	case <-sig:
 		ctr.Logger.Info(lctx, "stopping service")
-	case err := <-restSrv.Err():
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: REST server failed, %w", err).Error())
-	case err := <-profSrv.Err():
-		msgNPanic(lctx, ctr.Logger, fmt.Errorf("main: profiling server failed, %w", err).Error())
+	case serr := <-restSrv.Err():
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: REST server failed, %w", serr))
+	case serr := <-profSrv.Err():
+		return logErr(lctx, ctr.Logger, fmt.Errorf("main: profiling server failed, %w", serr))
 	}
+
 	// NOTE: We have used a service shutdown pattern leveraging `defer`.
-	// This way, whenever a critical resource is created we do the destruction of that resource
-	// right after the creation with a `defer`. So when the `main` function returns or panics
-	// it will destroy all attached resources properly.
+	// Whenever a critical resource is created we do the destruction of that resource
+	// right after the creation with a `defer`. So when `run` returns (normally or with an error)
+	// it will destroy all attached resources properly, and `main` exits non zero on error.
+	return nil
 }
 
-// msgNPanic a convenience function to perform a logging and a panic to reduce redundancy.
-func msgNPanic(ctx context.Context, l log.Logger, msg string) {
-	msg = infra.FormatMsg(msg)
+// logErr logs the error (through the logger, or stdout before the logger exists) and returns it.
+func logErr(ctx context.Context, l log.Logger, err error) error {
+	msg := infra.FormatMsg(err.Error())
 
 	if l == nil {
 		fmt.Println(msg)
@@ -132,5 +144,5 @@ func msgNPanic(ctx context.Context, l log.Logger, msg string) {
 		l.Error(ctx, msg)
 	}
 
-	panic("main")
+	return err
 }

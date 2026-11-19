@@ -85,15 +85,15 @@ chmod +x new_from_v3.4.1.sh
 > The script can handle version information in the module name when inferring the directory name. For example, both `example.com/dummyuser/sampler` and `example.com/dummyuser/sampler/v2` will produce `sampler` as the directory name.
 
 ### 3.2. Understanding How it Works
-The best place to start how a microservice based on Catalyst works is the `main.go` file and the `main` function.
+The best place to start how a microservice based on Catalyst works is the `main.go` file and the `run` function (called by `main`).
 
-You can easily identify how the microservice starts up and shuts down by going through the `main` function in execution order.
+You can easily identify how the microservice starts up and shuts down by going through the `run` function in execution order.
 
 By default it will,
 - Parse all configurations in to the `infra.Config` struct.
 - Resolve the container.
 - Start components in the **Presentation** layer. By default this is the `REST` server, you can additionally place components like a `WebSocket` server, a `GRPC` server or `GraphQL` server, etc. here depending on your need. If you are planning to configure custom `Telemetry` server that too can go here.
-- Block the `main` function using a channel that waits for interrupt signals.
+- Block the `run` function until an interrupt signal is received or a server fails. On failure, `run` returns the error after tearing everything down and the service exits with code 1.
 
 ### 3.3. Configuration
 You can provide configurations in one of two ways. Using a `config.yaml` file or using environment variables.
