@@ -106,7 +106,7 @@ The structure of the `config.yaml` file depends on the structure of the `Config`
 #### 3.2.2. Configure Using Environment Variables
 > NOTE: When using environment variables it will override values read from the `config.yaml` file.
 
-To avoid conflicts environment variables used are prefixed. The prefix to use is configurable (see `config.Settings` used in the `main` function in `main.go`).
+To avoid conflicts environment variables used are prefixed. The prefix to use is configurable (see `confSettings` in `main.go`).
 
 Names of environment variables too depends on the structure of the `Config` struct in `./infra/config.go` file. You can find an example usage in the `Makefile`s `run-with-env` section.
 

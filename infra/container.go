@@ -2,6 +2,7 @@ package infra
 
 import (
 	"errors"
+	"fmt"
 
 	rd "github.com/kosatnkn/catalyst-pkgs/infra/readiness/basic"
 	pg "github.com/kosatnkn/catalyst-pkgs/persistence/postgres"
@@ -63,7 +64,7 @@ func NewResolvedContainer(cfg Config) (*Container, error) {
 func (c *Container) Destroy() error {
 	err := c.DBAdapter.Destruct()
 	if err != nil {
-		return errors.Join(errors.New("container: error destroying database adapter"), err)
+		return fmt.Errorf("container, Destroy: error destroying database adapter, %w", err)
 	}
 
 	return nil

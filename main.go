@@ -17,6 +17,29 @@ import (
 	"github.com/kosatnkn/catalyst/v3/presentation/telemetry/profile"
 )
 
+// set settings for the configuration parser
+var confSettings = config.Settings{
+	Dir:    ".",
+	Prefix: "CATALYST",
+	Defaults: map[string]any{
+		"app.name":     metadata.Name(),
+		"app.mode":     "DEBUG",
+		"app.timezone": "UTC",
+		"rest.port":    8000,
+		"rest.wait":    "5s",
+		"rest.release": false,
+		"log.level":    "INFO",
+		// NOTE: The profiling server is OPTIONAL
+		// if profiler is added, add sensible default
+		// values here so that the service
+		// can be started with minimal config
+		"telemetry.profiler.enabled":     false,
+		"telemetry.profiler.port":        6060,
+		"telemetry.profiler.readtimeout": 60,
+	},
+}
+
+// main entrypoint.
 func main() {
 	if err := run(); err != nil {
 		// run has already logged the error and all of its defers have completed
@@ -26,66 +49,50 @@ func main() {
 
 // run starts the service and blocks until it is stopped.
 // It returns a non nil error when the service failed (startup, runtime or teardown).
-func run() (err error) {
+//
+// NOTE: `retErr` is a named result so that the deferred teardown funcs can report errors.
+// A value returned from a deferred func is discarded, but a deferred func can assign to a named result.
+// On `return X`, Go first sets `retErr = X`, then runs the defers (LIFO), and only then hands
+// `retErr` to the caller. So each teardown defer does `retErr = errors.Join(retErr, ...)`
+// to add its error without losing the one that caused the return.
+// It is intentionally named `retErr` (not `err`) so that it is never shadowed by a local `err`.
+func run() (retErr error) {
 	// create a single context to be used by all logging calls
-	lctx := context.Background()
+	lCtx := context.Background()
 
-	// parse all configurations
-	settings := config.Settings{
-		Dir:    ".",
-		Prefix: "CATALYST",
-		Defaults: map[string]any{
-			"app.name":     metadata.Name(),
-			"app.mode":     "DEBUG",
-			"app.timezone": "UTC",
-			"rest.port":    8000,
-			"rest.wait":    "5s",
-			"rest.release": false,
-			"log.level":    "INFO",
-			// NOTE: The profiling server is OPTIONAL
-			// if profiler is added, add sensible default
-			// values here so that the service
-			// can be started with minimal config
-			"telemetry.profiler.enabled":     false,
-			"telemetry.profiler.port":        6060,
-			"telemetry.profiler.readtimeout": 60,
-		},
-	}
-	c, err := config.Parse(infra.Config{}, settings)
+	c, err := config.Parse(infra.Config{}, confSettings)
 	if err != nil {
-		return logErr(lctx, nil, fmt.Errorf("main: config parse failed, %w", err))
+		return logErr(lCtx, nil, fmt.Errorf("main, run: config parse failed, %w", err))
 	}
 	cfg := c.(infra.Config)
 
 	// resolve the container using parsed configurations
 	ctr, err := infra.NewResolvedContainer(cfg)
 	if err != nil {
-		return logErr(lctx, nil, fmt.Errorf("main: error resolving container, %w", err))
+		return logErr(lCtx, nil, fmt.Errorf("main, run: error resolving container, %w", err))
 	}
 	defer func() {
-		ctr.Logger.Info(lctx, "destroying container")
-		if derr := ctr.Destroy(); derr != nil {
-			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error destroying container, %w", derr)))
+		ctr.Logger.Info(lCtx, "destroying container")
+		if err := ctr.Destroy(); err != nil {
+			retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error destroying container, %w", err)))
 		}
 	}()
 
 	// start service
 	splash := strings.Join(append([]string{metadata.BaseInfo()}, metadata.BuildInfo()...), ", ")
-	ctr.Logger.Info(lctx, splash)
+	ctr.Logger.Info(lCtx, splash)
 
 	// start the REST server to handle requests
 	restSrv, err := rest.NewServer(cfg.Rest, ctr)
 	if err != nil {
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error creating REST server, %w", err))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error creating REST server, %w", err))
 	}
-	ctr.Logger.Info(lctx, "starting REST server")
 	if err := restSrv.Start(); err != nil {
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error starting REST server, %w", err))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error starting REST server, %w", err))
 	}
 	defer func() {
-		ctr.Logger.Info(lctx, "stopping REST server")
-		if serr := restSrv.Stop(); serr != nil {
-			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error stopping REST server, %w", serr)))
+		if err := restSrv.Stop(); err != nil {
+			retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error stopping REST server, %w", err)))
 		}
 	}()
 
@@ -94,19 +101,19 @@ func run() (err error) {
 	// If you don't need it remove this section.
 	profSrv, err := profile.NewServer(cfg.Telemetry.Profile, ctr)
 	if err != nil {
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error creating profiling server, %w", err))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error creating profiling server, %w", err))
 	}
 	if err := profSrv.Start(); err != nil {
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: error starting profiling server, %w", err))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error starting profiling server, %w", err))
 	}
 	defer func() {
-		if serr := profSrv.Stop(); serr != nil {
-			err = errors.Join(err, logErr(lctx, ctr.Logger, fmt.Errorf("main: error stopping profiling server, %w", serr)))
+		if err := profSrv.Stop(); err != nil {
+			retErr = errors.Join(retErr, logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: error stopping profiling server, %w", err)))
 		}
 	}()
 
 	// mark service as ready to accept connections
-	ctr.Logger.Info(lctx, fmt.Sprintf("ready to accept connections on port %d", cfg.Rest.Port))
+	ctr.Logger.Info(lCtx, fmt.Sprintf("ready to accept connections on port %d", cfg.Rest.Port))
 
 	// enable graceful shutdown
 	sig := make(chan os.Signal, 1)
@@ -120,11 +127,11 @@ func run() (err error) {
 	// request failures never reach this point.
 	select {
 	case <-sig:
-		ctr.Logger.Info(lctx, "stopping service")
+		ctr.Logger.Info(lCtx, "stopping service")
 	case serr := <-restSrv.Err():
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: REST server failed, %w", serr))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: REST server failed, %w", serr))
 	case serr := <-profSrv.Err():
-		return logErr(lctx, ctr.Logger, fmt.Errorf("main: profiling server failed, %w", serr))
+		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: profiling server failed, %w", serr))
 	}
 
 	// NOTE: We have used a service shutdown pattern leveraging `defer`.

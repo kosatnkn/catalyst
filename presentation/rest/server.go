@@ -2,7 +2,6 @@ package rest
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -14,6 +13,8 @@ type Server struct {
 	cfg infra.RESTConfig
 	ctr *infra.Container
 	srv *http.Server
+	// wait is how long Stop waits for in-flight requests before forcefully closing connections
+	wait time.Duration
 	// errs delivers an unrecoverable serve error (ex: listener failure) that
 	// happens after Start has returned. Request failures never reach here.
 	errs chan error
@@ -21,9 +22,17 @@ type Server struct {
 
 // NewServer returns a new REST server instance.
 func NewServer(cfg infra.RESTConfig, ctr *infra.Container) (*Server, error) {
+	// parse here (not in Stop) so that a bad value fails at startup
+	// instead of skipping the graceful shutdown
+	wait, err := time.ParseDuration(cfg.Wait)
+	if err != nil {
+		return nil, fmt.Errorf("rest, NewServer: invalid wait duration %q, %w", cfg.Wait, err)
+	}
+
 	s := &Server{
-		cfg: cfg,
-		ctr: ctr,
+		cfg:  cfg,
+		ctr:  ctr,
+		wait: wait,
 	}
 
 	return s, nil
@@ -31,7 +40,10 @@ func NewServer(cfg infra.RESTConfig, ctr *infra.Container) (*Server, error) {
 
 // Start starts the REST server.
 func (s *Server) Start() error {
-	s.ctr.Logger.Debug(context.Background(), fmt.Sprintf("config values: %+v", s.cfg))
+	ctx := context.Background()
+
+	s.ctr.Logger.Info(ctx, "starting REST server")
+	s.ctr.Logger.Debug(ctx, fmt.Sprintf("config values: %+v", s.cfg))
 
 	s.srv = &http.Server{
 		Addr:    fmt.Sprintf(":%d", s.cfg.Port),
@@ -64,20 +76,18 @@ func (s *Server) Err() <-chan error {
 
 // Stop stops the REST server.
 func (s *Server) Stop() error {
-	wait, err := time.ParseDuration(s.cfg.Wait)
-	if err != nil {
-		return err
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), wait)
+	s.ctr.Logger.Info(context.Background(), "stopping REST server")
+
+	ctx, cancel := context.WithTimeout(context.Background(), s.wait)
 	defer cancel()
 
 	if err := s.srv.Shutdown(ctx); err != nil {
 		// when timeout exceeds forcefully close any remaining connections
 		if cerr := s.srv.Close(); cerr != nil {
-			return errors.Join(err, cerr)
+			return fmt.Errorf("rest, Stop: error in forceful connection termination, %w, %w", cerr, err)
 		}
 
-		return err
+		return fmt.Errorf("rest, Stop: error in server shutdown, %w", err)
 	}
 
 	return nil
