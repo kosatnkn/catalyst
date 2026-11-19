@@ -3,6 +3,7 @@ package rest
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
 	"time"
 
@@ -50,22 +51,24 @@ func (s *Server) Start() error {
 		Handler: newRouter(s.cfg, s.ctr).Handler(),
 	}
 
-	// channel to catch serve failures, both early (startup) and late (runtime)
+	// bind eagerly so a bind failure (ex: port already in use) is returned from Start
+	// deterministically, instead of racing a timer against the serve goroutine
+	ln, err := net.Listen("tcp", s.srv.Addr)
+	if err != nil {
+		return fmt.Errorf("rest, Start: failed to bind to %s, %w", s.srv.Addr, err)
+	}
+
+	// channel to catch unrecoverable serve failures after Start has returned
 	s.errs = make(chan error, 1)
 
 	go func() {
-		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			s.errs <- err // pass err through channel to calling routine
+		// Serve owns ln and closes it when it returns, Stop() causes ErrServerClosed
+		if err := s.srv.Serve(ln); err != nil && err != http.ErrServerClosed {
+			s.errs <- fmt.Errorf("rest, Serve: %w", err)
 		}
 	}()
 
-	// give it a moment to fail fast on startup (ex: port already in use)
-	select {
-	case err := <-s.errs:
-		return err // ex: bind failed
-	case <-time.After(50 * time.Millisecond):
-		return nil // server is up and stable
-	}
+	return nil
 }
 
 // Err returns a channel that receives an unrecoverable error if the server
