@@ -51,7 +51,7 @@ The layers and the direction of dependencies:
 1. `config.Parse(infra.Config{}, confSettings)` runs. It takes its defaults from the package-level `confSettings` in `main.go`, and uses the env prefix `CATALYST`. For example, `db.host` becomes `CATALYST_DB_HOST`.
 2. `infra.NewResolvedContainer` runs.
 3. The servers start.
-4. The process blocks until it receives SIGINT or SIGTERM, or until a server reports an unrecoverable runtime error through `Err()`. On any failure (startup, runtime or teardown), `run()` logs it with `logErr` and returns it. Its defers tear everything down, and then `main` exits with code 1. Don't `panic` or `os.Exit` inside `run`.
+4. The process blocks until it receives SIGINT or SIGTERM, or until a server reports an unrecoverable runtime error through `Err()`. Signals are caught with `signal.NotifyContext` at the very top of `run`, so a signal received during startup still goes through teardown. After the first signal, `stop()` restores the default behaviour, so a second Ctrl+C force-quits a shutdown that hangs. On any failure (startup, runtime or teardown), `run()` logs it with `logErr` and returns it. Its defers tear everything down, and then `main` exits with code 1. Don't `panic` or `os.Exit` inside `run`.
 
 Each resource is torn down by a `defer` placed right after it's created, so the order of the `defer`s is the shutdown order. Every server follows the same `NewServer`/`Start()`/`Stop()`/`Err()` shape. `Start` fails fast if the listener can't bind, and `Err()` returns a channel that delivers a later serve failure (nil if the server can't fail). When you add a config key, also add a sensible default in the `confSettings.Defaults` map in `main.go`.
 

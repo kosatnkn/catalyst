@@ -60,6 +60,12 @@ func run() (retErr error) {
 	// create a single context to be used by all logging calls
 	lCtx := context.Background()
 
+	// catch SIGINT (Ctrl+C) and SIGTERM from the very start, so that a signal received
+	// while starting up still goes through the deferred teardown
+	// NOTE: SIGKILL cannot be caught
+	sigCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
 	c, err := config.Parse(infra.Config{}, confSettings)
 	if err != nil {
 		return logErr(lCtx, nil, fmt.Errorf("main, run: config parse failed, %w", err))
@@ -115,19 +121,14 @@ func run() (retErr error) {
 	// mark service as ready to accept connections
 	ctr.Logger.Info(lCtx, fmt.Sprintf("ready to accept connections on port %d", cfg.Rest.Port))
 
-	// enable graceful shutdown
-	sig := make(chan os.Signal, 1)
-	// accept graceful shutdowns when quit via SIGINT (Ctrl+C) or SIGTERM (Ctrl+/)
-	// SIGKILL or SIGQUIT will not be caught
-	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
-	defer signal.Stop(sig)
-
 	// block until a registered signal is received or a server fails
 	// NOTE: a server failure here is unrecoverable (ex: the listener died),
 	// request failures never reach this point.
 	select {
-	case <-sig:
-		ctr.Logger.Info(lCtx, "stopping service")
+	case <-sigCtx.Done():
+		// restore default signal behaviour so a second Ctrl+C force quits a hung shutdown
+		stop()
+		ctr.Logger.Info(lCtx, fmt.Sprintf("stopping service, %v", context.Cause(sigCtx)))
 	case serr := <-restSrv.Err():
 		return logErr(lCtx, ctr.Logger, fmt.Errorf("main, run: REST server failed, %w", serr))
 	case serr := <-profSrv.Err():
